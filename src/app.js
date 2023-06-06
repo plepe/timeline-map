@@ -6,6 +6,7 @@ let dateInput
 let layer
 let features
 let styleTemplate
+let popupTemplate
 
 window.onload = () => {
   map = L.map('map', { maxZoom: 22 })
@@ -31,6 +32,7 @@ function init () {
   map.setView(config.location, config.zoom)
 
   styleTemplate = Twig.twig({ data: config.style })
+  popupTemplate = Twig.twig({ data: config.popup })
 
   fetch(config.file)
     .then(req => req.json())
@@ -47,7 +49,7 @@ function showMap () {
     }
   })
     .bindPopup((layer) => {
-      return layer.feature.properties.STRNAM
+      return popupTemplate.render({ item: layer.feature })
     })
     .addTo(map)
 
