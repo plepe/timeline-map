@@ -1,9 +1,11 @@
 /* global L:false */
+const Twig = require('twig')
 let map
 let data
 let dateInput
 let layer
 let features
+let styleTemplate
 
 window.onload = () => {
   map = L.map('map', { maxZoom: 22 })
@@ -27,6 +29,8 @@ window.onload = () => {
 
 function init () {
   map.setView(config.location, config.zoom)
+
+  styleTemplate = Twig.twig({ data: config.style })
 
   fetch(config.file)
     .then(req => req.json())
@@ -67,9 +71,19 @@ function updateDate () {
     })
 
     if (shown) {
-      layer.setStyle({ opacity: 1 })
+      let style = styleTemplate.render({ item: layer.feature })
+      style = JSON.parse(style)
+
+      if (!('interactive' in style)) {
+        style.interactive = true
+      }
+      if (!('opacity' in style)) {
+        style.opacity = 1
+      }
+
+      layer.setStyle(style)
     } else {
-      layer.setStyle({ opacity: 0 })
+      layer.setStyle({ opacity: 0, interactive: false })
     }
   })
 }
