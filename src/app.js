@@ -1,5 +1,6 @@
 /* global L:false */
 let map
+let data
 
 window.onload = () => {
   map = L.map('map', { maxZoom: 22 })
@@ -19,4 +20,23 @@ window.onload = () => {
 
 function init () {
   map.setView(config.location, config.zoom)
+
+  fetch(config.file)
+    .then(req => req.json())
+    .then(json => {
+      data = json
+      showMap()
+    })
+}
+
+function showMap () {
+  L.geoJSON(data, {
+    style: (feature) => {
+      return {}
+    }
+  })
+    .bindPopup((layer) => {
+      return layer.feature.properties.STRNAM
+    })
+    .addTo(map)
 }
