@@ -1,6 +1,7 @@
 /* global L:false */
 let map
 let data
+let dateInput
 
 window.onload = () => {
   map = L.map('map', { maxZoom: 22 })
@@ -16,6 +17,10 @@ window.onload = () => {
       config = _config
       init()
     })
+
+  dateInput = document.getElementById('date')
+  dateInput.value = new Date().toISOString().substr(0, 10)
+  dateInput.addEventListener('change', updateDate)
 }
 
 function init () {
@@ -39,4 +44,10 @@ function showMap () {
       return layer.feature.properties.STRNAM
     })
     .addTo(map)
+
+  updateDate()
+}
+
+function updateDate () {
+  const date = dateInput.value
 }
