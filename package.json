@@ -1,5 +1,12 @@
 {
+  "scripts": {
+    "build": "browserify -p esmify src/app.js -o dist/app.js",
+    "watch": "watchify -p esmify -d src/app.js -o dist/app.js -v"
+  },
   "dependencies": {
-    "leaflet": "^1.9.4"
+    "browserify": "^17.0.0",
+    "esmify": "^2.1.1",
+    "leaflet": "^1.9.4",
+    "watchify": "^4.0.0"
   }
 }
