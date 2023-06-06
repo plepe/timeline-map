@@ -2,6 +2,8 @@
 let map
 let data
 let dateInput
+let layer
+let features
 
 window.onload = () => {
   map = L.map('map', { maxZoom: 22 })
@@ -35,7 +37,7 @@ function init () {
 }
 
 function showMap () {
-  L.geoJSON(data, {
+  layer = L.geoJSON(data, {
     style: (feature) => {
       return {}
     }
@@ -50,4 +52,24 @@ function showMap () {
 
 function updateDate () {
   const date = dateInput.value
+  layer.eachLayer((layer) => {
+    const log = layer.feature.properties.log
+    let shown = false
+
+    log.forEach(e => {
+      if (e[0] === null || e[0] <= date) {
+        shown = true
+      }
+      if (e[1] !== null) {
+        if (e[1] <= date) {
+        shown = false
+      }}
+    })
+
+    if (shown) {
+      layer.setStyle({ opacity: 1 })
+    } else {
+      layer.setStyle({ opacity: 0 })
+    }
+  })
 }
