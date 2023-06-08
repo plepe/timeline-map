@@ -4,8 +4,10 @@
     "watch": "watchify -p esmify -d src/app.js -o dist/app.js -v"
   },
   "dependencies": {
+    "async": "^3.2.4",
     "browserify": "^17.0.0",
     "esmify": "^2.1.1",
+    "js-yaml": "^4.1.0",
     "leaflet": "^1.9.4",
     "twig": "^1.16.0",
     "watchify": "^4.0.0"

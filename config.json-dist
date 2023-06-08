@@ -1,7 +1,0 @@
-{
-  "location": [ 48.20868, 16.37067 ],
-  "zoom": 12,
-  "file": "history.geojson",
-  "popup": "{{ item.properties.title }}",
-  "style": "{\"color\":item.properties.color}"
-}
