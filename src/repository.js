@@ -38,6 +38,19 @@ module.exports = {
         }
       )
     ], (err) => callback(err))
+  },
+
+  commit (callback) {
+    const repConfig = config.get('repository')
+
+    async.waterfall([
+      (done) => childProcess.execFile('git', ['add', '*'], {
+        cwd: repConfig.path
+      }, (err) => done(err)),
+      (done) => childProcess.execFile('git', ['commit', '-m', 'snapshot'], {
+        cwd: repConfig.path
+      }, (err) => done(err))
+    ], (err) => callback(err))
   }
 }
 
