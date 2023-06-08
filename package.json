@@ -9,5 +9,23 @@
     "leaflet": "^1.9.4",
     "twig": "^1.16.0",
     "watchify": "^4.0.0"
-  }
+  },
+  "name": "geojson-watcher",
+  "description": "Loads GeoJSON files from internet sources, puts them into a Git archive and visualizes their development.",
+  "version": "0.0.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plepe/geojson-watcher.git"
+  },
+  "keywords": [
+    "GeoJSON",
+    "Git"
+  ],
+  "author": "Stephan Bösch-Plepelits <skunk@xover.mud.at>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/plepe/geojson-watcher/issues"
+  },
+  "homepage": "https://github.com/plepe/geojson-watcher#readme"
 }
