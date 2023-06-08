@@ -1,2 +1,6 @@
 repository:
   path: data/
+
+sources:
+  countries:
+    url: https://datahub.io/core/geo-countries/r/countries.geojson
