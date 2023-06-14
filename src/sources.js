@@ -26,7 +26,7 @@ module.exports = {
 
 function modifySource (data, def) {
   if (!def.modifyFeatures) {
-    return
+    return data
   }
 
   if (def.modifyFeatures.sortBy) {
