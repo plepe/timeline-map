@@ -37,7 +37,7 @@ window.onload = () => {
 }
 
 function init () {
-  map.setView(config.location, config.zoom)
+  map.setView(config.get('map').location, config.get('map').zoom)
 
   styleTemplate = Twig.twig({ data: config.style })
   popupTemplate = Twig.twig({ data: config.popup })
