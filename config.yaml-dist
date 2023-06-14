@@ -7,7 +7,8 @@ sources:
     attribution: Natural Earth
     url: https://datahub.io/core/geo-countries/r/countries.geojson
 
-    sortBy: properties.OBJECT_ID
-    featuresDelete:
-    - id
-    - properties.OBJECT_ID
+    modifyFeatures:
+      sortBy: properties.OBJECT_ID
+      delete:
+      - id
+      - properties.OBJECT_ID

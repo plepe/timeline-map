@@ -25,17 +25,21 @@ module.exports = {
 }
 
 function modifySource (data, def) {
-  if (def.sortBy) {
+  if (!def.modifyFeatures) {
+    return
+  }
+
+  if (def.modifyFeatures.sortBy) {
     data.features.sort((a, b) => {
-      const va = valueGet(a, def.sortBy.split('.'))
-      const vb = valueGet(b, def.sortBy.split('.'))
+      const va = valueGet(a, def.modifyFeatures.sortBy.split('.'))
+      const vb = valueGet(b, def.modifyFeatures.sortBy.split('.'))
       return va < vb ? -1 : 1
     })
   }
 
-  if (def.featuresDelete) {
+  if (def.modifyFeatures.delete) {
     data.features.forEach(item => {
-      def.featuresDelete.forEach(path => {
+      def.modifyFeatures.delete.forEach(path => {
         path = path.split('.')
         const key = path.pop()
         const parent = path.length ? valueGet(item, path) : item
