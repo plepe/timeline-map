@@ -33,7 +33,7 @@ window.onload = () => {
 
   dateInput = document.getElementById('date')
   dateInput.value = new Date().toISOString().substr(0, 10)
-  dateInput.addEventListener('change', updateDate)
+  // dateInput.addEventListener('change', updateDate)
 }
 
 function init () {
@@ -75,7 +75,7 @@ function showMap () {
 //      return popupTemplate.render({ item: layer.feature })
 //    })
 
-  updateDate()
+//  updateDate()
 }
 
 function updateDate () {
