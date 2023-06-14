@@ -1,6 +1,7 @@
 {
   "scripts": {
     "build": "browserify -p esmify src/app.js -o dist/app.js",
+    "prepare": "npm run build",
     "update": "node update.js",
     "watch": "watchify -p esmify -d src/app.js -o dist/app.js -v"
   },
