@@ -5,7 +5,7 @@ let config
 
 module.exports = {
   load (callback) {
-    fs.readFile('config.yaml',
+    loadFile('config.yaml',
       (err, file) => {
         if (err) { return callback(err) }
         config = yaml.load(file)
@@ -21,5 +21,15 @@ module.exports = {
 
   get (key) {
     return config[key]
+  }
+}
+
+function loadFile (file, callback) {
+  if (fs && fs.readFile) {
+    fs.readFile(file, callback)
+  } else {
+    fetch(file)
+      .then(req => req.text())
+      .then(body => callback(null, body))
   }
 }
