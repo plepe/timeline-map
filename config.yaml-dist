@@ -6,3 +6,6 @@ sources:
     url: https://datahub.io/core/geo-countries/r/countries.geojson
 
     sortBy: properties.OBJECT_ID
+    featuresDelete:
+    - id
+    - properties.OBJECT_ID

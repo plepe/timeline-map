@@ -33,6 +33,17 @@ function modifySource (data, def) {
     })
   }
 
+  if (def.featuresDelete) {
+    data.features.forEach(item => {
+      def.featuresDelete.forEach(path => {
+        path = path.split('.')
+        const key = path.pop()
+        const parent = path.length ? valueGet(item, path) : item
+        delete parent[key]
+      })
+    })
+  }
+
   return data
 }
 
