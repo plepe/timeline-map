@@ -39,27 +39,41 @@ window.onload = () => {
 function init () {
   map.setView(config.get('map').location, config.get('map').zoom)
 
+  const select = document.getElementById('source')
+  select.onchange = (e) => selectSource(select.value)
+  const sources = config.get('sources')
+  Object.entries(sources).forEach(([sourceId, sourceDef]) => {
+    const option = document.createElement('option')
+    option.value = sourceId
+    option.appendChild(document.createTextNode(sourceDef.title || sourceId))
+    select.appendChild(option)
+  })
+  selectSource(Object.keys(sources)[0])
+
   styleTemplate = Twig.twig({ data: config.style })
   popupTemplate = Twig.twig({ data: config.popup })
+}
 
-  fetch(config.file)
+function selectSource (sourceId) {
+  const sources = config.get('sources')
+  const sourceDef = sources[sourceId]
+
+  fetch(config.get('repository').path + '/' + sourceId + '.geojson')
     .then(req => req.json())
-    .then(json => {
-      data = json
-      showMap()
+    .then(data => {
+      layer = L.geoJSON(data, {
+        style: (feature) => {
+          return {}
+        }
+      })
+        .addTo(map)
     })
 }
 
 function showMap () {
-  layer = L.geoJSON(data, {
-    style: (feature) => {
-      return {}
-    }
-  })
-    .bindPopup((layer) => {
-      return popupTemplate.render({ item: layer.feature })
-    })
-    .addTo(map)
+//    .bindPopup((layer) => {
+//      return popupTemplate.render({ item: layer.feature })
+//    })
 
   updateDate()
 }
