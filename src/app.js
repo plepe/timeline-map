@@ -67,6 +67,13 @@ function selectSource (sourceId) {
         }
       })
         .addTo(map)
+
+      if (sourceDef.popupTemplate) {
+        popupTemplate = Twig.twig({ data: sourceDef.popupTemplate })
+        layer.bindPopup(layer => {
+          return popupTemplate.render({ item: layer.feature })
+        })
+      }
     })
 }
 

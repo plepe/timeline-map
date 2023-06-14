@@ -16,3 +16,6 @@ sources:
       delete:
       - id
       - properties.OBJECT_ID
+
+    popupTemplate: |-
+      {{ item.properties.ADMIN }}
