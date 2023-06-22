@@ -79,6 +79,12 @@ module.exports = {
 
       callback(null, result)
     })
+  },
+
+  getFile (options, callback) {
+    const cmd = ['show', options.hash + ':' + options.file]
+
+    childProcess.execFile('git', cmd, { cwd: 'data/', maxBuffer: 128 * 1024 * 1024 }, callback)
   }
 }
 
