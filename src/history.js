@@ -66,7 +66,7 @@ module.exports = {
             Object.keys(features).forEach(id => {
               const log = features[id].log
               if (!(id in found) && log[log.length - 1][1] === null) {
-                features[id].log[log.length - 1][1] = date
+                features[id].log[log.length - 1][1] = commit.date
               }
             })
 
