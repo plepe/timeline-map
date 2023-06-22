@@ -54,7 +54,16 @@ function init () {
   popupTemplate = Twig.twig({ data: config.popup })
 }
 
+function hideSource () {
+  if (layer) {
+    map.removeLayer(layer)
+    layer = null
+  }
+}
+
 function selectSource (sourceId) {
+  hideSource()
+
   const sources = config.get('sources')
   const sourceDef = sources[sourceId]
 
