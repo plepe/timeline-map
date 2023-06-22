@@ -51,6 +51,34 @@ module.exports = {
         cwd: repConfig.path
       }, (err) => done(err))
     ], (err) => callback(err))
+  },
+
+  log (options, callback) {
+    const cmd = ['log', '--pretty=%H %aI %s']
+    if (options.file) {
+      cmd.push('--')
+      cmd.push(options.file)
+    }
+
+    childProcess.execFile('git', cmd, { cwd: 'data/' }, (err, result) => {
+      if (err) { return callback(err) }
+
+      result = result
+        .trimEnd()
+        .split('\n')
+        .reverse()
+        .map(str => {
+          str = str.split(' ')
+
+          return {
+            hash: str.shift(),
+            date: str.shift(),
+            subject: str.join(' ')
+          }
+        })
+
+      callback(null, result)
+    })
   }
 }
 
