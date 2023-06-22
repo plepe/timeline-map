@@ -33,7 +33,7 @@ window.onload = () => {
 
   dateInput = document.getElementById('date')
   dateInput.value = new Date().toISOString().substr(0, 10)
-  // dateInput.addEventListener('change', updateDate)
+  dateInput.addEventListener('change', updateDate)
 }
 
 function init () {
@@ -67,7 +67,7 @@ function selectSource (sourceId) {
   const sources = config.get('sources')
   const sourceDef = sources[sourceId]
 
-  fetch(config.get('repository').path + '/' + sourceId + '.geojson')
+  fetch(config.get('evaluation').path + '/' + sourceId + '.geojson')
     .then(req => req.json())
     .then(data => {
       layer = L.geoJSON(data, {
@@ -83,6 +83,8 @@ function selectSource (sourceId) {
           return popupTemplate.render({ item: layer.feature })
         })
       }
+
+      updateDate()
     })
 }
 
@@ -97,7 +99,7 @@ function showMap () {
 function updateDate () {
   const date = dateInput.value
   layer.eachLayer((layer) => {
-    const log = layer.feature.properties.log
+    const log = layer.feature.log
     let shown = false
 
     log.forEach(e => {
