@@ -1,6 +1,9 @@
 repository:
   path: data/
 
+evaluation:
+  path: evaluation/
+
 map:
   location: [ 0.0, 0.0 ]
   zoom: 2

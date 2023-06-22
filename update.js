@@ -8,6 +8,7 @@ const history = require('./src/history')
 async.waterfall([
   (done) => config.load(done),
   (done) => repository.check(done),
+  (done) => history.check(done),
   (done) => sources.download(done),
   (done) => repository.commit(done)
   (done) => history.build(done)
