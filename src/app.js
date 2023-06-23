@@ -86,6 +86,20 @@ function selectSource (sourceId) {
   fetch(config.get('evaluation').path + '/' + sourceId + '.geojson')
     .then(req => req.json())
     .then(data => {
+      const items = new visDataset.DataSet(data.history.map(commit => {
+        return {
+          id: commit.hash,
+          content: commit.date.substr(0, 10),
+          start: commit.date
+        }
+      }))
+      timeline.setItems(items)
+      timeline.setOptions({
+        min: data.history[0].date,
+        max: new Date(),
+      })
+      timeline.setWindow(data.history[0].date, new Date())
+
       layer = L.geoJSON(data, {
         style: (feature) => {
           return JSON.parse(styleTemplate.render({ item: feature }))
