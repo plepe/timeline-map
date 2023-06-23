@@ -81,7 +81,7 @@ function selectSource (sourceId) {
   const sources = config.get('sources')
   const sourceDef = sources[sourceId]
 
-  const styleTemplate = Twig.twig({ data: sourceDef.styleTemplate ?? '{}' })
+  styleTemplate = Twig.twig({ data: sourceDef.styleTemplate ?? '{}' })
 
   fetch(config.get('evaluation').path + '/' + sourceId + '.geojson')
     .then(req => req.json())
