@@ -113,6 +113,10 @@ function selectSource (sourceId) {
       timeline.setOptions({
         min: data.history[0].date,
         max: new Date(),
+        snap: null,
+        cluster: {
+          titleTemplate: '{count} Zeitpunkte'
+        }
       })
       timeline.setWindow(data.history[0].date, new Date())
 
