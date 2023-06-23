@@ -1,6 +1,8 @@
 /* global L:false */
 const Twig = require('twig')
 const async = require('async')
+const visTimeline = require('vis-timeline')
+const visDataset = require('vis-data')
 
 const config = require('./config')
 
@@ -11,6 +13,7 @@ let layer
 let features
 let styleTemplate
 let popupTemplate
+let timeline
 
 window.onload = () => {
   async.waterfall([
@@ -34,6 +37,20 @@ window.onload = () => {
   dateInput = document.getElementById('date')
   dateInput.value = new Date().toISOString().substr(0, 10)
   dateInput.addEventListener('change', updateDate)
+
+  createTimeline()
+}
+
+function createTimeline () {
+  const options = {
+    autoResize: true
+  }
+
+  const container = document.getElementById('timeline')
+  const items = new visDataset.DataSet([])
+  timeline = new visTimeline.Timeline(container, items, options)
+  timeline.addCustomTime()
+  timeline.on('timechanged', (e) => console.log(e.time))
 }
 
 function init () {

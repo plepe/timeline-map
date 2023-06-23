@@ -13,6 +13,8 @@
     "leaflet": "^1.9.4",
     "md5": "^2.3.0",
     "twig": "^1.16.0",
+    "vis-data": "^7.1.6",
+    "vis-timeline": "^7.7.2",
     "watchify": "^4.0.0"
   },
   "name": "geojson-watcher",
