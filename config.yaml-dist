@@ -22,3 +22,5 @@ sources:
 
     popupTemplate: |-
       {{ item.properties.ADMIN }}
+    styleTemplate: |-
+      {{ { color: 'red' }|json_encode }}

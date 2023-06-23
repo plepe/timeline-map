@@ -49,9 +49,6 @@ function init () {
     select.appendChild(option)
   })
   selectSource(Object.keys(sources)[0])
-
-  styleTemplate = Twig.twig({ data: config.style })
-  popupTemplate = Twig.twig({ data: config.popup })
 }
 
 function hideSource () {
@@ -67,12 +64,14 @@ function selectSource (sourceId) {
   const sources = config.get('sources')
   const sourceDef = sources[sourceId]
 
+  const styleTemplate = Twig.twig({ data: sourceDef.styleTemplate ?? '{}' })
+
   fetch(config.get('evaluation').path + '/' + sourceId + '.geojson')
     .then(req => req.json())
     .then(data => {
       layer = L.geoJSON(data, {
         style: (feature) => {
-          return {}
+          return JSON.parse(styleTemplate.render({ item: feature }))
         }
       })
         .addTo(map)
