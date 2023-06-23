@@ -3,6 +3,7 @@ const Twig = require('twig')
 const async = require('async')
 const visTimeline = require('vis-timeline')
 const visDataset = require('vis-data')
+const moment = require('moment')
 
 const config = require('./config')
 
@@ -50,7 +51,7 @@ function createTimeline () {
   const items = new visDataset.DataSet([])
   timeline = new visTimeline.Timeline(container, items, options)
   timeline.addCustomTime()
-  timeline.on('timechanged', (e) => console.log(e.time))
+  timeline.on('timechanged', (e) => setDate(e.time))
 }
 
 function init () {
@@ -94,6 +95,7 @@ function selectSource (sourceId) {
         }
       }))
       timeline.setItems(items)
+      timeline.setCustomTimeMarker('Zeitpunkt')
       timeline.setOptions({
         min: data.history[0].date,
         max: new Date(),
@@ -124,6 +126,11 @@ function showMap () {
 //    })
 
 //  updateDate()
+}
+
+function setDate (date) {
+  dateInput.value = moment(date).format()
+  updateDate()
 }
 
 function updateDate () {
