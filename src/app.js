@@ -61,13 +61,15 @@ function createTimeline () {
     setDate(date)
   })
   timeline.on('click', (e) => {
-    const date = moment(e.time).format()
-    timeline.setCustomTime(date)
-    dateInput.value = date
-    setDate(date)
-  })
-  timeline.on('select', (e) => {
-    const item = timeline.itemSet.getItemById(e.items[0])
+    if (!e.item) {
+      const date = moment(e.time).format()
+      timeline.setCustomTime(date)
+      dateInput.value = date
+      setDate(date)
+      return
+    }
+
+    const item = timeline.itemSet.getItemById(e.item)
     if (item.data.isCluster) {
       timeline.setWindow(item.data.min, item.data.max, { animation: true })
     }
