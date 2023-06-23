@@ -77,6 +77,7 @@ module.exports = {
           if (err) { return done(err) }
           fs.writeFile(evalConfig.path + '/' + sourceId + '.geojson', JSON.stringify({
             type: 'FeatureCollection',
+            history,
             features: Object.values(features)
           }), (err) => done(err))
         })
