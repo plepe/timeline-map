@@ -37,7 +37,11 @@ window.onload = () => {
 
   dateInput = document.getElementById('date')
   dateInput.value = new Date().toISOString().substr(0, 10)
-  dateInput.addEventListener('change', updateDate)
+  dateInput.addEventListener('change', () => {
+    const date = moment(dateInput.value).format()
+    timeline.setCustomTime(date)
+    setDate(date)
+  })
 
   createTimeline()
 }
@@ -51,7 +55,17 @@ function createTimeline () {
   const items = new visDataset.DataSet([])
   timeline = new visTimeline.Timeline(container, items, options)
   timeline.addCustomTime()
-  timeline.on('timechanged', (e) => setDate(e.time))
+  timeline.on('timechanged', (e) => {
+    const date = moment(e.time).format()
+    dateInput.value = date
+    setDate(date)
+  })
+  timeline.on('click', (e) => {
+    const date = moment(e.time).format()
+    timeline.setCustomTime(date)
+    dateInput.value = date
+    setDate(date)
+  })
 }
 
 function init () {
@@ -116,7 +130,7 @@ function selectSource (sourceId) {
         })
       }
 
-      updateDate()
+      setDate(moment().format())
     })
 }
 
@@ -129,12 +143,6 @@ function showMap () {
 }
 
 function setDate (date) {
-  dateInput.value = moment(date).format()
-  updateDate()
-}
-
-function updateDate () {
-  const date = dateInput.value
   layer.eachLayer((layer) => {
     const log = layer.feature.log
     let shown = false
