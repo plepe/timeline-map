@@ -66,6 +66,18 @@ function createTimeline () {
     dateInput.value = date
     setDate(date)
   })
+  timeline.on('select', (e) => {
+    const item = timeline.itemSet.getItemById(e.items[0])
+    if (item.data.isCluster) {
+      timeline.setWindow(item.data.min, item.data.max, { animation: true })
+    }
+    else {
+      const date = moment(item.data.start).format()
+      timeline.setCustomTime(date)
+      dateInput.value = date
+      setDate(date)
+    }
+  })
 }
 
 function init () {
