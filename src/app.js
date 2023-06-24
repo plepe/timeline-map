@@ -35,6 +35,11 @@ window.onload = () => {
     maxZoom: 18
   }).addTo(map)
 
+  map.createPane('removed')
+  map.getPane('removed').style.zIndex = 399
+  map.createPane('added')
+  map.getPane('added').style.zIndex = 401
+
   dateInput = document.getElementById('date')
   dateInput.value = new Date().toISOString().substr(0, 10)
   dateInput.addEventListener('change', () => {
@@ -78,6 +83,7 @@ function createTimeline () {
       timeline.setCustomTime(date)
       dateInput.value = date
       setDate(date)
+      showChange(date)
     }
   })
 }
@@ -161,6 +167,8 @@ function showMap () {
 }
 
 function setDate (date) {
+  hideChange()
+
   layer.eachLayer((layer) => {
     const log = layer.feature.log
     let shown = false
@@ -189,6 +197,41 @@ function setDate (date) {
       layer.setStyle(style)
     } else {
       layer.setStyle({ opacity: 0, interactive: false })
+    }
+  })
+}
+
+function showChange (date) {
+  layer.eachLayer((layer) => {
+    const log = layer.feature.log
+    let shown = false
+
+    log.forEach(e => {
+      if (e[0] === date) {
+        map.removeLayer(layer)
+        layer.setStyle({ pane: 'added' })
+        layer.addTo(map)
+      }
+      if (e[1] === date) {
+        console.log(layer.feature.properties)
+        map.removeLayer(layer)
+        layer.setStyle({ pane: 'removed', color: 'black', opacity: 1 })
+        layer.addTo(map)
+      }
+    })
+  })
+
+  map.getPane('overlayPane').style.opacity = 0.2
+}
+
+function hideChange () {
+  map.getPane('overlayPane').style.opacity = 1
+
+  layer.eachLayer((layer) => {
+    if (layer.options.pane !== 'overlayPane') {
+      map.removeLayer(layer)
+      layer.setStyle({ pane: 'overlayPane' })
+      layer.addTo(map)
     }
   })
 }
