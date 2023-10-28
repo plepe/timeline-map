@@ -5,22 +5,40 @@ import state from './state'
 import App from './App'
 let app
 let layer
+let layers = {}
 
 App.addExtension({
   id: 'timelineLayer',
   initFun: (_app, callback) => {
     app = _app
     app.on('state-apply', state => {
-      if (!layer) {
-        layer = new TimelineLayer(app.config.source, app.config.feature)
-        layer.load(() => {
-          layer.init()
+      if ('id' in state && (!layer || layer.id !== state.id)) {
+        if (layer) {
+          layer.hide()
+        }
+
+        if (state.id in layers) {
           layer.show()
-        })
+        } else {
+          layer = new TimelineLayer(state.id, app.config.source, app.config.feature)
+          layers[state.id] = layer
+          layer.load(() => {
+            layer.init()
+            layer.show()
+          })
+        }
       }
 
       if ('date' in state) {
-        layer.setDate(state.date)
+        if (layer) {
+          layer.setDate(state.date)
+        }
+      }
+    })
+
+    app.on('state-get', state => {
+      if (layer) {
+        state.id = layer.id
       }
     })
 
@@ -29,7 +47,8 @@ App.addExtension({
 })
 
 class TimelineLayer {
-  constructor (source, config) {
+  constructor (id, source, config) {
+    this.id = id
     this.source = source
     this.config = config
   }
