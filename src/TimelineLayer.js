@@ -1,7 +1,26 @@
 const Twig = require('twig')
 const twigGet = require('./twigGet')
 
-module.exports = class TimelineLayer {
+import App from './App'
+let app
+
+App.addExtension({
+  id: 'timelineLayer',
+  initFun: (_app, callback) => {
+    app = _app
+    app.on('state-apply', () => {
+      const layer = new TimelineLayer(app.config.source, app.config.feature)
+      layer.load(() => {
+        layer.init()
+        layer.show()
+      })
+    })
+
+    callback()
+  }
+})
+
+class TimelineLayer {
   constructor (source, config) {
     this.source = source
     this.config = config
@@ -68,11 +87,12 @@ module.exports = class TimelineLayer {
     }
   }
 
-  addTo (map) {
-    this.layer.addTo(map)
+  show (map) {
+    this.layer.addTo(app.map)
   }
 
-  removeFrom () {
+  hide (map) {
+    app.map.removeLayer(this.layer)
   }
 
   setDate (date) {
