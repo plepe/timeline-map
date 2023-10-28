@@ -1,5 +1,6 @@
 const Twig = require('twig')
 const twigGet = require('./twigGet')
+import state from './state'
 
 import App from './App'
 let app
@@ -94,6 +95,11 @@ class TimelineLayer {
     }
 
     app.emit('data-loaded', this)
+
+    const date = state.get().date
+    if (date) {
+      this.setDate(date)
+    }
   }
 
   show (map) {
