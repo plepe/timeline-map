@@ -6,6 +6,7 @@ const visDataset = require('vis-data')
 const moment = require('moment')
 
 const config = require('./config')
+const twigGet = require('./twigGet')
 
 let map
 let data
@@ -14,7 +15,6 @@ let layer
 let features
 let styleTemplate
 let popupTemplate
-let twigTemplates = {}
 let timeline
 let allItems
 
@@ -262,10 +262,4 @@ function showChange (date) {
   map.getPane('overlayPane').style.opacity = 0.2
 }
 
-function twigGet (template, item) {
-  if (!(template in twigTemplates)) {
-    twigTemplates[template] = Twig.twig({ data: template })
-  }
 
-  return twigTemplates[template].render({ item })
-}
