@@ -14,7 +14,9 @@ let layer
 let features
 let styleTemplate
 let popupTemplate
+let twigTemplates = {}
 let timeline
+let allItems
 
 window.onload = () => {
   async.waterfall([
@@ -66,13 +68,13 @@ function createTimeline () {
     setDate(date)
   })
   timeline.on('click', (e) => {
-    if (!e.item) {
+//    if (!e.item) {
       const date = moment(e.time).format()
       timeline.setCustomTime(date)
       dateInput.value = date
       setDate(date)
       return
-    }
+//    }
 
     const item = timeline.itemSet.getItemById(e.item)
     if (item.data.isCluster) {
@@ -91,16 +93,16 @@ function createTimeline () {
 function init () {
   map.setView(config.get('map').location, config.get('map').zoom)
 
-  const select = document.getElementById('source')
-  select.onchange = (e) => selectSource(select.value)
-  const sources = config.get('sources')
-  Object.entries(sources).forEach(([sourceId, sourceDef]) => {
-    const option = document.createElement('option')
-    option.value = sourceId
-    option.appendChild(document.createTextNode(sourceDef.title || sourceId))
-    select.appendChild(option)
-  })
-  selectSource(Object.keys(sources)[0])
+//  const select = document.getElementById('source')
+//  select.onchange = (e) => selectSource(select.value)
+//  const sources = config.get('sources')
+//  Object.entries(sources).forEach(([sourceId, sourceDef]) => {
+//    const option = document.createElement('option')
+//    option.value = sourceId
+//    option.appendChild(document.createTextNode(sourceDef.title || sourceId))
+//    select.appendChild(option)
+//  })
+  selectSource()
 }
 
 function hideSource () {
@@ -113,32 +115,66 @@ function hideSource () {
 function selectSource (sourceId) {
   hideSource()
 
-  const sources = config.get('sources')
-  const sourceDef = sources[sourceId]
+  const configFeature = config.get('feature')
 
-  styleTemplate = Twig.twig({ data: sourceDef.styleTemplate ?? '{}' })
+  styleTemplate = Twig.twig({ data: configFeature.styleTemplate ?? '{}' })
 
-  fetch(config.get('evaluation').path + '/' + sourceId + '.geojson')
+  fetch(config.get('source').url)
     .then(req => req.json())
     .then(data => {
-      const items = new visDataset.DataSet(data.history.map(commit => {
+      let min = null
+      let max = null
+      let timestamps = {}
+
+      data.features.forEach(feature => {
+        if (configFeature.type === 'start-end-field') {
+          const start = twigGet(configFeature.startField, feature)
+          const end = twigGet(configFeature.endField, feature)
+          feature.log = [ [ start, end ] ]
+        }
+
+        feature.log.forEach(([ start, end ]) => {
+          if (start !== null && start !== '') {
+            if (min === null || start < min) {
+              min = start
+            }
+            timestamps[start] = true
+          }
+
+          if (end !== null && start !== '') {
+            if (max === null || end > max) {
+              max = end
+            }
+            timestamps[end] = true
+          }
+        })
+      })
+
+      if (!max) {
+        max = new Date()
+      }
+
+      timestamps = Object.keys(timestamps).map(t => {
+        return { date: t, name: 'Ereignis' }
+      })
+
+      const items = new visDataset.DataSet(timestamps.map(entry => {
         return {
-          id: commit.hash,
-          content: commit.date.substr(0, 10),
-          start: commit.date
+          content: entry.date.substr(0, 10),
+          start: entry.date
         }
       }))
-      timeline.setItems(items)
+
+      //timeline.setItems(items)
       timeline.setCustomTimeMarker('Zeitpunkt')
       timeline.setOptions({
-        min: data.history[0].date,
-        max: new Date(),
+        min, max,
         snap: null,
         cluster: {
           titleTemplate: '{count} Zeitpunkte'
         }
       })
-      timeline.setWindow(data.history[0].date, new Date())
+      timeline.setWindow(min, max ?? new Date())
 
       layer = L.geoJSON(data, {
         style: (feature) => {
@@ -147,8 +183,10 @@ function selectSource (sourceId) {
       })
         .addTo(map)
 
-      if (sourceDef.popupTemplate) {
-        popupTemplate = Twig.twig({ data: sourceDef.popupTemplate })
+      allItems = layer.getLayers()
+
+      if (configFeature.popupTemplate) {
+        popupTemplate = Twig.twig({ data: configFeature.popupTemplate })
         layer.bindPopup(layer => {
           return popupTemplate.render({ item: layer.feature })
         })
@@ -167,10 +205,8 @@ function showMap () {
 }
 
 function setDate (date) {
-  hideChange()
-
-  layer.eachLayer((layer) => {
-    const log = layer.feature.log
+  allItems.forEach((item) => {
+    const log = item.feature.log
     let shown = false
 
     log.forEach(e => {
@@ -184,7 +220,7 @@ function setDate (date) {
     })
 
     if (shown) {
-      let style = styleTemplate.render({ item: layer.feature })
+      let style = styleTemplate.render({ item: item.feature })
       style = JSON.parse(style)
 
       if (!('interactive' in style)) {
@@ -194,9 +230,11 @@ function setDate (date) {
         style.opacity = 1
       }
 
-      layer.setStyle(style)
+      item.addTo(layer)
+      if (item.setStyle)
+        item.setStyle(style)
     } else {
-      layer.setStyle({ opacity: 0, interactive: false })
+      layer.removeLayer(item)
     }
   })
 }
@@ -224,14 +262,10 @@ function showChange (date) {
   map.getPane('overlayPane').style.opacity = 0.2
 }
 
-function hideChange () {
-  map.getPane('overlayPane').style.opacity = 1
+function twigGet (template, item) {
+  if (!(template in twigTemplates)) {
+    twigTemplates[template] = Twig.twig({ data: template })
+  }
 
-  layer.eachLayer((layer) => {
-    if (layer.options.pane !== 'overlayPane') {
-      map.removeLayer(layer)
-      layer.setStyle({ pane: 'overlayPane' })
-      layer.addTo(map)
-    }
-  })
+  return twigTemplates[template].render({ item })
 }

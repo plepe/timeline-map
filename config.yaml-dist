@@ -1,26 +1,22 @@
-repository:
-  path: data/
-
-evaluation:
-  path: evaluation/
-
 map:
   location: [ 0.0, 0.0 ]
   zoom: 2
 
-sources:
-  countries:
-    title: Countries
-    attribution: Natural Earth
-    url: https://datahub.io/core/geo-countries/r/countries.geojson
+source:
+  title: Countries
+  attribution: Natural Earth
+  url: https://datahub.io/core/geo-countries/r/countries.geojson
 
-    modifyFeatures:
-      sortBy: properties.OBJECT_ID
-      delete:
-      - id
-      - properties.OBJECT_ID
-
-    popupTemplate: |-
-      {{ item.properties.ADMIN }}
-    styleTemplate: |-
-      {{ { color: 'red' }|json_encode }}
+feature:
+  type: start-end-field
+  startField: |-
+    {{ item.properties.start }}
+  endField: |-
+    {{ item.properties.end }}
+  popupTemplate: |-
+    {{ item.properties.popup }}
+  nodeFeature: marker
+  popupTemplate: |-
+    {{ item.properties.ADMIN }}
+  styleTemplate: |-
+    {{ { color: 'red' }|json_encode }}

@@ -7,7 +7,6 @@
   },
   "dependencies": {
     "async": "^3.2.4",
-    "browserify": "^17.0.0",
     "esmify": "^2.1.1",
     "js-yaml": "^4.1.0",
     "leaflet": "^1.9.4",
@@ -15,7 +14,10 @@
     "moment": "^2.29.4",
     "twig": "^1.16.0",
     "vis-data": "^7.1.6",
-    "vis-timeline": "^7.7.2",
+    "vis-timeline": "^7.7.2"
+  },
+  "devDependencies": {
+    "browserify": "^17.0.0",
     "watchify": "^4.0.0"
   },
   "name": "geojson-watcher",

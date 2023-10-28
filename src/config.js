@@ -10,10 +10,6 @@ module.exports = {
         if (err) { return callback(err) }
         config = yaml.load(file)
 
-        if (!config.repository && !config.repository.path) {
-          return callback(new Error('No repository path defined!'))
-        }
-
         callback()
       }
     )
