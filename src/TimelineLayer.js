@@ -3,17 +3,24 @@ const twigGet = require('./twigGet')
 
 import App from './App'
 let app
+let layer
 
 App.addExtension({
   id: 'timelineLayer',
   initFun: (_app, callback) => {
     app = _app
-    app.on('state-apply', () => {
-      const layer = new TimelineLayer(app.config.source, app.config.feature)
-      layer.load(() => {
-        layer.init()
-        layer.show()
-      })
+    app.on('state-apply', state => {
+      if (!layer) {
+        layer = new TimelineLayer(app.config.source, app.config.feature)
+        layer.load(() => {
+          layer.init()
+          layer.show()
+        })
+      }
+
+      if ('date' in state) {
+        layer.setDate(state.date)
+      }
     })
 
     callback()
@@ -85,6 +92,8 @@ class TimelineLayer {
         return this.popupTemplate.render({ item: item.feature })
       })
     }
+
+    app.emit('data-loaded', this)
   }
 
   show (map) {
@@ -96,6 +105,10 @@ class TimelineLayer {
   }
 
   setDate (date) {
+    if (!this.allItems) {
+      return
+    }
+
     this.allItems.forEach((item) => {
       const log = item.feature.log
       let shown = false

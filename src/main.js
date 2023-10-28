@@ -3,6 +3,7 @@ import './lang'
 import './map'
 import './layer'
 import './config'
+import './timeline'
 import './TimelineLayer'
 
 window.onload = function () {
