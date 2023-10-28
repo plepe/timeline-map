@@ -35,6 +35,9 @@ function initFun (app, callback) {
         app.map.flyTo({ lat: state.lat, lng: state.lon }, state.zoom)
       }
       app.setNonInteractive(false)
+    }
+
+    if (app.map.getZoom()) {
       return
     }
 
