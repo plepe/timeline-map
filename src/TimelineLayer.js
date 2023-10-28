@@ -54,7 +54,8 @@ class TimelineLayer {
   }
 
   load (callback) {
-    fetch(this.source.url)
+    const url = twigGet(this.source.url, { id: this.id })
+    fetch(url)
       .then(req => req.json())
       .then(data => {
         this.data = data
