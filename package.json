@@ -1,9 +1,9 @@
 {
   "scripts": {
-    "build": "browserify -p esmify src/app.js -o dist/app.js",
+    "build": "browserify -p esmify src/main.js -o dist/app.js",
     "prepare": "npm run build",
     "update": "node update.js",
-    "watch": "watchify -p esmify -d src/app.js -o dist/app.js -v"
+    "watch": "watchify -p esmify -d src/main.js -o dist/app.js -v"
   },
   "dependencies": {
     "async": "^3.2.4",
@@ -11,7 +11,10 @@
     "js-yaml": "^4.1.0",
     "leaflet": "^1.9.4",
     "md5": "^2.3.0",
+    "modulekit-lang": "github:plepe/modulekit-lang#browserify",
     "moment": "^2.29.4",
+    "query-string": "^8.1.0",
+    "sheet-router": "^4.2.3",
     "twig": "^1.16.0",
     "vis-data": "^7.1.6",
     "vis-timeline": "^7.7.2"
