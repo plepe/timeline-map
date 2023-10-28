@@ -7,16 +7,12 @@ const moment = require('moment')
 
 const config = require('./config')
 const twigGet = require('./twigGet')
+const TimelineLayer = require('./TimelineLayer')
 
 let map
-let data
 let dateInput
 let layer
-let features
-let styleTemplate
-let popupTemplate
 let timeline
-let allItems
 
 window.onload = () => {
   async.waterfall([
@@ -115,85 +111,34 @@ function hideSource () {
 function selectSource (sourceId) {
   hideSource()
 
-  const configFeature = config.get('feature')
+  layer = new TimelineLayer(config.get('source'), config.get('feature'))
 
-  styleTemplate = Twig.twig({ data: configFeature.styleTemplate ?? '{}' })
+  layer.load((err) => {
+    if (err) { global.alert(err) }
+    layer.addTo(map)
 
-  fetch(config.get('source').url)
-    .then(req => req.json())
-    .then(data => {
-      let min = null
-      let max = null
-      let timestamps = {}
-
-      data.features.forEach(feature => {
-        if (configFeature.type === 'start-end-field') {
-          const start = twigGet(configFeature.startField, feature)
-          const end = twigGet(configFeature.endField, feature)
-          feature.log = [ [ start, end ] ]
-        }
-
-        feature.log.forEach(([ start, end ]) => {
-          if (start !== null && start !== '') {
-            if (min === null || start < min) {
-              min = start
-            }
-            timestamps[start] = true
-          }
-
-          if (end !== null && start !== '') {
-            if (max === null || end > max) {
-              max = end
-            }
-            timestamps[end] = true
-          }
-        })
-      })
-
-      if (!max) {
-        max = new Date()
-      }
-
-      timestamps = Object.keys(timestamps).map(t => {
-        return { date: t, name: 'Ereignis' }
-      })
-
-      const items = new visDataset.DataSet(timestamps.map(entry => {
-        return {
-          content: entry.date.substr(0, 10),
-          start: entry.date
-        }
-      }))
-
-      //timeline.setItems(items)
-      timeline.setCustomTimeMarker('Zeitpunkt')
-      timeline.setOptions({
-        min, max,
-        snap: null,
-        cluster: {
-          titleTemplate: '{count} Zeitpunkte'
-        }
-      })
-      timeline.setWindow(min, max ?? new Date())
-
-      layer = L.geoJSON(data, {
-        style: (feature) => {
-          return JSON.parse(styleTemplate.render({ item: feature }))
-        }
-      })
-        .addTo(map)
-
-      allItems = layer.getLayers()
-
-      if (configFeature.popupTemplate) {
-        popupTemplate = Twig.twig({ data: configFeature.popupTemplate })
-        layer.bindPopup(layer => {
-          return popupTemplate.render({ item: layer.feature })
-        })
-      }
-
-      setDate(moment().format())
+    const timestamps = Object.keys(layer.timestamps).map(t => {
+      return { date: t, name: 'Ereignis' }
     })
+
+    const items = new visDataset.DataSet(timestamps.map(entry => {
+      return {
+        content: entry.date.substr(0, 10),
+        start: entry.date
+      }
+    }))
+
+    //timeline.setItems(items)
+    timeline.setCustomTimeMarker('Zeitpunkt')
+    timeline.setOptions({
+      min: layer.min, max: layer.max,
+      snap: null,
+      cluster: {
+        titleTemplate: '{count} Zeitpunkte'
+      }
+    })
+    timeline.setWindow(layer.min, layer.max)
+  })
 }
 
 function showMap () {
@@ -205,38 +150,7 @@ function showMap () {
 }
 
 function setDate (date) {
-  allItems.forEach((item) => {
-    const log = item.feature.log
-    let shown = false
-
-    log.forEach(e => {
-      if (e[0] === null || e[0] <= date) {
-        shown = true
-      }
-      if (e[1] !== null) {
-        if (e[1] <= date) {
-        shown = false
-      }}
-    })
-
-    if (shown) {
-      let style = styleTemplate.render({ item: item.feature })
-      style = JSON.parse(style)
-
-      if (!('interactive' in style)) {
-        style.interactive = true
-      }
-      if (!('opacity' in style)) {
-        style.opacity = 1
-      }
-
-      item.addTo(layer)
-      if (item.setStyle)
-        item.setStyle(style)
-    } else {
-      layer.removeLayer(item)
-    }
-  })
+  layer.setDate(date)
 }
 
 function showChange (date) {
