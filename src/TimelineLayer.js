@@ -78,8 +78,8 @@ class TimelineLayer {
   }
 
   init () {
-    this.min = null
-    this.max = null
+    this.min = '99999'
+    this.max = '0'
     this.timestamps = {}
 
     this.styleTemplate = Twig.twig({ data: this.config.styleTemplate ?? '{}' })
@@ -92,15 +92,22 @@ class TimelineLayer {
       }
 
       feature.log.forEach(([ start, end ]) => {
+        if (start === '') {
+          start = null
+        }
+        if (end === '') {
+          end = null
+        }
+
         if (start !== null && start !== '') {
-          if (this.min === null || start < this.min) {
+          if (this.min !== null && (start ?? '0') < this.min) {
             this.min = start
           }
           this.timestamps[start] = true
         }
 
-        if (end !== null && start !== '') {
-          if (this.max === null || end > this.max) {
+        if (end !== null && end !== '') {
+          if (this.max !== null && (end ?? '99999') > this.max) {
             this.max = end
           }
           this.timestamps[end] = true
@@ -108,6 +115,7 @@ class TimelineLayer {
       })
     })
 
+    this.max = null
     if (!this.max) {
       this.max = new Date()
     }
