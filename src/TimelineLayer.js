@@ -175,10 +175,10 @@ class TimelineLayer {
           shown = false
         }}
         return shown
-      }).length
+      })
 
-      if (shown) {
-        let style = this.styleTemplate.render({ item: item.feature })
+      if (shown.length) {
+        let style = this.styleTemplate.render({ item: item.feature, logEntry: shown[0] })
         style = JSON.parse(style)
 
         if (!('interactive' in style)) {
