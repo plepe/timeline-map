@@ -1,4 +1,7 @@
 {
+  "name": "geojson-timeline",
+  "description": "Use a timeline to visualize GeoJSON files with timed information.",
+  "version": "0.0.0",
   "scripts": {
     "build": "browserify -p esmify src/main.js -o dist/app.js",
     "prepare": "npm run build",
@@ -23,13 +26,10 @@
     "browserify": "^17.0.0",
     "watchify": "^4.0.0"
   },
-  "name": "geojson-watcher",
-  "description": "Loads GeoJSON files from internet sources, puts them into a Git archive and visualizes their development.",
-  "version": "0.0.0",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/plepe/geojson-watcher.git"
+    "url": "git+https://github.com/plepe/geojson-timeline.git"
   },
   "keywords": [
     "GeoJSON",
@@ -38,7 +38,7 @@
   "author": "Stephan Bösch-Plepelits <skunk@xover.mud.at>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/plepe/geojson-watcher/issues"
+    "url": "https://github.com/plepe/geojson-timeline/issues"
   },
-  "homepage": "https://github.com/plepe/geojson-watcher#readme"
+  "homepage": "https://github.com/plepe/geojson-timeline#readme"
 }

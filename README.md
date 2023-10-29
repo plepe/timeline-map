@@ -1,10 +1,10 @@
-# geojson-watcher
-Loads GeoJSON files from internet sources, puts them into a Git archive and visualizes their development.
+# geojson-timeline
+Use a timeline to visualize GeoJSON files with timed information.
 
 ## INSTALLATION
 ```sh
-git clone https://github.com/plepe/geojson-watcher
-cd geojson-watcher
+git clone https://github.com/plepe/geojson-timeline
+cd geojson-timeline
 npm install
 cp config.yaml-dist config.yaml
 edit config.yaml # Use your favorite editor
