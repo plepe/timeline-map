@@ -88,10 +88,10 @@ class TimelineLayer {
       if (this.config.type === 'start-end-field') {
         const start = twigGet(this.config.startField, { item: feature })
         const end = twigGet(this.config.endField, { item: feature })
-        feature.log = [ [ start, end ] ]
+        feature.log = [ { start, end } ]
       }
 
-      feature.log.forEach(([ start, end ]) => {
+      feature.log.forEach(({ start, end }) => {
         if (start === '') {
           start = null
         }
@@ -161,11 +161,11 @@ class TimelineLayer {
       let shown = false
 
       log.forEach(e => {
-        if (e[0] === null || e[0] <= date) {
+        if (e.start === null || e.start <= date) {
           shown = true
         }
-        if (e[1] !== null && e[1] !== '') {
-          if (e[1] <= date) {
+        if (e.end !== null && e.end !== '') {
+          if (e.end <= date) {
           shown = false
         }}
       })
