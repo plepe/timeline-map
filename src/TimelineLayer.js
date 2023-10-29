@@ -164,7 +164,7 @@ class TimelineLayer {
         if (e[0] === null || e[0] <= date) {
           shown = true
         }
-        if (e[1] !== null) {
+        if (e[1] !== null && e[1] !== '') {
           if (e[1] <= date) {
           shown = false
         }}
