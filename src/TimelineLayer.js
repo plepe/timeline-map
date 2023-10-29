@@ -93,6 +93,8 @@ class TimelineLayer {
         feature.log = feature.log(e => {
           return { start: e[0], end: e[1] }
         })
+      } else if (this.config.type === 'function') {
+        feature.log = JSON.parse(twigGet(this.config.logFunction, { item: feature }))
       }
 
       feature.log.forEach(({ start, end }) => {
