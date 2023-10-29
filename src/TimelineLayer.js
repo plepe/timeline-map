@@ -89,6 +89,10 @@ class TimelineLayer {
         const start = twigGet(this.config.startField, { item: feature })
         const end = twigGet(this.config.endField, { item: feature })
         feature.log = [ { start, end } ]
+      } else if (this.config.type === 'log-array') {
+        feature.log = feature.log(e => {
+          return { start: e[0], end: e[1] }
+        })
       }
 
       feature.log.forEach(({ start, end }) => {
