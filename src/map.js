@@ -74,9 +74,5 @@ function initFun (app, callback) {
     }
   })
 
-  app.on('data-loaded', layer => {
-    app.map.fitBounds(layer.layer.getBounds())
-  })
-
   callback()
 }

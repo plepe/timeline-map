@@ -42,6 +42,19 @@ App.addExtension({
       }
     })
 
+    app.on('initial-map-view', promises => {
+      if (!layer) { return }
+
+      promises.push(new Promise((resolve, reject) => {
+        app.once('data-loaded', () => {
+          resolve({
+            type: 'bounds',
+            bounds: layer.layer.getBounds()
+          })
+        })
+      }))
+    })
+
     callback()
   }
 })
