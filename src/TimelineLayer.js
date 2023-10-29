@@ -162,9 +162,9 @@ class TimelineLayer {
 
     this.allItems.forEach((item) => {
       const log = item.feature.log
-      let shown = false
 
-      log.forEach(e => {
+      const shown = log.filter(e => {
+        let shown = false
         if (e.start === null || e.start <= date) {
           shown = true
         }
@@ -172,7 +172,8 @@ class TimelineLayer {
           if (e.end <= date) {
           shown = false
         }}
-      })
+        return shown
+      }).length
 
       if (shown) {
         let style = this.styleTemplate.render({ item: item.feature })
