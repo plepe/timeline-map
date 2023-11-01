@@ -41,9 +41,7 @@ function initFun (app, callback) {
       return
     }
 
-    const promises = []
-    app.emit('initial-map-view', promises)
-    Promise.any(promises)
+    app.getParameter('initial-map-view')
       .then(value => {
         app.setNonInteractive(true)
         switch (value.type) {

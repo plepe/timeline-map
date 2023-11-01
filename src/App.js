@@ -72,6 +72,12 @@ class App extends Events {
     state.updateLink()
   }
 
+  getParameter (str) {
+    const promises = []
+    this.emit(str, promises)
+    return Promise.any(promises)
+  }
+
   setNonInteractive (value) {
     this.interactive = !value
   }
