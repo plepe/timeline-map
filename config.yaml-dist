@@ -1,9 +1,8 @@
-# Default Map Location. Can be overridden by the map-parameter with
-# zoom/lat/lon (e.g. map=17/12.345/67.890). Use 'auto' to load the bounding box
-# from the OSM file (or the whole world view, if a server is given).
-map: '15/46.2/16.4'
-# To use a specific map location
-#'17/12.345/67.890'
+defaultState:
+# Default Map Location.
+  zoom: 15
+  lat: 46.2
+  lon: 16.4
 
 source:
   title: Countries

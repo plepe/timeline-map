@@ -33,7 +33,6 @@ function initFun (app, callback) {
       app.config = { ...app.config, ..._config }
 
       app.options = { ...app.config }
-      app.options = { ...app.options, ...state.parse() }
 
       global.setTimeout(() => callback(), 0)
     })

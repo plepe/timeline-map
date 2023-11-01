@@ -60,7 +60,7 @@ class App extends Events {
     this.emit('init')
     state.init()
 
-    const initState = { ...this.options, ...state.parse() }
+    const initState = { ...this.options.defaultState, ...state.parse() }
     state.apply(initState)
   }
 

@@ -1,3 +1,5 @@
 {
-  "maxZoom": 19
+  "maxZoom": 19,
+  "defaultState": {
+  }
 }
