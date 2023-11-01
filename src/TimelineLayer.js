@@ -9,7 +9,13 @@ App.addExtension({
   id: 'timelineLayer',
   initFun: (app, callback) => {
     app.on('init', () => {
-      new TimelineLayer(app, app.config)
+      if (app.config.layers) {
+        app.config.layers.forEach(l => {
+          new TimelineLayer(app, l)
+        })
+      } else {
+        new TimelineLayer(app, app.config)
+      }
     })
     callback()
   }
