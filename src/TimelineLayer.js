@@ -72,7 +72,6 @@ class TimelineLayer {
       .then(req => req.json())
       .then(data => {
         this.data = data
-        this.init()
         callback(null)
       })
   }
