@@ -157,6 +157,14 @@ class TimelineLayer extends Events {
     this.layer = L.geoJSON(this.data, {
       style: (feature) => {
         return JSON.parse(this.styleTemplate.render({ item: feature }))
+      },
+      pointToLayer: (feature, latlng) => {
+        const icon = this.getIcon(feature)
+        if (icon) {
+          return L.marker(latlng, { icon })
+        } else {
+          return L.marker(latlng)
+        }
       }
     })
 
@@ -231,5 +239,29 @@ class TimelineLayer extends Events {
         this.layer.removeLayer(item)
       }
     })
+  }
+
+  getIcon (feature) {
+    if (!this.config.markerSymbol) {
+      return null
+    }
+
+    const div = document.createElement('div')
+    const html = twigGet(this.config.markerSymbol, { item: feature })
+    div.innerHTML = html
+    const c = div.firstChild
+
+    const iconOptions = { html }
+    iconOptions.iconSize = [c.offsetWidth, c.offsetHeight]
+
+    iconOptions.iconAnchor = [iconOptions.iconSize[0] / 2, iconOptions.iconSize[1] / 2]
+    if (c.hasAttribute('anchorx')) {
+      iconOptions.iconAnchor[0] = parseFloat(c.getAttribute('anchorx'))
+    }
+    if (c.hasAttribute('anchory')) {
+      iconOptions.iconAnchor[1] = parseFloat(c.getAttribute('anchory'))
+    }
+
+    return L.divIcon(iconOptions)
   }
 }
