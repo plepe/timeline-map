@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "build": "browserify -p esmify src/main.js -o dist/app.js",
+    "lint": "standard --fix src/*.js",
     "prepare": "npm run build",
     "update": "node update.js",
     "watch": "watchify -p esmify -d src/main.js -o dist/app.js -v"
@@ -19,6 +20,7 @@
     "moment": "^2.29.4",
     "query-string": "^8.1.0",
     "sheet-router": "^4.2.3",
+    "standard": "^17.1.0",
     "twig": "^1.16.0",
     "vis-data": "^7.1.6",
     "vis-timeline": "^7.7.2"
