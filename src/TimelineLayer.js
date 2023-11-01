@@ -21,10 +21,16 @@ class TimelineLayer extends Events {
     this.app = app
     this.source = config.source
     this.config = config.feature
+    this.reqParameter = this.source.reqParameter ?? []
+    this.parameter = {}
 
     this.app.on('state-apply', state => {
-      if ('id' in state) {
-        const url = twigGet(this.source.url, { id: state.id })
+      if (this.reqParameter.filter(k => k in state).length === this.reqParameter.length) {
+        this.reqParameter.forEach(k => {
+          this.parameter[k] = state[k]
+        })
+
+        const url = twigGet(this.source.url, state)
         if (this.url !== url) {
           this.data = null
 
@@ -42,7 +48,9 @@ class TimelineLayer extends Events {
     })
 
     this.app.on('state-get', state => {
-      state.id = this.id
+      Object.entries(this.parameter).forEach(([k, v]) => {
+        state[k] = v
+      })
     })
 
     this.app.on('initial-map-view', promises => {

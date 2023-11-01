@@ -10,6 +10,10 @@ source:
   title: Countries
   attribution: Natural Earth
   url: https://datahub.io/core/geo-countries/r/countries.geojson
+  reqParameter: []
+  # the url may use twig parameters from the state (e.g. 'id')
+  # then you should add 'id' to reqParameter, so that the app detects
+  # when the source changes; also these parameters will be added to the link
 
 feature:
   type: start-end-field
