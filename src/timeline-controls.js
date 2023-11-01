@@ -66,6 +66,7 @@ App.addExtension({
     ;['backward', 'forward'].forEach(v => {
       inputs[v] = document.querySelector('button[name=' + v + ']')
       inputs[v].addEventListener('click', () => {
+        setActive(false)
         getDate(v === 'forward' ? 'start' : 'end').then(date => {
           date = moment(date)
           date = v == 'backward' ? date.subtract(...stepSize) : date.add(...stepSize)
