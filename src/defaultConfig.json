@@ -1,5 +1,6 @@
 {
   "maxZoom": 19,
+  "dateFormat": "lll",
   "defaultState": {
   }
 }

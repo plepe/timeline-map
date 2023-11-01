@@ -4,6 +4,8 @@ defaultState:
   lat: 46.2
   lon: 16.4
 
+dateFormat: lll
+
 source:
   title: Countries
   attribution: Natural Earth

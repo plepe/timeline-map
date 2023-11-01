@@ -28,9 +28,12 @@ App.addExtension({
     }
 
     inputs.date = document.getElementById('date')
-    inputs.date.value = new Date().toISOString().substr(0, 10)
     inputs.date.addEventListener('change', () => {
-      date = moment(inputs.date.value).format()
+      let date = inputs.date.value
+      if (date !== '') {
+        date = moment(date, ['LL', 'YYYY-MM-DD', 'D.M.YYYY'], 'de').format('YYYY-MM-DD').substr(0, 10)
+      }
+
       app.updateLink()
       state.apply({ date })
     })
@@ -58,7 +61,7 @@ App.addExtension({
 
     app.on('state-apply', state => {
       if ('date' in state) {
-        inputs.date.value = state.date
+        inputs.date.value = state.date ? moment(state.date).format(app.config.dateFormat) : ''
       }
 
       if ('stepSize' in state) {
