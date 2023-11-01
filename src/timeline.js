@@ -1,9 +1,9 @@
+import state from './state'
+import App from './App'
+
 const visTimeline = require('vis-timeline')
 const visDataset = require('vis-data')
 const moment = require('moment')
-
-import state from './state'
-import App from './App'
 let app
 let date = null
 
@@ -57,7 +57,8 @@ function init () {
   app.on('data-loaded', layer => {
     timeline.setCustomTimeMarker('Zeitpunkt')
     timeline.setOptions({
-      min: layer.min, max: layer.max,
+      min: layer.min,
+      max: layer.max,
       snap: null,
       cluster: {
         titleTemplate: '{count} Zeitpunkte'

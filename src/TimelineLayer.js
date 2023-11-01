@@ -102,7 +102,7 @@ class TimelineLayer extends Events {
       if (this.config.type === 'start-end-field') {
         const start = twigGet(this.config.startField, { item: feature })
         const end = twigGet(this.config.endField, { item: feature })
-        feature.log = [ { start, end } ]
+        feature.log = [{ start, end }]
       } else if (this.config.type === 'log-array') {
         feature.log = feature.log(e => {
           return { start: e[0], end: e[1] }
@@ -191,8 +191,9 @@ class TimelineLayer extends Events {
           }
           if (e.end !== null && e.end !== '') {
             if (e.end <= date) {
-            shown = false
-          }}
+              shown = false
+            }
+          }
           return shown
         })
       } else {
@@ -211,8 +212,7 @@ class TimelineLayer extends Events {
         }
 
         item.addTo(this.layer)
-        if (item.setStyle)
-          item.setStyle(style)
+        if (item.setStyle) { item.setStyle(style) }
       } else {
         this.layer.removeLayer(item)
       }

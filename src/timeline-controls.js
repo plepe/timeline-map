@@ -1,10 +1,10 @@
-const moment = require('moment')
-
 import App from './App'
 import state from './state'
 
+const moment = require('moment')
+
 const inputs = {}
-let stepSize = [ '1', 'M' ]
+let stepSize = ['1', 'M']
 let interval
 
 App.addExtension({
