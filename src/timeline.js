@@ -23,7 +23,7 @@ function init () {
 
   const container = document.getElementById('timeline')
   const items = new visDataset.DataSet([])
-  timeline = new visTimeline.Timeline(container, items, options)
+  const timeline = new visTimeline.Timeline(container, items, options)
   timeline.addCustomTime()
   timeline.on('timechanged', (e) => {
     date = moment(e.time).format()
