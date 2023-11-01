@@ -1,67 +1,73 @@
-const Twig = require('twig')
-const twigGet = require('./twigGet')
+import Events from 'events'
 import state from './state'
 
 import App from './App'
-let app
-let layer
-let layers = {}
+const Twig = require('twig')
+const twigGet = require('./twigGet')
 
 App.addExtension({
   id: 'timelineLayer',
-  initFun: (_app, callback) => {
-    app = _app
-    app.on('state-apply', state => {
-      if ('id' in state && (!layer || layer.id !== state.id)) {
-        if (layer) {
-          layer.hide()
-        }
+  initFun: (app, callback) => {
+    app.on('init', () => {
+      new TimelineLayer(app, app.config)
+    })
+    callback()
+  }
+})
 
-        if (state.id in layers) {
-          layer.show()
-        } else {
-          layer = new TimelineLayer(state.id, app.config.source, app.config.feature)
-          layers[state.id] = layer
-          layer.load(() => {
-            layer.init()
-            layer.show()
+class TimelineLayer extends Events {
+  constructor (app, config) {
+    super()
+    this.app = app
+    this.source = config.source
+    this.config = config.feature
+
+    this.app.on('state-apply', state => {
+      if ('id' in state) {
+        const url = twigGet(this.source.url, { id: state.id })
+        if (this.url !== url) {
+          this.data = null
+
+          this.hide()
+          this.load(url, () => {
+            this.init()
+            this.show()
           })
         }
       }
 
       if ('date' in state) {
-        if (layer) {
-          layer.setDate(state.date)
-        }
+        this.setDate(state.date)
       }
     })
 
-    app.on('state-get', state => {
-      if (layer) {
-        state.id = layer.id
-      }
+    this.app.on('state-get', state => {
+      state.id = this.id
     })
 
-    app.on('initial-map-view', promises => {
-      if (!layer) { return }
-
+    this.app.on('initial-map-view', promises => {
       promises.push(new Promise((resolve, reject) => {
-        app.once('data-loaded', () => {
+        if (this.data) {
+          return resolve({
+            type: 'bounds',
+            bounds: this.layer.getBounds()
+          })
+        }
+
+        this.once('data-loaded', () => {
           resolve({
             type: 'bounds',
-            bounds: layer.layer.getBounds()
+            bounds: this.layer.getBounds()
           })
         })
       }))
     })
 
     ;['start', 'end'].forEach(p => {
-      app.on('default-' + p + '-date', promises => {
-        if (!layer) { return }
-
-        promises.push(new Promise(resolve => {
-          const starts = layer.allItems
-            .map(item => twigGet(layer.config[p + 'Field'], { item: item.feature }))
+      this.app.on('default-' + p + '-date', promises => {
+        promises.push(new Promise((resolve, reject) => {
+          const starts = this.allItems
+            .map(item => twigGet(this.config[p + 'Field'], { item: item.feature }))
             .filter(v => v)
             .sort()
 
@@ -73,21 +79,11 @@ App.addExtension({
         }))
       })
     })
-
-    callback()
-  }
-})
-
-class TimelineLayer {
-  constructor (id, source, config) {
-    this.id = id
-    this.source = source
-    this.config = config
   }
 
-  load (callback) {
-    const url = twigGet(this.source.url, { id: this.id })
-    fetch(url)
+  load (url, callback) {
+    this.url = url
+    fetch(this.url)
       .then(req => req.json())
       .then(data => {
         this.data = data
@@ -159,7 +155,8 @@ class TimelineLayer {
       })
     }
 
-    app.emit('data-loaded', this)
+    this.emit('data-loaded')
+    this.app.emit('data-loaded', this)
 
     const date = state.get().date
     if (date) {
@@ -168,11 +165,13 @@ class TimelineLayer {
   }
 
   show (map) {
-    this.layer.addTo(app.map)
+    this.layer.addTo(this.app.map)
   }
 
   hide (map) {
-    app.map.removeLayer(this.layer)
+    if (this.layer) {
+      this.app.map.removeLayer(this.layer)
+    }
   }
 
   setDate (date) {
