@@ -13,10 +13,16 @@
     <script src="dist/app.js"></script>
   </head>
   <body>
-    <div id='controls'>
-      <input id="date" type="text" name="date" value="">
+    <div class='timeline-header'>
+      <div class='controls'>
+        <input id="date" type="text" name="date" value="">
+        <div class=''>
+          <button name='backward'><i class="fa-solid fa-backward-step"></i></button>
+          <button name='forward'><i class="fa-solid fa-forward-step"></i></button>
+        </div>
+      </div>
+      <div id='timeline'></div>
     </div>
-    <div id='timeline'></div>
     <div id='map'></div>
   </body>
 </body>
