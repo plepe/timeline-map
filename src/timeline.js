@@ -5,7 +5,6 @@ const moment = require('moment')
 import state from './state'
 import App from './App'
 let app
-let dateInput
 let date = null
 
 App.addExtension({
@@ -18,14 +17,6 @@ App.addExtension({
 })
 
 function init () {
-  dateInput = document.getElementById('date')
-  dateInput.value = new Date().toISOString().substr(0, 10)
-  dateInput.addEventListener('change', () => {
-    date = moment(dateInput.value).format()
-    app.updateLink()
-    state.apply({ date })
-  })
-
   const options = {
     autoResize: true
   }
@@ -79,7 +70,6 @@ function init () {
   app.on('state-apply', state => {
     if ('date' in state) {
       date = state.date
-      dateInput.value = state.date
       timeline.setCustomTime(state.date)
     }
   })
