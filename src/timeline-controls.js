@@ -4,6 +4,7 @@ import App from './App'
 import state from './state'
 
 const inputs = {}
+let stepSize = [ '1', 'M' ]
 
 App.addExtension({
   id: 'timeline-controls',
@@ -20,19 +21,35 @@ App.addExtension({
       inputs[v] = document.querySelector('button[name=' + v + ']')
       inputs[v].addEventListener('click', () => {
         let date = moment(state.get().date)
-        date = v == 'backward' ? date.subtract(1, 'M') : date.add(1, 'M')
+        date = v == 'backward' ? date.subtract(...stepSize) : date.add(...stepSize)
         date = date.format('YYYY-MM-DD')
         state.apply({ date })
         app.updateLink()
       })
     })
 
+    inputs.stepSize = document.querySelector('select[name=stepSize]')
+    stepSize = parseStepSize(inputs.stepSize.value)
+    inputs.stepSize.addEventListener('change', () => {
+      stepSize = parseStepSize(inputs.stepSize.value).join('')
+      state.apply({ stepSize })
+    })
+
     app.on('state-apply', state => {
       if ('date' in state) {
         inputs.date.value = state.date
+      }
+
+      if ('stepSize' in state) {
+        inputs.stepSize.value = state.stepSize
+        stepSize = parseStepSize(state.stepSize)
       }
     })
 
     callback()
   }
 })
+
+function parseStepSize (str) {
+  return Array.from(str.match(/^([0-9]+)([A-Za-z])+$/)).slice(1)
+}
