@@ -5,10 +5,28 @@ import state from './state'
 
 const inputs = {}
 let stepSize = [ '1', 'M' ]
+let interval
 
 App.addExtension({
   id: 'timeline-controls',
   initFun: (app, callback) => {
+    const setActive = (active) => {
+      if (active) {
+        inputs.play.innerHTML = '<i class="fa-solid fa-pause"></i>'
+        interval = global.setInterval(() => {
+          let date = moment(state.get().date)
+          date = date.add(...stepSize)
+          date = date.format('YYYY-MM-DD')
+          state.apply({ date })
+          app.updateLink()
+        }, 1000)
+      } else {
+        inputs.play.innerHTML = '<i class="fa-solid fa-play"></i>'
+        global.clearInterval(interval)
+        interval = null
+      }
+    }
+
     inputs.date = document.getElementById('date')
     inputs.date.value = new Date().toISOString().substr(0, 10)
     inputs.date.addEventListener('change', () => {
@@ -27,6 +45,9 @@ App.addExtension({
         app.updateLink()
       })
     })
+
+    inputs.play = document.querySelector('button[name=play]')
+    inputs.play.addEventListener('click', () => setActive(!interval))
 
     inputs.stepSize = document.querySelector('select[name=stepSize]')
     stepSize = parseStepSize(inputs.stepSize.value)
