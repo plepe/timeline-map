@@ -55,6 +55,25 @@ App.addExtension({
       }))
     })
 
+    ;['start', 'end'].forEach(p => {
+      app.on('default-' + p + '-date', promises => {
+        if (!layer) { return }
+
+        promises.push(new Promise(resolve => {
+          const starts = layer.allItems
+            .map(item => twigGet(layer.config[p + 'Field'], { item: item.feature }))
+            .filter(v => v)
+            .sort()
+
+          if (starts.length) {
+            resolve(starts[p === 'end' ? starts.length - 1 : 0])
+          } else {
+            reject()
+          }
+        }))
+      })
+    })
+
     callback()
   }
 })

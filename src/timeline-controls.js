@@ -10,11 +10,37 @@ let interval
 App.addExtension({
   id: 'timeline-controls',
   initFun: (app, callback) => {
+    const getDate = (p) => new Promise(resolve => {
+      const date = state.get().date
+      if (date) {
+        return resolve(date)
+      }
+
+      app.getParameter('default-' + p + '-date')
+        .then(date => {
+          resolve(date)
+        })
+        .catch(err => {
+          console.error(err)
+          reject(err)
+          global.alert('Kein ' + p + ' Datum gefunden')
+        })
+    })
+
     const setActive = (active) => {
+      let date = state.get().date
+      if (!date) {
+        return getDate('start').then(date => {
+          console.log(date)
+          state.apply({ date })
+          setActive(active)
+        })
+      }
+
       if (active) {
         inputs.play.innerHTML = '<i class="fa-solid fa-pause"></i>'
         interval = global.setInterval(() => {
-          let date = moment(state.get().date)
+          date = moment(state.get().date)
           date = date.add(...stepSize)
           date = date.format('YYYY-MM-DD')
           state.apply({ date })
@@ -41,11 +67,13 @@ App.addExtension({
     ;['backward', 'forward'].forEach(v => {
       inputs[v] = document.querySelector('button[name=' + v + ']')
       inputs[v].addEventListener('click', () => {
-        let date = moment(state.get().date)
-        date = v == 'backward' ? date.subtract(...stepSize) : date.add(...stepSize)
-        date = date.format('YYYY-MM-DD')
-        state.apply({ date })
-        app.updateLink()
+        getDate(v === 'forward' ? 'start' : 'end').then(date => {
+          date = moment(date)
+          date = v == 'backward' ? date.subtract(...stepSize) : date.add(...stepSize)
+          date = date.format('YYYY-MM-DD')
+          state.apply({ date })
+          app.updateLink()
+        })
       })
     })
 
