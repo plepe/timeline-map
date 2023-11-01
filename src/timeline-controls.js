@@ -31,7 +31,6 @@ App.addExtension({
       let date = state.get().date
       if (!date) {
         return getDate('start').then(date => {
-          console.log(date)
           state.apply({ date })
           setActive(active)
         })

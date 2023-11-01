@@ -21,8 +21,6 @@ function initFun (app, callback) {
   app.map.on('moveend', (e) => {
     if (app.interactive) {
       app.updateLink()
-    } else {
-      console.log('skip')
     }
   })
 

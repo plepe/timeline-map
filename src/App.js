@@ -20,7 +20,6 @@ class App extends Events {
 
         if (extension.requireExtensions) {
           if (!extension.requireExtensions.filter(rId => extensions[rId] && extensions[rId].done).length) {
-            console.log('req', extension.requireExtensions)
             return false
           }
         }
@@ -28,13 +27,11 @@ class App extends Events {
         return true
       })
 
-    console.log('loadable', loadableExtensions)
     if (!loadableExtensions.length) {
       return callback()
     }
 
     each(loadableExtensions, ([id, extension], done) => {
-      console.log('start', id)
       if (!extension.initFun) {
         extension.done = true
         return done()
@@ -47,7 +44,6 @@ class App extends Events {
         }
 
         extension.done = true
-        console.log('done', id)
         return done()
       })
     }, () => this.initExtensions(callback))
