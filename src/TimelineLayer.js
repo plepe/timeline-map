@@ -164,17 +164,22 @@ class TimelineLayer {
     this.allItems.forEach((item) => {
       const log = item.feature.log
 
-      const shown = log.filter(e => {
-        let shown = false
-        if (e.start === null || e.start <= date) {
-          shown = true
-        }
-        if (e.end !== null && e.end !== '') {
-          if (e.end <= date) {
-          shown = false
-        }}
-        return shown
-      })
+      let shown
+      if (date) {
+        shown = log.filter(e => {
+          let shown = false
+          if (e.start === null || e.start <= date) {
+            shown = true
+          }
+          if (e.end !== null && e.end !== '') {
+            if (e.end <= date) {
+            shown = false
+          }}
+          return shown
+        })
+      } else {
+        shown = [true]
+      }
 
       if (shown.length) {
         let style = this.styleTemplate.render({ item: item.feature, logEntry: shown[0] })
