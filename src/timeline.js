@@ -1,5 +1,5 @@
-import state from './state'
-import App from './App'
+import state from 'geowiki-viewer/src/state'
+import App from 'geowiki-viewer/src/App'
 
 const visTimeline = require('vis-timeline')
 const visDataset = require('vis-data')

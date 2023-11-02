@@ -1,5 +1,5 @@
-import App from './App'
-import state from './state'
+import App from 'geowiki-viewer/src/App'
+import state from 'geowiki-viewer/src/state'
 
 const moment = require('moment')
 

@@ -1,9 +1,9 @@
 import Events from 'events'
-import state from './state'
+import state from 'geowiki-viewer/src/state'
+import twigGet from './twigGet'
 
-import App from './App'
+import App from 'geowiki-viewer/src/App'
 const Twig = require('twig')
-const twigGet = require('./twigGet')
 
 App.addExtension({
   id: 'timelineLayer',
