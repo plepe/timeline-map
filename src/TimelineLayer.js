@@ -1,5 +1,4 @@
 import Events from 'events'
-import state from 'geowiki-viewer/src/state'
 import twigGet from './twigGet'
 
 import App from 'geowiki-viewer/src/App'
@@ -180,7 +179,7 @@ class TimelineLayer extends Events {
     this.emit('data-loaded')
     this.app.emit('data-loaded', this)
 
-    const date = state.get().date
+    const date = this.app.state.get().date
     if (date) {
       this.setDate(date)
     }

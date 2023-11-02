@@ -1,4 +1,3 @@
-import state from 'geowiki-viewer/src/state'
 import App from 'geowiki-viewer/src/App'
 
 const visTimeline = require('vis-timeline')
@@ -28,12 +27,12 @@ function init () {
   timeline.on('timechanged', (e) => {
     date = moment(e.time).format()
     app.updateLink()
-    state.apply({ date })
+    app.state.apply({ date })
   })
   timeline.on('click', (e) => {
     date = moment(e.time).format()
     app.updateLink()
-    state.apply({ date })
+    app.state.apply({ date })
   })
   app.on('state-get', state => {
     state.date = date
@@ -77,5 +76,5 @@ function init () {
 }
 
 function setDate (date) {
-  state.apply({ date })
+  app.state.apply({ date })
 }

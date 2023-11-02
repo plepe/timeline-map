@@ -1,5 +1,4 @@
 import App from 'geowiki-viewer/src/App'
-import state from 'geowiki-viewer/src/state'
 
 const moment = require('moment')
 
@@ -11,7 +10,7 @@ App.addExtension({
   id: 'timeline-controls',
   initFun: (app, callback) => {
     const getDate = (p) => new Promise(resolve => {
-      const date = state.get().date
+      const date = app.state.get().date
       if (date) {
         return resolve(date)
       }
@@ -28,10 +27,10 @@ App.addExtension({
     })
 
     const setActive = (active) => {
-      let date = state.get().date
+      let date = app.state.get().date
       if (!date) {
         return getDate('start').then(date => {
-          state.apply({ date })
+          app.state.apply({ date })
           setActive(active)
         })
       }
@@ -39,10 +38,10 @@ App.addExtension({
       if (active) {
         inputs.play.innerHTML = '<i class="fa-solid fa-pause"></i>'
         interval = global.setInterval(() => {
-          date = moment(state.get().date)
+          date = moment(app.state.get().date)
           date = date.add(...stepSize)
           date = date.format('YYYY-MM-DD')
-          state.apply({ date })
+          app.state.apply({ date })
           app.updateLink()
         }, 1000)
       } else {
@@ -60,7 +59,7 @@ App.addExtension({
       }
 
       app.updateLink()
-      state.apply({ date })
+      app.state.apply({ date })
     })
 
     ;['backward', 'forward'].forEach(v => {
@@ -71,7 +70,7 @@ App.addExtension({
           date = moment(date)
           date = v == 'backward' ? date.subtract(...stepSize) : date.add(...stepSize)
           date = date.format('YYYY-MM-DD')
-          state.apply({ date })
+          app.state.apply({ date })
           app.updateLink()
         })
       })
@@ -84,7 +83,7 @@ App.addExtension({
     stepSize = parseStepSize(inputs.stepSize.value)
     inputs.stepSize.addEventListener('change', () => {
       stepSize = parseStepSize(inputs.stepSize.value).join('')
-      state.apply({ stepSize })
+      app.state.apply({ stepSize })
     })
 
     app.on('state-apply', state => {
