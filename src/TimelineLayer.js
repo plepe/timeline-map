@@ -233,20 +233,25 @@ class TimelineLayer extends Events {
         }
 
         item.addTo(this.layer)
-        if (item.setStyle) { item.setStyle(style) }
+        if (item.setStyle) {
+          item.setStyle(style)
+        }
+        if (item.setIcon) {
+          item.setIcon(this.getIcon(item.feature, shown[0]))
+        }
       } else {
         this.layer.removeLayer(item)
       }
     })
   }
 
-  getIcon (feature) {
+  getIcon (feature, logEntry = null) {
     if (!this.config.markerSymbol) {
       return null
     }
 
     const div = document.createElement('div')
-    const html = twigGet(this.config.markerSymbol, { item: feature })
+    const html = twigGet(this.config.markerSymbol, { item: feature, logEntry })
     div.innerHTML = html
     const c = div.firstChild
 
