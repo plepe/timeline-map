@@ -251,8 +251,20 @@ class TimelineLayer extends Events {
     div.innerHTML = html
     const c = div.firstChild
 
-    const iconOptions = { html }
+    const iconOptions = {
+      html,
+      iconAnchor: [0, 0],
+      iconSize: [0, 0],
+      signAnchor: [0, 0],
+      className: 'overpass-layer-icon'
+    }
     iconOptions.iconSize = [c.offsetWidth, c.offsetHeight]
+    if (c.hasAttribute('width')) {
+      iconOptions.iconSize[0] = parseFloat(c.getAttribute('width'))
+    }
+    if (c.hasAttribute('height')) {
+      iconOptions.iconSize[1] = parseFloat(c.getAttribute('height'))
+    }
 
     iconOptions.iconAnchor = [iconOptions.iconSize[0] / 2, iconOptions.iconSize[1] / 2]
     if (c.hasAttribute('anchorx')) {
@@ -260,6 +272,19 @@ class TimelineLayer extends Events {
     }
     if (c.hasAttribute('anchory')) {
       iconOptions.iconAnchor[1] = parseFloat(c.getAttribute('anchory'))
+    }
+
+    if (c.hasAttribute('signanchorx')) {
+      iconOptions.signAnchor[0] = parseFloat(c.getAttribute('signanchorx'))
+    }
+    if (c.hasAttribute('signanchory')) {
+      iconOptions.signAnchor[1] = parseFloat(c.getAttribute('signanchory'))
+    }
+
+    if (this.config.markerSign) {
+      const x = iconOptions.iconAnchor[0] + iconOptions.signAnchor[0]
+      const y = -iconOptions.iconSize[1] + iconOptions.iconAnchor[1] + iconOptions.signAnchor[1]
+      iconOptions.html += '<div class="sign" style="margin-left: ' + x + 'px; margin-top: ' + y + 'px;">' + this.config.markerSign + '</div>'
     }
 
     return L.divIcon(iconOptions)

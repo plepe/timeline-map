@@ -23,7 +23,15 @@ body {
   height: 100%;
   width: 100%;
 }
-.leaflet-div-icon {
-  border: none;
-  background: none;
+.overpass-layer-icon > img,
+.overpass-layer-icon > svg {
+  display: block;
+}
+.overpass-layer-icon div.sign {
+  position: relative;
+  font-size: 12px;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
 }
