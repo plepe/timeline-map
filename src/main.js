@@ -5,6 +5,7 @@ import 'geowiki-viewer/src/config'
 import './timeline'
 import './timeline-controls'
 import './TimelineLayer'
+import './overlays'
 
 window.onload = function () {
   return new App()

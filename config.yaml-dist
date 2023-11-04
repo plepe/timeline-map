@@ -6,6 +6,13 @@ defaultState:
 
 dateFormat: lll
 
+overlays:
+  - id: borders
+    type: leaflet-geowiki
+    enabled: true
+    data: borders.osm
+    styleFile: borders.yaml
+
 source:
   title: Countries
   attribution: Natural Earth
