@@ -10,7 +10,7 @@ overlays:
   - id: borders
     type: leaflet-geowiki
     enabled: true
-    data: borders.osm
+    data: borders.osm.json
     styleFile: borders.yaml
 
 source:
