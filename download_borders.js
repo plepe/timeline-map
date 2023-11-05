@@ -3,7 +3,7 @@ const osmtogeojson = require('osmtogeojson')
 
 fetch('https://overpass-api.openhistoricalmap.org/api/map', {
   method: 'POST',
-  body: '[out:json][bbox:41.376,3.472,51.179,29.531];relation[admin_level=2][wikidata~"^Q(40|131964)$"];out body;(way(r:"outer");way(r:"inner"););out body geom;'
+  body: '[out:json];(relation[wikidata~"^Q(40|131964|28513|268970)$"];relation[wikidata=Q1206012][start_date~"^19(38|39|4)"];)->.x;.x out body;(way(r.x:"outer");way(r.x:"inner"););out body geom;'
 })
 .then(req => req.json())
 .then(body => {
