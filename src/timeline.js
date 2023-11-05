@@ -6,7 +6,10 @@ const moment = require('moment')
 let app
 let date = null
 
-const TimelineLayer = require('./TimelineLayer')
+const types = {
+  TimelineLayer: require('./TimelineLayer'),
+  TimelineTimestamps: require('./TimelineTimestamps')
+}
 
 App.addExtension({
   id: 'timeline',
@@ -17,7 +20,8 @@ App.addExtension({
     app.on('init', () => {
       const layers = app.config.layers ?? [ app.config ]
       layers.forEach(l => {
-        new TimelineLayer(app, l)
+        const Type = types[l.type ?? 'TimelineLayer']
+        new Type(app, l)
       })
     })
 
@@ -46,6 +50,9 @@ function init () {
   })
   app.on('state-get', state => {
     state.date = date
+  })
+  app.on('timeline-dataset', items => {
+    timeline.setItems(new visDataset.DataSet(items))
   })
 
 /*
