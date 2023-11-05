@@ -12,6 +12,9 @@ overlays:
     enabled: true
     data: borders.osm.json
     styleFile: borders.yaml
+    filter: |
+      {% if state.date %}
+      relation[start_date~"{{ state.date|osmDateQuery({ op: '<=', strict: true }) }}"][end_date!~"{{ state.date|osmDateQuery({ op: '<=', strict: true }) }}"]
 
 source:
   title: Countries
