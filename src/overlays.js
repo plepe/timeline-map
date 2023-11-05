@@ -1,6 +1,7 @@
 import App from 'geowiki-viewer/src/App'
 const OverpassFrontend = require('overpass-frontend')
 const LeafletGeowiki = require('leaflet-geowiki')
+const twigGet = require('./twigGet')
 
 const overpassFrontendData = {}
 
@@ -18,6 +19,13 @@ App.addExtension({
           overpassFrontend: overpassFrontendData[l.data],
           styleFile: l.styleFile
         })
+
+        if (l.filter) {
+          layer.setFilter(twigGet(l.filter, { state: app.state.get() }))
+          app.on('state-apply', state => {
+            layer.setFilter(twigGet(l.filter, { state: app.state.get() }))
+          })
+        }
 
         layer.addTo(app.map)
       })
