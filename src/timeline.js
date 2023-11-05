@@ -15,13 +15,10 @@ App.addExtension({
     init()
 
     app.on('init', () => {
-      if (app.config.layers) {
-        app.config.layers.forEach(l => {
-          new TimelineLayer(app, l)
-        })
-      } else {
-        new TimelineLayer(app, app.config)
-      }
+      const layers = app.config.layers ?? [ app.config ]
+      layers.forEach(l => {
+        new TimelineLayer(app, l)
+      })
     })
 
     callback()
