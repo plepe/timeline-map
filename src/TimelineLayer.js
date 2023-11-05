@@ -1,26 +1,9 @@
 import Events from 'events'
 import twigGet from './twigGet'
 
-import App from 'geowiki-viewer/src/App'
 const Twig = require('twig')
 
-App.addExtension({
-  id: 'timelineLayer',
-  initFun: (app, callback) => {
-    app.on('init', () => {
-      if (app.config.layers) {
-        app.config.layers.forEach(l => {
-          new TimelineLayer(app, l)
-        })
-      } else {
-        new TimelineLayer(app, app.config)
-      }
-    })
-    callback()
-  }
-})
-
-class TimelineLayer extends Events {
+module.exports = class TimelineLayer extends Events {
   constructor (app, config) {
     super()
     this.app = app

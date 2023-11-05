@@ -6,11 +6,24 @@ const moment = require('moment')
 let app
 let date = null
 
+const TimelineLayer = require('./TimelineLayer')
+
 App.addExtension({
   id: 'timeline',
   initFun: (_app, callback) => {
     app = _app
     init()
+
+    app.on('init', () => {
+      if (app.config.layers) {
+        app.config.layers.forEach(l => {
+          new TimelineLayer(app, l)
+        })
+      } else {
+        new TimelineLayer(app, app.config)
+      }
+    })
+
     callback()
   }
 })
