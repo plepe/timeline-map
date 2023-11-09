@@ -1,4 +1,5 @@
 const fs = require('fs')
+const turfSimplify = require('@turf/simplify').default
 const osmtogeojson = require('osmtogeojson')
 
 fetch('https://overpass-api.openhistoricalmap.org/api/map', {
@@ -7,8 +8,39 @@ fetch('https://overpass-api.openhistoricalmap.org/api/map', {
 })
 .then(req => req.json())
 .then(body => {
-  fs.writeFileSync('borders.osm.json', JSON.stringify(body))
+  fs.writeFileSync('borders-orig.osm.json', JSON.stringify(body))
 
-//  const geojson = osmtogeojson(JSON.parse(body))
-//  fs.writeFileSync('borders.geojson', JSON.stringify(geojson))
+  const simplified = simplifyBorders(body)
+  fs.writeFileSync('borders.osm.json', JSON.stringify(simplified))
 })
+
+function simplifyBorders (borders) {
+  borders.elements.forEach(element => {
+    if (element.type !== 'way') {
+      return
+    }
+
+    const geoJson = {
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'LineString',
+        coordinates: element.geometry.map(g => [ g.lon, g.lat ])
+      }
+    }
+
+    const simplified = turfSimplify(geoJson, {
+      tolerance: 0.01,
+      highQuality: true
+    })
+
+    console.log(element.id, '-', element.nodes.length, 'nodes', '->', simplified.geometry.coordinates.length)
+
+    delete element.nodes
+    element.geometry = simplified.geometry.coordinates.map(g => {
+      return { lon: g[0], lat: g[1] }
+    })
+  })
+
+  return borders
+}
