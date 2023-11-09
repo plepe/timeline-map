@@ -10,7 +10,7 @@ App.addExtension({
   id: 'timeline-controls',
   initFun: (app, callback) => {
     const getDate = (p) => new Promise(resolve => {
-      const date = app.state.get().date
+      const date = app.state.current.date
       if (date) {
         return resolve(date)
       }
@@ -27,7 +27,7 @@ App.addExtension({
     })
 
     const setActive = (active) => {
-      let date = app.state.get().date
+      let date = app.state.current.date
       if (!date) {
         return getDate('start').then(date => {
           app.state.apply({ date })
@@ -38,7 +38,7 @@ App.addExtension({
       if (active) {
         inputs.play.innerHTML = '<i class="fa-solid fa-pause"></i>'
         interval = global.setInterval(() => {
-          date = moment(app.state.get().date)
+          date = moment(app.state.current.date)
           date = date.add(...stepSize)
           date = date.format('YYYY-MM-DD')
           app.state.apply({ date })

@@ -162,7 +162,7 @@ module.exports = class TimelineLayer extends Events {
     this.emit('data-loaded')
     this.app.emit('data-loaded', this)
 
-    const date = this.app.state.get().date
+    const date = this.app.state.current.date
     if (date) {
       this.setDate(date)
     }

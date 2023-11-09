@@ -21,9 +21,9 @@ App.addExtension({
         })
 
         if (l.filter) {
-          layer.setFilter(twigGet(l.filter, { state: app.state.get() }))
+          layer.setFilter(twigGet(l.filter, { state: app.state.current }))
           app.on('state-apply', state => {
-            layer.setFilter(twigGet(l.filter, { state: app.state.get() }))
+            layer.setFilter(twigGet(l.filter, { state: app.state.current }))
           })
         }
 
