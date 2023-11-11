@@ -1,8 +1,6 @@
 import Events from 'events'
 import twigGet from './twigGet'
 
-const Twig = require('twig')
-
 module.exports = class TimelineLayer extends Events {
   constructor (app, config) {
     super()
@@ -92,8 +90,6 @@ module.exports = class TimelineLayer extends Events {
     this.max = '0'
     this.timestamps = {}
 
-    this.styleTemplate = Twig.twig({ data: this.config.styleTemplate ?? '{}' })
-
     this.data.features.forEach(feature => {
       if (this.config.type === 'start-end-field') {
         const start = twigGet(this.config.startField, { item: feature })
@@ -138,7 +134,8 @@ module.exports = class TimelineLayer extends Events {
 
     this.layer = L.geoJSON(this.data, {
       style: (feature) => {
-        return JSON.parse(this.styleTemplate.render({ item: feature }))
+        const style = twigGet(this.config.styleTemplate, { item: feature })
+        return JSON.parse(style)
       },
       pointToLayer: (feature, latlng) => {
         const icon = this.getIcon(feature)
@@ -153,9 +150,8 @@ module.exports = class TimelineLayer extends Events {
     this.allItems = this.layer.getLayers()
 
     if (this.config.popupTemplate) {
-      this.popupTemplate = Twig.twig({ data: this.config.popupTemplate })
       this.layer.bindPopup(item => {
-        return this.popupTemplate.render({ item: item.feature })
+        return twigGet(this.config.popupTemplate, { item: item.feature })
       })
     }
 
@@ -205,7 +201,7 @@ module.exports = class TimelineLayer extends Events {
       }
 
       if (shown.length) {
-        let style = this.styleTemplate.render({ item: item.feature, logEntry: shown[0] })
+        let style = twigGet(this.config.styleTemplate, { item: item.feature, logEntry: shown[0] })
         style = JSON.parse(style)
 
         if (!('interactive' in style)) {
