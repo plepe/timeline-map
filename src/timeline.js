@@ -7,7 +7,7 @@ let app
 let date = null
 
 const types = {
-  TimelineLayer: require('./TimelineLayer'),
+  TimelineGeoJSON: require('./TimelineGeoJSON'),
   TimelineTimestamps: require('./TimelineTimestamps')
 }
 
@@ -20,7 +20,7 @@ App.addExtension({
     app.on('init', () => {
       const layers = app.config.layers ?? [ app.config ]
       layers.forEach(l => {
-        const Type = types[l.type ?? 'TimelineLayer']
+        const Type = types[l.type ?? 'TimelineGeoJSON']
         new Type(app, l)
       })
     })

@@ -4,7 +4,7 @@ import 'geowiki-viewer/src/map'
 import 'geowiki-viewer/src/config'
 import './timeline'
 import './timeline-controls'
-import './TimelineLayer'
+import './TimelineGeoJSON'
 import './overlays'
 import './flags'
 

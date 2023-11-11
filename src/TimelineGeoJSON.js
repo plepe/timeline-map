@@ -1,7 +1,7 @@
 import Events from 'events'
 import twigGet from './twigGet'
 
-module.exports = class TimelineLayer extends Events {
+module.exports = class TimelineGeoJSON extends Events {
   constructor (app, config) {
     super()
     this.app = app

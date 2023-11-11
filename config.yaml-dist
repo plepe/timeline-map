@@ -16,6 +16,7 @@ overlays:
       {% if state.date %}
       relation[start_date~"{{ state.date|osmDateQuery({ op: '<=', strict: true }) }}"][end_date!~"{{ state.date|osmDateQuery({ op: '<=', strict: true }) }}"]
 
+type: TimelineGeoJSON
 source:
   title: Countries
   attribution: Natural Earth
