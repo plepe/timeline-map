@@ -91,6 +91,10 @@ module.exports = class TimelineLayer extends Events {
     this.timestamps = {}
 
     this.data.features.forEach(feature => {
+      if (this.config.init) {
+        twigGet(this.config.init, { item: feature })
+      }
+
       if (this.config.type === 'start-end-field') {
         const start = twigGet(this.config.startField, { item: feature })
         const end = twigGet(this.config.endField, { item: feature })
