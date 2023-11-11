@@ -6,6 +6,7 @@ import './timeline'
 import './timeline-controls'
 import './TimelineLayer'
 import './overlays'
+import './flags'
 
 window.onload = function () {
   return new App()
