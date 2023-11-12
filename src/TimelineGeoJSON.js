@@ -5,9 +5,8 @@ module.exports = class TimelineGeoJSON extends Events {
   constructor (app, config) {
     super()
     this.app = app
-    this.source = config.source
-    this.config = config.feature
-    this.reqParameter = this.source.reqParameter ?? []
+    this.config = config
+    this.reqParameter = this.config.source.reqParameter ?? []
     this.parameter = {}
 
     this.app.on('state-apply', state => {
@@ -16,7 +15,7 @@ module.exports = class TimelineGeoJSON extends Events {
           this.parameter[k] = state[k]
         })
 
-        const url = twigGet(this.source.url, state)
+        const url = twigGet(this.config.source.url, state)
         if (this.url !== url) {
           this.data = null
 
@@ -61,7 +60,7 @@ module.exports = class TimelineGeoJSON extends Events {
       this.app.on('default-' + p + '-date', promises => {
         promises.push(new Promise((resolve, reject) => {
           const starts = this.allItems
-            .map(item => twigGet(this.config[p + 'Field'], { item: item.feature }))
+            .map(item => twigGet(this.config.feature[p + 'Field'], { item: item.feature }))
             .filter(v => v)
             .sort()
 
@@ -91,20 +90,20 @@ module.exports = class TimelineGeoJSON extends Events {
     this.timestamps = {}
 
     this.data.features.forEach(feature => {
-      if (this.config.init) {
-        twigGet(this.config.init, { item: feature })
+      if (this.config.feature.init) {
+        twigGet(this.config.feature.init, { item: feature })
       }
 
-      if (this.config.type === 'start-end-field') {
-        const start = twigGet(this.config.startField, { item: feature })
-        const end = twigGet(this.config.endField, { item: feature })
+      if (this.config.feature.type === 'start-end-field') {
+        const start = twigGet(this.config.feature.startField, { item: feature })
+        const end = twigGet(this.config.feature.endField, { item: feature })
         feature.log = [{ start, end }]
-      } else if (this.config.type === 'log-array') {
+      } else if (this.config.feature.type === 'log-array') {
         feature.log = feature.log(e => {
           return { start: e[0], end: e[1] }
         })
-      } else if (this.config.type === 'function') {
-        feature.log = JSON.parse(twigGet(this.config.logFunction, { item: feature }))
+      } else if (this.config.feature.type === 'function') {
+        feature.log = JSON.parse(twigGet(this.config.feature.logFunction, { item: feature }))
       }
 
       feature.log.forEach(({ start, end }) => {
@@ -138,7 +137,7 @@ module.exports = class TimelineGeoJSON extends Events {
 
     this.layer = L.geoJSON(this.data, {
       style: (feature) => {
-        const style = twigGet(this.config.styleTemplate, { item: feature })
+        const style = twigGet(this.config.feature.styleTemplate, { item: feature })
         return JSON.parse(style)
       },
       pointToLayer: (feature, latlng) => {
@@ -153,9 +152,9 @@ module.exports = class TimelineGeoJSON extends Events {
 
     this.allItems = this.layer.getLayers()
 
-    if (this.config.popupTemplate) {
+    if (this.config.feature.popupTemplate) {
       this.layer.bindPopup(item => {
-        return twigGet(this.config.popupTemplate, { item: item.feature })
+        return twigGet(this.config.feature.popupTemplate, { item: item.feature })
       })
     }
 
@@ -205,7 +204,7 @@ module.exports = class TimelineGeoJSON extends Events {
       }
 
       if (shown.length) {
-        let style = twigGet(this.config.styleTemplate, { item: item.feature, logEntry: shown[0] })
+        let style = twigGet(this.config.feature.styleTemplate, { item: item.feature, logEntry: shown[0] })
         style = JSON.parse(style)
 
         if (!('interactive' in style)) {
@@ -229,12 +228,12 @@ module.exports = class TimelineGeoJSON extends Events {
   }
 
   getIcon (feature, logEntry = null) {
-    if (!this.config.markerSymbol) {
+    if (!this.config.feature.markerSymbol) {
       return null
     }
 
     const div = document.createElement('div')
-    const html = twigGet(this.config.markerSymbol, { item: feature, logEntry })
+    const html = twigGet(this.config.feature.markerSymbol, { item: feature, logEntry })
     div.innerHTML = html
     const c = div.firstChild
 
@@ -268,10 +267,10 @@ module.exports = class TimelineGeoJSON extends Events {
       iconOptions.signAnchor[1] = parseFloat(c.getAttribute('signanchory'))
     }
 
-    if (this.config.markerSign) {
+    if (this.config.feature.markerSign) {
       const x = iconOptions.iconAnchor[0] + iconOptions.signAnchor[0]
       const y = -iconOptions.iconSize[1] + iconOptions.iconAnchor[1] + iconOptions.signAnchor[1]
-      iconOptions.html += '<div class="sign" style="margin-left: ' + x + 'px; margin-top: ' + y + 'px;">' + this.config.markerSign + '</div>'
+      iconOptions.html += '<div class="sign" style="margin-left: ' + x + 'px; margin-top: ' + y + 'px;">' + this.config.feature.markerSign + '</div>'
     }
 
     return L.divIcon(iconOptions)
