@@ -89,7 +89,7 @@ module.exports = class TimelineJSON extends Events {
     this.min = '99999'
     this.max = '0'
     this.timestamps = {}
-    this.layer = L.layerGroup()
+    this.layer = L.featureGroup()
 
     this.allItems = this.data.map(item => {
       const result = { item }
@@ -142,10 +142,7 @@ module.exports = class TimelineJSON extends Events {
         result.features = result.log.map(logEntry => {
           const coords = {
             type: 'Feature',
-            properties: {
-              start: logEntry.start,
-              end: logEntry.end
-            },
+            properties: { item, logEntry },
             geometry: wkx.Geometry.parse(logEntry[this.config.feature.geomLogField]).toGeoJSON()
           }
 
@@ -158,6 +155,7 @@ module.exports = class TimelineJSON extends Events {
       } else if (this.config.feature.geomField) {
         const coords = {
           type: 'Feature',
+          properties: { item },
           geometry: wkx.Geometry.parse(item[this.config.feature.geomField]).toGeoJSON()
         }
 
@@ -173,8 +171,8 @@ module.exports = class TimelineJSON extends Events {
     }
 
     if (this.config.feature.popupTemplate) {
-      this.layer.bindPopup(item => {
-        return twigGet(this.config.feature.popupTemplate, { item: item.feature })
+      this.layer.bindPopup(feature => {
+        return twigGet(this.config.feature.popupTemplate, feature.feature.properties)
       })
     }
 
