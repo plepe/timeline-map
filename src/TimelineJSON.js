@@ -133,33 +133,30 @@ module.exports = class TimelineJSON extends Events {
         }
       })
 
-      if (item.kartendaten) {
-        const coords = {
-          type: 'FeatureCollection',
-          features: JSON.parse(item.kartendaten).map(k => {
-            return {
-              type: 'Feature',
-              geometry: wkx.Geometry.parse(k.koordinaten).toGeoJSON()
-            }
-          })
-        }
-
-        result.feature = L.geoJSON(coords, {
-          style: (item) => {
-            const style = twigGet(this.config.feature.styleTemplate, { item })
-            return JSON.parse(style)
-          },
-          pointToLayer: (feature, latlng) => {
-            const icon = this.getIcon(item)
-            if (icon) {
-              return L.marker(latlng, { icon })
-            } else {
-              return L.marker(latlng)
-            }
+      if (this.config.feature.geomLogField) {
+        result.features = result.log.map(logEntry => {
+          const coords = {
+            type: 'Feature',
+            properties: {
+              start: logEntry.start,
+              end: logEntry.end
+            },
+            geometry: wkx.Geometry.parse(logEntry[this.config.feature.geomLogField]).toGeoJSON()
           }
+
+          return this.coordsToLeaflet(coords, item)
         })
 
-        this.layer.addLayer(result.feature)
+        result.features.forEach(feature => {
+          this.layer.addLayer(feature)
+        })
+      } else if (this.config.feature.geomField) {
+        const coords = {
+          type: 'Feature',
+          geometry: wkx.Geometry.parse(item[this.config.feature.geomField]).toGeoJSON()
+        }
+
+        result.feature = coordsToLeaflet(coords, item)
       }
 
       return result
@@ -200,7 +197,7 @@ module.exports = class TimelineJSON extends Events {
       return
     }
 
-    this.allItems.forEach(({ item, log, feature }) => {
+    this.allItems.forEach(({ item, log, feature, features }) => {
       let shown
       if (date && log) {
         shown = log.filter(e => {
@@ -290,5 +287,29 @@ module.exports = class TimelineJSON extends Events {
     }
 
     return L.divIcon(iconOptions)
+  }
+
+  coordsToLeaflet (coords, item) {
+    return L.geoJSON(coords, {
+      style: (item) => {
+        let style
+        try {
+          style = twigGet(this.config.feature.styleTemplate, { item })
+          style = JSON.parse(style)
+        } catch (e) {
+          console.error(e.message)
+        }
+
+        return style
+      },
+      pointToLayer: (item, latlng) => {
+        const icon = this.getIcon(item)
+        if (icon) {
+          return L.marker(latlng, { icon })
+        } else {
+          return L.marker(latlng)
+        }
+      }
+    })
   }
 }
