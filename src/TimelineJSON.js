@@ -200,10 +200,10 @@ module.exports = class TimelineJSON extends Events {
       return
     }
 
-    this.allItems.forEach(({ item, log, feature, features }) => {
+    this.allItems.forEach(({ item, log, feature, features }, i) => {
       let shown
       if (date && log) {
-        shown = log.filter(e => {
+        shown = log.map(e => {
           let shown = false
           if (e.start === null || e.start <= date) {
             shown = true
@@ -219,7 +219,7 @@ module.exports = class TimelineJSON extends Events {
         shown = [true]
       }
 
-      if (shown.length) {
+      if (shown.includes(true)) {
         let style = twigGet(this.config.feature.styleTemplate, { item, logEntry: shown[0] })
         try {
           style = JSON.parse(style)
@@ -234,15 +234,42 @@ module.exports = class TimelineJSON extends Events {
           style.opacity = 1
         }
 
-        feature.addTo(this.layer)
-        if (feature.setStyle) {
-          feature.setStyle(style)
-        }
-        if (feature.setIcon) {
-          feature.setIcon(this.getIcon(item, shown[0]))
+        console.log(shown)
+        if (features) {
+          features.forEach((f, i) => {
+            if (shown[i]) {
+              if (f.setStyle) {
+                f.setStyle(style)
+              }
+              if (f.setIcon) {
+                f.setIcon(this.getIcon(item, log[i]))
+              }
+
+              f.addTo(this.layer)
+            } else if (this.layer.hasLayer(f)) {
+              this.layer.removeLayer(f)
+            }
+          })
+        } else {
+          if (feature.setStyle) {
+            feature.setStyle(style)
+          }
+          if (feature.setIcon) {
+            feature.setIcon(this.getIcon(item, shown[0]))
+          }
+
+          feature.addTo(this.layer)
         }
       } else {
-        this.layer.removeLayer(feature)
+        if (features) {
+          features.forEach(f => {
+            if (this.layer.hasLayer(f)) {
+              this.layer.removeLayer(f)
+            }
+          })
+        } else if (this.layer.hasLayer(features)) {
+          this.layer.removeLayer(feature)
+        }
       }
     })
   }
