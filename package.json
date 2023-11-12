@@ -29,7 +29,8 @@
     "standard": "^17.1.0",
     "twig": "^1.16.0",
     "vis-data": "^7.1.6",
-    "vis-timeline": "^7.7.2"
+    "vis-timeline": "^7.7.2",
+    "wkx": "^0.5.0"
   },
   "devDependencies": {
     "browserify": "^17.0.0",

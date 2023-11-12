@@ -8,6 +8,7 @@ let date = null
 
 const types = {
   TimelineGeoJSON: require('./TimelineGeoJSON'),
+  TimelineJSON: require('./TimelineJSON'),
   TimelineTimestamps: require('./TimelineTimestamps')
 }
 
