@@ -102,14 +102,6 @@ module.exports = class TimelineJSON extends Events {
         const start = twigGet(this.config.feature.startField, { item })
         const end = twigGet(this.config.feature.endField, { item })
         result.log = [{ start, end }]
-      } else if (this.config.feature.type === 'array') {
-        if (item.kartendaten) {
-          result.log = JSON.parse(item.kartendaten).map(e => {
-            return { start: e.start, end: e.ende }
-          })
-        } else {
-          result.log = []
-        }
       } else if (this.config.feature.type === 'log-array') {
         result.log = feature.log(e => {
           return { start: e[0], end: e[1] }
