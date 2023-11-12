@@ -107,7 +107,12 @@ module.exports = class TimelineJSON extends Events {
           return { start: e[0], end: e[1] }
         })
       } else if (this.config.feature.type === 'function') {
-        result.log = JSON.parse(twigGet(this.config.feature.logFunction, { item: feature }))
+        try {
+          const l = twigGet(this.config.feature.logFunction, { item })
+          result.log = JSON.parse(l)
+        } catch (e) {
+          console.error(e.message)
+        }
       }
 
       result.log.forEach(({ start, end }) => {
@@ -218,7 +223,11 @@ module.exports = class TimelineJSON extends Events {
 
       if (shown.length) {
         let style = twigGet(this.config.feature.styleTemplate, { item, logEntry: shown[0] })
-        style = JSON.parse(style)
+        try {
+          style = JSON.parse(style)
+        } catch (e) {
+          console.error(e.message)
+        }
 
         if (!('interactive' in style)) {
           style.interactive = true
