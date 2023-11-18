@@ -360,7 +360,7 @@ module.exports = class TimelineJSON extends Events {
     if (this.config.feature.markerSign) {
       const x = iconOptions.iconAnchor[0] + iconOptions.signAnchor[0]
       const y = -iconOptions.iconSize[1] + iconOptions.iconAnchor[1] + iconOptions.signAnchor[1]
-      iconOptions.html += '<div class="sign" style="margin-left: ' + x + 'px; margin-top: ' + y + 'px;">' + this.config.feature.markerSign + '</div>'
+      iconOptions.html += '<div class="sign" style="margin-left: ' + x + 'px; margin-top: ' + y + 'px;">' + twigGet(this.config.feature.markerSign, { item, logEntry }) + '</div>'
     }
 
     return L.divIcon(iconOptions)
