@@ -58,8 +58,8 @@ App.addExtension({
         date = moment(date, ['LL', 'YYYY-MM-DD', 'D.M.YYYY'], 'de').format('YYYY-MM-DD').substr(0, 10)
       }
 
-      app.updateLink()
       app.state.apply({ date })
+      app.updateLink()
     })
 
     ;['backward', 'forward'].forEach(v => {
