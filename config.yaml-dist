@@ -17,6 +17,12 @@ overlays:
       relation[start_date~"{{ state.date|osmDateQuery({ op: '<=', strict: true }) }}"][end_date!~"{{ state.date|osmDateQuery({ op: '<=', strict: true }) }}"]
 
 layer:
+- type: TimelineJSON
+  source:
+    # url: '{{ id }}.json'
+    url: all.json
+    reqParameter: ['id']
+
 - type: TimelineGeoJSON
   source:
     title: Countries
