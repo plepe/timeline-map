@@ -125,7 +125,14 @@ module.exports = class TimelineJSON extends Events {
         }
       }
 
-      result.log.forEach(({ start, end }) => {
+      result.log.forEach(logEntry => {
+        let start = this.config.feature.startLog ?
+          twigGet(this.config.feature.startLog, { item, logEntry }) :
+          logEntry[this.config.feature.startLogField ?? 'start']
+        let end = this.config.feature.endLog ?
+          twigGet(this.config.feature.endLog, { item, logEntry }) :
+          logEntry[this.config.feature.endLogField ?? 'end']
+
         if (start === '') {
           start = null
         }

@@ -32,6 +32,18 @@ layer:
     filterId: |
       {{ state.id }}
 
+  feature:
+    # which field in each log entry to use as startdate (default: 'start')
+    #startLogField: start
+
+    # use a Twig template to evaluate the value of the the start of a log entry.
+    # Use {{ item.key }} and {{ logEntry.key }}.
+    #startLog: '{{ logEntry.start }}'
+
+    # See startLogField and startLog for documentation
+    #endLogField: end
+    #endLog: '{{ logEntry.ende }}'
+
 - type: TimelineGeoJSON
   source:
     title: Countries
