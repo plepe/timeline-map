@@ -156,7 +156,7 @@ module.exports = class TimelineJSON extends Events {
       })
 
       if (this.config.feature.geomLogField) {
-        result.features = result.log.map(logEntry => {
+        result.features = result.log.forEach(logEntry => {
           if (!logEntry[this.config.feature.geomLogField]) {
             return
           }
@@ -167,10 +167,7 @@ module.exports = class TimelineJSON extends Events {
             geometry: wkx.Geometry.parse(logEntry[this.config.feature.geomLogField]).toGeoJSON()
           }
 
-          return this.coordsToLeaflet(coords, item, logEntry)
-        }).filter(l => l)
-
-        result.features.forEach(feature => {
+          const feature = this.coordsToLeaflet(coords, item, logEntry)
           this.layer.addLayer(feature)
         })
       } else if (this.config.feature.geomField) {
