@@ -342,6 +342,18 @@ module.exports = class TimelineJSON extends Events {
   }
 
   coordsToLeaflet (coords, item, logEntry = null) {
+    if (coords.geometry.type === 'GeometryCollection') {
+      const layers = coords.geometry.geometries.map(g => {
+        return this.coordsToLeaflet({
+          type: 'Feature',
+          properties: coords.properties,
+          geometry: g
+        }, item, logEntry)
+      })
+
+      return L.featureGroup(layers)
+    }
+
     return L.geoJSON(coords, {
       style: (item) => {
         let style
