@@ -167,7 +167,7 @@ module.exports = class TimelineJSON extends Events {
             geometry: wkx.Geometry.parse(logEntry[this.config.feature.geomLogField]).toGeoJSON()
           }
 
-          return this.coordsToLeaflet(coords, item)
+          return this.coordsToLeaflet(coords, item, logEntry)
         }).filter(l => l)
 
         result.features.forEach(feature => {
@@ -344,12 +344,12 @@ module.exports = class TimelineJSON extends Events {
     return L.divIcon(iconOptions)
   }
 
-  coordsToLeaflet (coords, item) {
+  coordsToLeaflet (coords, item, logEntry = null) {
     return L.geoJSON(coords, {
       style: (item) => {
         let style
         try {
-          style = twigGet(this.config.feature.styleTemplate, { item })
+          style = twigGet(this.config.feature.styleTemplate, { item, logEntry })
           style = JSON.parse(style)
         } catch (e) {
           console.error(e.message)
@@ -358,7 +358,7 @@ module.exports = class TimelineJSON extends Events {
         return style
       },
       pointToLayer: (item, latlng) => {
-        const icon = this.getIcon(item)
+        const icon = this.getIcon(item, logEntry)
         if (icon) {
           return L.marker(latlng, { icon })
         } else {
