@@ -23,6 +23,15 @@ layer:
     url: all.json
     reqParameter: ['id']
 
+    # from all.json, load only the items where the filter evaluates to a true
+    # value
+    filter: |
+      {{ state.id ? item.id == state.id : true }}
+    # if filter is used, use 'filterId' to detect, when the layer has to be
+    # redrawn (if the filterId changes)
+    filterId: |
+      {{ state.id }}
+
 - type: TimelineGeoJSON
   source:
     title: Countries

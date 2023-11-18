@@ -2,6 +2,7 @@ import Events from 'events'
 import wkx from 'wkx'
 import twigGet from './twigGet'
 import loader from './loader'
+import isTrue from './isTrue'
 
 module.exports = class TimelineJSON extends Events {
   constructor (app, config) {
@@ -18,7 +19,10 @@ module.exports = class TimelineJSON extends Events {
         })
 
         const url = twigGet(this.config.source.url, state)
-        if (this.url !== url) {
+        const filterId = this.config.source.filterId ? twigGet(this.config.source.filterId, { state: this.app.state.current }) : null
+
+        if (this.url !== url || this.currentFilterId !== filterId) {
+          this.currentFilterId = filterId
           this.data = null
 
           this.hide()
@@ -79,7 +83,14 @@ module.exports = class TimelineJSON extends Events {
   load (url, callback) {
     this.url = url
     loader(url, {}, (err, data) => {
-      this.data = data
+      if (this.config.source.filter) {
+        this.data = data.filter(item =>
+          isTrue(twigGet(this.config.source.filter, { item, state: this.app.state.current }))
+        )
+      } else {
+        this.data = data
+      }
+
       callback(err)
     })
   }
