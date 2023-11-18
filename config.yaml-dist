@@ -50,6 +50,9 @@ layer:
       {{ item.title }}
 
     # an alternative to popupTemplate: load popup content from an address
+    # if both popupTemplate and popupSource are defined, then first the
+    # evaluated popupTemplate will be shown, then overwriten by the result of
+    # popupSource
     popupSource:
       url: '/popup-{{ item.id }}.html'
 

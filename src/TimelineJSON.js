@@ -189,30 +189,33 @@ module.exports = class TimelineJSON extends Events {
       this.max = new Date()
     }
 
-    if (this.config.feature.popupTemplate) {
-      this.layer.bindPopup(feature => {
-        return twigGet(this.config.feature.popupTemplate, feature.feature.properties)
-      })
-    } else if (this.config.feature.popupSource) {
+    if (this.config.feature.popupTemplate || this.config.feature.popupSource) {
       this.layer.bindPopup(feature => {
         const div = document.createElement('div')
 
-        const url = twigGet(this.config.feature.popupSource.url, feature.feature.properties)
-        fetch(url)
-          .then(req => req.text())
-          .then(body => {
-            if (this.config.feature.popupSource.querySelector) {
-              const x = document.createElement('div')
-              x.innerHTML = body
+        if (this.config.feature.popupTemplate) {
+          const content = twigGet(this.config.feature.popupTemplate, feature.feature.properties)
+          div.innerHTML = content
+        }
 
-              const content = x.querySelector(this.config.feature.popupSource.querySelector)
-              if (content) {
-                body = content.innerHTML
+        if (this.config.feature.popupSource) {
+          const url = twigGet(this.config.feature.popupSource.url, feature.feature.properties)
+          fetch(url)
+            .then(req => req.text())
+            .then(body => {
+              if (this.config.feature.popupSource.querySelector) {
+                const x = document.createElement('div')
+                x.innerHTML = body
+
+                const content = x.querySelector(this.config.feature.popupSource.querySelector)
+                if (content) {
+                  body = content.innerHTML
+                }
               }
-            }
 
-            div.innerHTML = body
-          })
+              div.innerHTML = body
+            })
+        }
 
         return div
       })
