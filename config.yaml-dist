@@ -46,6 +46,16 @@ layer:
     #endLogField: end
     #endLog: '{{ logEntry.ende }}'
 
+    popupTemplate: |-
+      {{ item.title }}
+
+    # an alternative to popupTemplate: load popup content from an address
+    popupSource:
+      url: '/popup-{{ item.id }}.html'
+
+      # if the address returns wrapping HTML, just use the queried part
+      querySelector: '.content'
+
 - type: TimelineGeoJSON
   source:
     title: Countries

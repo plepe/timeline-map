@@ -35,3 +35,6 @@ body {
   display: flex;
   justify-content: center;
 }
+.leaflet-popup-content {
+  width: 400px;
+}
