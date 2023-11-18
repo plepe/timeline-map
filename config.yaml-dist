@@ -16,26 +16,27 @@ overlays:
       {% if state.date %}
       relation[start_date~"{{ state.date|osmDateQuery({ op: '<=', strict: true }) }}"][end_date!~"{{ state.date|osmDateQuery({ op: '<=', strict: true }) }}"]
 
-type: TimelineGeoJSON
-source:
-  title: Countries
-  attribution: Natural Earth
-  url: https://datahub.io/core/geo-countries/r/countries.geojson
-  reqParameter: []
-  # the url may use twig parameters from the state (e.g. 'id')
-  # then you should add 'id' to reqParameter, so that the app detects
-  # when the source changes; also these parameters will be added to the link
-
-feature:
-  type: start-end-field
-  startField: |-
-    {{ item.properties.start }}
-  endField: |-
-    {{ item.properties.end }}
-  popupTemplate: |-
-    {{ item.properties.popup }}
-  nodeFeature: marker
-  popupTemplate: |-
-    {{ item.properties.ADMIN }}
-  styleTemplate: |-
-    {{ { color: 'red' }|json_encode }}
+layer:
+- type: TimelineGeoJSON
+  source:
+    title: Countries
+    attribution: Natural Earth
+    url: https://datahub.io/core/geo-countries/r/countries.geojson
+    reqParameter: []
+    # the url may use twig parameters from the state (e.g. 'id')
+    # then you should add 'id' to reqParameter, so that the app detects
+    # when the source changes; also these parameters will be added to the link
+  
+  feature:
+    type: start-end-field
+    startField: |-
+      {{ item.properties.start }}
+    endField: |-
+      {{ item.properties.end }}
+    popupTemplate: |-
+      {{ item.properties.popup }}
+    nodeFeature: marker
+    popupTemplate: |-
+      {{ item.properties.ADMIN }}
+    styleTemplate: |-
+      {{ { color: 'red' }|json_encode }}
