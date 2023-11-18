@@ -7,6 +7,9 @@ Twig.extendFunction('markerCircle', (data, options) => Twig.filters.raw(markers.
 Twig.extendFunction('markerPointer', (data, options) => Twig.filters.raw(markers.pointer(data, options)))
 Twig.extendFunction('markerPolygon', (data, options) => Twig.filters.raw(markers.polygon(data, options)))
 Twig.extendFilter('osmDateQuery', (value, options) => osmDateQuery(value, options[0]))
+Twig.extendFilter('json_decode', (value) => {
+  return JSON.parse(value)
+})
 
 const twigTemplates = {}
 
