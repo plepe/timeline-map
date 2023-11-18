@@ -391,7 +391,7 @@ module.exports = class TimelineJSON extends Events {
 
         return style
       },
-      pointToLayer: (item, latlng) => {
+      pointToLayer: (feature, latlng) => {
         const icon = this.getIcon(item, logEntry)
         if (icon) {
           return L.marker(latlng, { icon })
