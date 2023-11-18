@@ -12,25 +12,26 @@ module.exports = class TimelineJSON extends Events {
     this.reqParameter = this.config.source.reqParameter ?? []
     this.parameter = {}
 
-    this.app.on('state-apply', state => {
+    this.app.on('state-apply', () => {
+      const state = this.app.state.current
       if (this.reqParameter.filter(k => k in state).length === this.reqParameter.length) {
         this.reqParameter.forEach(k => {
           this.parameter[k] = state[k]
         })
+      }
 
-        const url = twigGet(this.config.source.url, state)
-        const filterId = this.config.source.filterId ? twigGet(this.config.source.filterId, { state: this.app.state.current }) : null
+      const url = twigGet(this.config.source.url, state)
+      const filterId = this.config.source.filterId ? twigGet(this.config.source.filterId, { state }) : null
 
-        if (this.url !== url || this.currentFilterId !== filterId) {
-          this.currentFilterId = filterId
-          this.data = null
+      if (this.url !== url || this.currentFilterId !== filterId) {
+        this.currentFilterId = filterId
+        this.data = null
 
-          this.hide()
-          this.load(url, () => {
-            this.init()
-            this.show()
-          })
-        }
+        this.hide()
+        this.load(url, () => {
+          this.init()
+          this.show()
+        })
       }
 
       if ('date' in state) {
