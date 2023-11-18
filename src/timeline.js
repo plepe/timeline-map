@@ -88,7 +88,7 @@ function init () {
   app.on('state-apply', state => {
     if ('date' in state) {
       date = state.date
-      timeline.setCustomTime(state.date)
+      timeline.setCustomTime(state.date ?? '')
     }
   })
 }
