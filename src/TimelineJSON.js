@@ -1,6 +1,7 @@
 import Events from 'events'
 import wkx from 'wkx'
 import twigGet from './twigGet'
+import loader from './loader'
 
 module.exports = class TimelineJSON extends Events {
   constructor (app, config) {
@@ -77,12 +78,10 @@ module.exports = class TimelineJSON extends Events {
 
   load (url, callback) {
     this.url = url
-    fetch(this.url)
-      .then(req => req.json())
-      .then(data => {
-        this.data = data
-        callback(null)
-      })
+    loader(url, {}, (err, data) => {
+      this.data = data
+      callback(err)
+    })
   }
 
   init () {
