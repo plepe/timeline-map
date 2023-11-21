@@ -209,8 +209,8 @@ module.exports = class TimelineJSON extends Events {
     }
 
 
-    // this.emit('data-loaded')
-    // this.app.emit('data-loaded', this)
+    this.emit('data-loaded')
+    this.app.emit('data-loaded', this)
 
     const date = this.app.state.current.date
     if (date) {
