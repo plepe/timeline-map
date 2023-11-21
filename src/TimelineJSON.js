@@ -283,7 +283,7 @@ module.exports = class TimelineJSON extends Events {
               this.layer.removeLayer(f)
             }
           })
-        } else {
+        } else if (feature) {
           if (feature.setStyle) {
             feature.setStyle(style)
           }
