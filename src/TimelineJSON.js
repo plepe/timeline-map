@@ -20,7 +20,7 @@ module.exports = class TimelineJSON extends Events {
         })
       }
 
-      const url = twigGet(this.config.source.url, state)
+      const url = twigGet(this.config.source.url, { state })
       const filterId = this.config.source.filterId ? twigGet(this.config.source.filterId, { state }) : null
 
       if (this.url !== url || this.currentFilterId !== filterId) {
@@ -67,7 +67,7 @@ module.exports = class TimelineJSON extends Events {
       this.app.on('default-' + p + '-date', promises => {
         promises.push(new Promise((resolve, reject) => {
           const starts = this.allItems
-            .map(item => twigGet(this.config.feature[p + 'Field'], { item: item.feature }))
+            .map(item => twigGet(this.config.feature[p + 'Field'], { item: item.feature, state: this.app.state.current }))
             .filter(v => v)
             .sort()
 
@@ -106,12 +106,12 @@ module.exports = class TimelineJSON extends Events {
       const result = { item }
 
       if (this.config.feature.init) {
-        twigGet(this.config.feature.init, { item })
+        twigGet(this.config.feature.init, { item, state: this.app.state.current })
       }
 
       if (this.config.feature.type === 'start-end-field') {
-        const start = twigGet(this.config.feature.startField, { item })
-        const end = twigGet(this.config.feature.endField, { item })
+        const start = twigGet(this.config.feature.startField, { item, state: this.app.state.current })
+        const end = twigGet(this.config.feature.endField, { item, state: this.app.state.current })
         result.log = [{ start, end }]
       } else if (this.config.feature.type === 'log-array') {
         result.log = feature.log(e => {
@@ -119,7 +119,7 @@ module.exports = class TimelineJSON extends Events {
         })
       } else if (this.config.feature.type === 'function') {
         try {
-          const l = twigGet(this.config.feature.logFunction, { item })
+          const l = twigGet(this.config.feature.logFunction, { item, state: this.app.state.current })
           result.log = JSON.parse(l)
         } catch (e) {
           console.error(e.message)
@@ -128,10 +128,10 @@ module.exports = class TimelineJSON extends Events {
 
       result.log.forEach(logEntry => {
         let start = this.config.feature.startLog ?
-          twigGet(this.config.feature.startLog, { item, logEntry }) :
+          twigGet(this.config.feature.startLog, { item, logEntry, state: this.app.state.current }) :
           logEntry[this.config.feature.startLogField ?? 'start']
         let end = this.config.feature.endLog ?
-          twigGet(this.config.feature.endLog, { item, logEntry }) :
+          twigGet(this.config.feature.endLog, { item, logEntry, state: this.app.state.current }) :
           logEntry[this.config.feature.endLogField ?? 'end']
 
         if (start === '') {
@@ -194,12 +194,12 @@ module.exports = class TimelineJSON extends Events {
         const div = document.createElement('div')
 
         if (this.config.feature.popupTemplate) {
-          const content = twigGet(this.config.feature.popupTemplate, feature.feature.properties)
+          const content = twigGet(this.config.feature.popupTemplate, { ...feature.feature.properties, state: this.app.state.current })
           div.innerHTML = content
         }
 
         if (this.config.feature.popupSource) {
-          const url = twigGet(this.config.feature.popupSource.url, feature.feature.properties)
+          const url = twigGet(this.config.feature.popupSource.url, { ...feature.feature.properties, state: this.app.state.current })
           fetch(url)
             .then(req => req.text())
             .then(body => {
@@ -266,7 +266,7 @@ module.exports = class TimelineJSON extends Events {
       }
 
       if (shown.includes(true)) {
-        let style = twigGet(this.config.feature.styleTemplate, { item, logEntry: shown[0] })
+        let style = twigGet(this.config.feature.styleTemplate, { item, logEntry: shown[0], state: this.app.state.current })
         try {
           style = JSON.parse(style)
         } catch (e) {
@@ -326,7 +326,7 @@ module.exports = class TimelineJSON extends Events {
     }
 
     const div = document.createElement('div')
-    const html = twigGet(this.config.feature.markerSymbol, { item, logEntry })
+    const html = twigGet(this.config.feature.markerSymbol, { item, logEntry, state: this.app.state.current })
     div.innerHTML = html
     const c = div.firstChild
 
@@ -363,7 +363,7 @@ module.exports = class TimelineJSON extends Events {
     if (this.config.feature.markerSign) {
       const x = iconOptions.iconAnchor[0] + iconOptions.signAnchor[0]
       const y = -iconOptions.iconSize[1] + iconOptions.iconAnchor[1] + iconOptions.signAnchor[1]
-      iconOptions.html += '<div class="sign" style="margin-left: ' + x + 'px; margin-top: ' + y + 'px;">' + twigGet(this.config.feature.markerSign, { item, logEntry }) + '</div>'
+      iconOptions.html += '<div class="sign" style="margin-left: ' + x + 'px; margin-top: ' + y + 'px;">' + twigGet(this.config.feature.markerSign, { item, logEntry, state: this.app.state.current }) + '</div>'
     }
 
     return L.divIcon(iconOptions)
@@ -386,7 +386,7 @@ module.exports = class TimelineJSON extends Events {
       style: (item) => {
         let style
         try {
-          style = twigGet(this.config.feature.styleTemplate, { item, logEntry })
+          style = twigGet(this.config.feature.styleTemplate, { item, logEntry, state: this.app.state.current })
           style = JSON.parse(style)
         } catch (e) {
           console.error(e.message)

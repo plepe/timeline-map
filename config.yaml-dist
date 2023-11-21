@@ -19,7 +19,7 @@ overlays:
 layer:
 - type: TimelineJSON
   source:
-    # url: '{{ id }}.json'
+    # url: '{{ state.id }}.json'
     url: all.json
 
     # remember value of 'id' parameter and re-add when stringifying state
