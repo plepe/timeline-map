@@ -144,7 +144,7 @@ module.exports = class TimelineJSON extends Events {
       })
 
       if (this.config.feature.geomLogField) {
-        result.features = result.log.forEach(logEntry => {
+        result.features = result.log.map(logEntry => {
           if (!logEntry[this.config.feature.geomLogField]) {
             return
           }
@@ -157,6 +157,7 @@ module.exports = class TimelineJSON extends Events {
 
           const feature = this.coordsToLeaflet(coords, item, logEntry)
           this.layer.addLayer(feature)
+          return feature
         })
       } else if (this.config.feature.geomField) {
         const coords = {
