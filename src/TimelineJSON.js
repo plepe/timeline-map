@@ -271,6 +271,8 @@ module.exports = class TimelineJSON extends Events {
         console.log(shown)
         if (features) {
           features.forEach((f, i) => {
+            if (!f) { return }
+
             if (shown[i]) {
               if (f.setStyle) {
                 f.setStyle(style)
