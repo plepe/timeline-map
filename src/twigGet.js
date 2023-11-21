@@ -15,7 +15,12 @@ const twigTemplates = {}
 
 module.exports = function twigGet (template, data) {
   if (!(template in twigTemplates)) {
-    twigTemplates[template] = Twig.twig({ data: template })
+    try {
+      twigTemplates[template] = Twig.twig({ data: template, rethrow: true })
+    } catch(e) {
+      console.error('Error compiling Twig template:', template, e.message)
+      return ''
+    }
   }
 
   return twigTemplates[template].render(data)
