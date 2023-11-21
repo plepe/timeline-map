@@ -47,6 +47,11 @@ layer:
     #endLogField: end
     #endLog: '{{ logEntry.ende }}'
 
+    # Whether this feature should be considered by the initialMapView (default:
+    # true)
+    initialMapView: |
+      {{ state.id != null and state.id != '' ? item.id == state.id : true }}
+
     popupTemplate: |-
       {{ item.title }}
 

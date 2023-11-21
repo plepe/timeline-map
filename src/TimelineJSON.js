@@ -37,14 +37,14 @@ module.exports = class TimelineJSON extends Events {
         if (this.data) {
           return resolve({
             type: 'bounds',
-            bounds: this.layer.getBounds()
+            bounds: this.initialMapView()
           })
         }
 
         this.once('data-loaded', () => {
           resolve({
             type: 'bounds',
-            bounds: this.layer.getBounds()
+            bounds: this.initialMapView()
           })
         })
       }))
@@ -391,5 +391,32 @@ module.exports = class TimelineJSON extends Events {
         }
       }
     })
+  }
+
+  initialMapView () {
+    let allItems = this.allItems
+    let group = []
+
+    if (this.config.feature.initialMapView) {
+      allItems = allItems.forEach(({ item, log, feature, features }) => {
+        console.log(item, this.app.state.current)
+        if (!isTrue(twigGet(this.config.feature.initialMapView, { item, state: this.app.state.current }))) {
+          return
+        }
+
+        if (feature) {
+          group.push(feature)
+        } else if (features) {
+          group = group.concat(features)
+        }
+      })
+
+      group = group.filter(f => f)
+
+      const layer = L.featureGroup(group)
+      return layer.getBounds()
+    } else {
+      return this.layer.getBounds()
+    }
   }
 }
