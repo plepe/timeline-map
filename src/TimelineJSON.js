@@ -9,16 +9,9 @@ module.exports = class TimelineJSON extends Events {
     super()
     this.app = app
     this.config = config
-    this.reqParameter = this.config.source.reqParameter ?? []
-    this.parameter = {}
 
     this.app.on('state-apply', () => {
       const state = this.app.state.current
-      if (this.reqParameter.filter(k => k in state).length === this.reqParameter.length) {
-        this.reqParameter.forEach(k => {
-          this.parameter[k] = state[k]
-        })
-      }
 
       const url = twigGet(this.config.source.url, { state })
       const filterId = this.config.source.filterId ? twigGet(this.config.source.filterId, { state }) : null
@@ -37,12 +30,6 @@ module.exports = class TimelineJSON extends Events {
       if ('date' in state) {
         this.setDate(state.date)
       }
-    })
-
-    this.app.on('state-get', state => {
-      Object.entries(this.parameter).forEach(([k, v]) => {
-        state[k] = v
-      })
     })
 
     this.app.on('initial-map-view', promises => {

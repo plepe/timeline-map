@@ -6,6 +6,7 @@ import './timeline'
 import './timeline-controls'
 import './TimelineGeoJSON'
 import './TimelineJSON'
+import './addParam'
 import './overlays'
 import './flags'
 

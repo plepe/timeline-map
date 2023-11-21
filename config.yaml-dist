@@ -4,6 +4,10 @@ defaultState:
   lat: 46.2
   lon: 16.4
 
+# remember these additional parameters in the url
+addParam:
+- id
+
 dateFormat: lll
 
 overlays:
@@ -21,9 +25,6 @@ layer:
   source:
     # url: '{{ state.id }}.json'
     url: all.json
-
-    # remember value of 'id' parameter and re-add when stringifying state
-    reqParameter: ['id']
 
     # from all.json, load only the items where the filter evaluates to a true
     # value
