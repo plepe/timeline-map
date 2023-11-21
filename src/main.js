@@ -11,5 +11,5 @@ import './overlays'
 import './flags'
 
 window.onload = function () {
-  return new App()
+  window.app = new App()
 }
