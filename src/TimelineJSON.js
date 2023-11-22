@@ -268,7 +268,6 @@ module.exports = class TimelineJSON extends Events {
           style.opacity = 1
         }
 
-        console.log(shown)
         if (features) {
           features.forEach((f, i) => {
             if (!f) { return }
@@ -401,7 +400,6 @@ module.exports = class TimelineJSON extends Events {
 
     if (this.config.feature.initialMapView) {
       allItems = allItems.forEach(({ item, log, feature, features }) => {
-        console.log(item, this.app.state.current)
         if (!isTrue(twigGet(this.config.feature.initialMapView, { item, state: this.app.state.current }))) {
           return
         }
