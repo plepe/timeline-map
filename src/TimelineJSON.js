@@ -61,23 +61,6 @@ module.exports = class TimelineJSON extends Events {
         })
       }))
     })
-
-    ;['start', 'end'].forEach(p => {
-      this.app.on('default-' + p + '-date', promises => {
-        promises.push(new Promise((resolve, reject) => {
-          const starts = this.allItems
-            .map(item => twigGet(this.config.feature[p + 'Field'], { item: item.feature, state: this.app.state.current }))
-            .filter(v => v)
-            .sort()
-
-          if (starts.length) {
-            resolve(starts[p === 'end' ? starts.length - 1 : 0])
-          } else {
-            reject()
-          }
-        }))
-      })
-    })
   }
 
   load (url, callback) {
