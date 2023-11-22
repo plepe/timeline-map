@@ -250,7 +250,7 @@ module.exports = class TimelineJSON extends Events {
           return shown
         })
       } else {
-        shown = [true]
+        shown = log ? log.map(v => true) : [true]
       }
 
       if (shown.includes(true)) {
