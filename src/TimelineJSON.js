@@ -373,10 +373,10 @@ module.exports = class TimelineJSON extends Events {
     }
 
     return L.geoJSON(coords, {
-      style: (item) => {
+      style: (feature) => {
         let style
         try {
-          style = twigGet(this.config.feature.styleTemplate, { item, logEntry, state: this.app.state.current })
+          style = twigGet(this.config.feature.styleTemplate, { ...feature.properties, state: this.app.state.current })
           style = JSON.parse(style)
         } catch (e) {
           console.error(e.message)
