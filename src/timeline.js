@@ -76,6 +76,19 @@ function init () {
       date = state.date
       timeline.setCustomTime(state.date ?? '')
     }
+
+    if ('id' in state) {
+      app.getParameter('timeline-timespan', 'all')
+        .then(values => {
+          const start = values.map(v => v.start).filter(v => v).sort()
+          const end = values.map(v => v.end).filter(v => v).sort().reverse()
+
+          timeline.setOptions({
+            min: start.length ? start[0] : null,
+            max: end.length ? end[0] : null
+          })
+        })
+    }
   })
 }
 
