@@ -26,6 +26,7 @@ function init () {
   const items = new visDataset.DataSet([])
   const timeline = new visTimeline.Timeline(container, items, options)
   timeline.addCustomTime()
+  timeline.setCustomTimeMarker('Zeitpunkt')
   timeline.on('timechanged', (e) => {
     date = moment(e.time).format()
     app.updateLink()
@@ -41,35 +42,6 @@ function init () {
   })
   app.on('timeline-dataset', items => {
     timeline.setItems(new visDataset.DataSet(items))
-  })
-
-/*
-  const timestamps = Object.keys(layer.timestamps).map(t => {
-    return { date: t, name: 'Ereignis' }
-  })
-
-  const items = new visDataset.DataSet(timestamps.map(entry => {
-    return {
-      content: entry.date.substr(0, 10),
-      start: entry.date
-    }
-  }))
-
-  //timeline.setItems(items)
-  */
-
-  app.on('data-loaded', layer => {
-    timeline.setCustomTimeMarker('Zeitpunkt')
-    timeline.setOptions({
-      min: layer.min,
-      max: layer.max,
-      snap: null,
-      cluster: {
-        titleTemplate: '{count} Zeitpunkte'
-      }
-    })
-
-    timeline.setWindow(layer.min, layer.max)
   })
 
   app.on('state-apply', state => {
