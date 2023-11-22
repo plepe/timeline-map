@@ -47,6 +47,15 @@ layer:
     #endLogField: end
     #endLog: '{{ logEntry.ende }}'
 
+    # whether this item should be considered for timeline-timespan
+    considerTimelineTimespan: |
+      {{ state.id != null and state.id != '' ? item.id == state.id : true }}
+    # value of start/end field
+    startField: |-
+      {{ item.start }}
+    endField: |-
+      {{ item.end }}
+
     # Whether this feature should be considered by the initialMapView (default:
     # true)
     initialMapView: |

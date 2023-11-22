@@ -50,6 +50,18 @@ module.exports = class TimelineJSON extends Events {
       }))
     })
 
+    this.app.on('timeline-timespan', promises => {
+      promises.push(new Promise((resolve, reject) => {
+        if (this.data) {
+          return resolve(this.getTimelineTimespan())
+        }
+
+        this.once('data-loaded', () => {
+          return resolve(this.getTimelineTimespan())
+        })
+      }))
+    })
+
     ;['start', 'end'].forEach(p => {
       this.app.on('default-' + p + '-date', promises => {
         promises.push(new Promise((resolve, reject) => {
@@ -417,6 +429,31 @@ module.exports = class TimelineJSON extends Events {
       return layer.getBounds()
     } else {
       return this.layer.getBounds()
+    }
+  }
+
+  getTimelineTimespan () {
+    const ranges = this.allItems
+      .map(({ item }) => {
+        const p = { item, state: this.app.state.current }
+
+        if (!isTrue(twigGet(this.config.feature.considerTimelineTimespan, p))) {
+          return
+        }
+
+        return {
+          start: twigGet(this.config.feature.startField, p),
+          end: twigGet(this.config.feature.endField, p)
+        }
+      })
+      .filter(v => v)
+
+    const starts = ranges.map(v => v.start).filter(v => v).sort()
+    const ends = ranges.map(v => v.end).filter(v => v).sort().reverse()
+
+    return {
+      start: starts.length ? starts[0] : null,
+      end: ends.length ? ends[0] : null
     }
   }
 }
