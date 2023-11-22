@@ -14,6 +14,11 @@ Twig.extendFilter('json_decode', (value) => {
 const twigTemplates = {}
 
 module.exports = function twigGet (template, data) {
+  if (typeof template !== 'string') {
+    console.error('Twig template is not a string:', template)
+    return ''
+  }
+
   if (!(template in twigTemplates)) {
     try {
       twigTemplates[template] = Twig.twig({ data: template, rethrow: true })
