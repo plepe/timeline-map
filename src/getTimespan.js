@@ -1,0 +1,40 @@
+const moment = require('moment')
+
+module.exports = function getTimespan (app) {
+  return new Promise((resolve, reject) => {
+    app.getParameter('timeline-timespan', 'all')
+      .then(values => {
+        let start = values.map(v => v.start).filter(v => v).sort()
+        start = start.length ? start[0] : app.config.timeline.defaultMin
+        let end = values.map(v => v.end).filter(v => v).sort().reverse()
+        end = end.length ? end[0] : app.config.timeline.defaultMax
+
+        start = completeDate(start, 'start')
+        end = completeDate(end, 'end')
+
+        resolve({ start, end })
+      })
+  })
+}
+
+function completeDate (date, timestamp) {
+  if (date === null) {
+    return null
+  }
+  if (typeof date !== 'string') {
+    date = '' + date
+  }
+
+  if (date.match(/^[0-9]{3}x$/)) {
+    return moment(date.substr(0, 3) + (timestamp === 'start' ? '0' : '9'))[timestamp + 'Of']('year')
+  }
+
+  switch (date.length) {
+    case 4:
+      return moment(date)[timestamp + 'Of']('year')
+    case 7:
+      return moment(date)[timestamp + 'Of']('month')
+    default:
+      return date
+  }
+}
