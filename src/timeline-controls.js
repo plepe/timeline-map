@@ -1,6 +1,7 @@
 import App from 'geowiki-viewer/src/App'
 
 const moment = require('moment')
+const getTimespan = require('./getTimespan')
 
 const inputs = {}
 let stepSize = ['1', 'M']
@@ -15,9 +16,10 @@ App.addExtension({
         return resolve(date)
       }
 
-      app.getParameter('default-' + p + '-date')
-        .then(date => {
-          resolve(date)
+      return getTimespan(app)
+        .then(v => {
+          console.log(v)
+          resolve(v[p])
         })
         .catch(err => {
           console.error(err)
