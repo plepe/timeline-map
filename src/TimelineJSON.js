@@ -179,6 +179,7 @@ module.exports = class TimelineJSON extends Events {
         if (this.config.feature.popupTemplate) {
           const content = twigGet(this.config.feature.popupTemplate, { ...feature.feature.properties, state: this.app.state.current })
           div.innerHTML = content
+          app.emit('popup-open', div)
         }
 
         if (this.config.feature.popupSource) {
@@ -197,6 +198,7 @@ module.exports = class TimelineJSON extends Events {
               }
 
               div.innerHTML = body
+              app.emit('popup-open', div)
             })
         }
 
