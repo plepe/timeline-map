@@ -367,6 +367,20 @@ module.exports = class TimelineJSON extends Events {
 
       return L.featureGroup(layers)
     }
+    else if (coords.geometry.type === 'MultiPoint') {
+      const layers = coords.geometry.coordinates.map(g => {
+        return this.coordsToLeaflet({
+          type: 'Feature',
+          properties: coords.properties,
+          geometry: {
+            type: 'Point',
+            coordinates: g
+          }
+        }, item, logEntry)
+      })
+
+      return L.featureGroup(layers)
+    }
 
     return L.geoJSON(coords, {
       style: (feature) => {
