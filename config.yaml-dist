@@ -21,6 +21,8 @@ overlays:
       relation[start_date~"{{ state.date|osmDateQuery({ op: '<=', strict: true }) }}"][end_date!~"{{ state.date|osmDateQuery({ op: '<=', strict: true }) }}"]
 
 timeline:
+  defaultMin: 1900
+  defaultMax: 2030
   # apply additional configuration options for the timeline, see
   # https://visjs.github.io/vis-timeline/docs/timeline/#Configuration_Options
   options:

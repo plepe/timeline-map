@@ -5,6 +5,7 @@ const visTimeline = require('vis-timeline')
 const visDataset = require('vis-data')
 const moment = require('moment')
 const getTimespan = require('./getTimespan')
+const completeDate = require('./completeDate')
 let app
 let dataset
 let date = null
@@ -29,6 +30,11 @@ function init () {
   const container = document.getElementById('timeline')
   dataset = new visDataset.DataSet([])
   const timeline = new visTimeline.Timeline(container, dataset, options)
+
+  if (app.config.timeline && (app.config.timeline.defaultMin || app.config.timeline.defaultMax)) {
+    timeline.setWindow(completeDate(app.config.timeline.defaultMin, 'start'), completeDate(app.config.timeline.defaultMax, 'end'), { animation: false })
+  }
+
   timeline.addCustomTime()
   timeline.setCustomTimeMarker('Zeitpunkt')
   timeline.on('timechanged', (e) => {
