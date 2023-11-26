@@ -3,6 +3,7 @@ import wkx from 'wkx'
 import twigGet from './twigGet'
 import loader from './loader'
 import isTrue from './isTrue'
+import completeDate from './completeDate'
 
 module.exports = class TimelineJSON extends Events {
   constructor (app, config) {
@@ -500,6 +501,9 @@ module.exports = class TimelineJSON extends Events {
         if (!('end' in data)) {
           data.end = twigGet(this.config.feature.endField, d)
         }
+
+        data.start = completeDate(data.start, 'start')
+        data.end = completeDate(data.end, 'end')
 
         return data
       })
