@@ -65,6 +65,13 @@ function init () {
     if ('date' in state) {
       date = state.date
       timeline.setCustomTime(state.date ?? '')
+
+      const current = timeline.getWindow()
+      const c = completeDate(date)
+      if (moment(current.start).format('YYYY-MM-DD') > c ||
+          moment(current.end).format('YYYY-MM-DD') < c) {
+        timeline.moveTo(moment(c))
+      }
     }
 
     if ('id' in state) {
