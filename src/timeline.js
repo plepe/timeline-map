@@ -19,7 +19,8 @@ App.addExtension({
 
 function init () {
   const options = {
-    autoResize: true
+    autoResize: true,
+    ...(app.config.timeline ? app.config.timeline.options ?? {} : {})
   }
 
   const container = document.getElementById('timeline')
