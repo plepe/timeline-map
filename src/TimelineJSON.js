@@ -109,19 +109,7 @@ module.exports = class TimelineJSON extends Events {
       }
 
       result.log.forEach(logEntry => {
-        let start = this.config.feature.startLog ?
-          twigGet(this.config.feature.startLog, { item, logEntry, state: this.app.state.current }) :
-          logEntry[this.config.feature.startLogField ?? 'start']
-        let end = this.config.feature.endLog ?
-          twigGet(this.config.feature.endLog, { item, logEntry, state: this.app.state.current }) :
-          logEntry[this.config.feature.endLogField ?? 'end']
-
-        if (start === '') {
-          start = null
-        }
-        if (end === '') {
-          end = null
-        }
+        let { start, end } = this.logGetStartEnd(item, logEntry)
 
         if (start !== null && start !== '') {
           if (this.min !== null && (start ?? '0') < this.min) {
@@ -454,5 +442,23 @@ module.exports = class TimelineJSON extends Events {
       start: starts.length ? starts[0] : null,
       end: ends.length ? ends[0] : null
     }
+  }
+
+  logGetStartEnd (item, logEntry) {
+    let start = this.config.feature.startLog ?
+      twigGet(this.config.feature.startLog, { item, logEntry, state: this.app.state.current }) :
+      logEntry[this.config.feature.startLogField ?? 'start']
+    let end = this.config.feature.endLog ?
+      twigGet(this.config.feature.endLog, { item, logEntry, state: this.app.state.current }) :
+      logEntry[this.config.feature.endLogField ?? 'end']
+
+    if (start === '') {
+      start = null
+    }
+    if (end === '') {
+      end = null
+    }
+
+    return { start, end }
   }
 }
