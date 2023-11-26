@@ -296,6 +296,7 @@ module.exports = class TimelineJSON extends Events {
       } else {
         if (features) {
           features.forEach(f => {
+            if (!f) { return }
             if (this.layer.hasLayer(f)) {
               this.layer.removeLayer(f)
             }
