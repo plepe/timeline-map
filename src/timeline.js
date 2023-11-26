@@ -6,6 +6,7 @@ const visDataset = require('vis-data')
 const moment = require('moment')
 const getTimespan = require('./getTimespan')
 let app
+let dataset
 let date = null
 
 App.addExtension({
@@ -21,12 +22,13 @@ App.addExtension({
 function init () {
   const options = {
     autoResize: true,
+    selectable: true,
     ...(app.config.timeline ? app.config.timeline.options ?? {} : {})
   }
 
   const container = document.getElementById('timeline')
-  const items = new visDataset.DataSet([])
-  const timeline = new visTimeline.Timeline(container, items, options)
+  dataset = new visDataset.DataSet([])
+  const timeline = new visTimeline.Timeline(container, dataset, options)
   timeline.addCustomTime()
   timeline.setCustomTimeMarker('Zeitpunkt')
   timeline.on('timechanged', (e) => {
@@ -66,8 +68,8 @@ function init () {
         done()
       })
     }, () => {
-      console.log(items)
-      timeline.setItems(new visDataset.DataSet(items))
+      dataset.clear()
+      dataset.add(items)
     })
   })
 }
