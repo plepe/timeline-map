@@ -222,7 +222,8 @@ module.exports = class TimelineJSON extends Events {
     this.allItems.forEach(({ item, log, feature, features }, i) => {
       let shown
       if (date && log) {
-        shown = log.map(e => {
+        shown = log.map(logEntry => {
+          const e = this.logGetStartEnd(item, logEntry)
           let shown = false
           if (e.start === null || e.start <= date) {
             shown = true
