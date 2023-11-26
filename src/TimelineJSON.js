@@ -32,6 +32,18 @@ module.exports = class TimelineJSON extends Events {
       }
     })
 
+    this.app.on('timeline-get-items', promises =>
+      promises.push(new Promise((resolve) => {
+        if (this.data) {
+          return resolve(this.getTimelineItems())
+        }
+
+        this.once('data-loaded', () => {
+          resolve(this.getTimelineItems())
+        })
+      }))
+    )
+
     this.app.on('initial-map-view', promises => {
       promises.push(new Promise((resolve, reject) => {
         if (this.data) {
@@ -461,5 +473,37 @@ module.exports = class TimelineJSON extends Events {
     }
 
     return { start, end }
+  }
+
+  getTimelineItems () {
+    const config = this.config.feature.timeline ?? { show: false }
+
+    const items = this.allItems
+      .map(feature => {
+        const d = { ...feature, state: this.app.state.current }
+        const data = Object.fromEntries(Object.entries(config).map(([k, v]) => {
+          if (typeof v === 'string') {
+            v = twigGet(v, d)
+          }
+          return [k, v]
+        }))
+
+        if ('show' in data && !isTrue(data.show)) {
+          return null
+        }
+
+        if (!('start' in data)) {
+          data.start = twigGet(this.config.feature.startField, d)
+        }
+
+        if (!('end' in data)) {
+          data.end = twigGet(this.config.feature.endField, d)
+        }
+
+        return data
+      })
+      .filter(v => v)
+
+    return items
   }
 }

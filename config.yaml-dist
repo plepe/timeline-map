@@ -80,6 +80,15 @@ layer:
       # if the address returns wrapping HTML, just use the queried part
       querySelector: '.content'
 
+    # how to show item in the timeline. Each of the options may be a twig
+    # template, available values: item, state. start and end may be overridden,
+    # if not startField and endField are used.
+    timeline:
+      show: true
+      type: 'box'
+      content: |-
+        {{ item.title }}
+
 - type: TimelineGeoJSON
   source:
     title: Countries
