@@ -1,4 +1,5 @@
 import App from 'geowiki-viewer/src/App'
+import async from 'async'
 
 const visTimeline = require('vis-timeline')
 const visDataset = require('vis-data')
@@ -41,9 +42,6 @@ function init () {
   app.on('state-get', state => {
     state.date = date
   })
-  app.on('timeline-dataset', items => {
-    timeline.setItems(new visDataset.DataSet(items))
-  })
 
   app.on('state-apply', state => {
     if ('date' in state) {
@@ -58,6 +56,19 @@ function init () {
           timeline.setWindow(start, end)
         })
     }
+
+    const promises = []
+    let items = []
+    app.emit('timeline-get-items', promises)
+    async.each(promises, (promise, done) => {
+      promise.then(_items => {
+        items = items.concat(_items)
+        done()
+      })
+    }, () => {
+      console.log(items)
+      timeline.setItems(new visDataset.DataSet(items))
+    })
   })
 }
 
