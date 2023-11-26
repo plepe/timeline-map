@@ -11,7 +11,7 @@ App.addExtension({
   id: 'timeline',
   initFun: (_app, callback) => {
     app = _app
-    init()
+    app.on('init', init)
 
     callback()
   }
