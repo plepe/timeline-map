@@ -1,6 +1,6 @@
 module.exports = function (v) {
-  if (v === false) {
-    return false
+  if (typeof v === 'boolean') {
+    return v
   }
 
   v = v.trim()
