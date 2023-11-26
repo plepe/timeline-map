@@ -41,6 +41,16 @@ function init () {
     app.updateLink()
     app.state.apply({ date })
   })
+  timeline.on('select', (e) => {
+    const selectedItems = dataset.get(e.items)
+    let start = selectedItems.map(i => i.start).filter(v => v).sort()
+    start = start.length ? start[0] : null
+    let end = selectedItems.map(i => i.end).filter(v => v).sort().reverse()
+    end = end.length ? end[0] : null
+
+    app.state.apply({ date: start })
+    app.updateLink()
+  })
   app.on('state-get', state => {
     state.date = date
   })
