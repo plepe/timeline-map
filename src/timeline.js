@@ -20,6 +20,8 @@ App.addExtension({
   }
 })
 
+let customTime
+
 function init () {
   const options = {
     autoResize: true,
@@ -35,8 +37,6 @@ function init () {
     timeline.setWindow(completeDate(app.config.timeline.defaultMin, 'start'), completeDate(app.config.timeline.defaultMax, 'end'), { animation: false })
   }
 
-  timeline.addCustomTime()
-  timeline.setCustomTimeMarker('Zeitpunkt')
   timeline.on('timechanged', (e) => {
     date = moment(e.time).format()
     app.updateLink()
@@ -64,12 +64,23 @@ function init () {
   app.on('state-apply', state => {
     if ('date' in state) {
       date = state.date
-      timeline.setCustomTime(state.date ?? '')
+
+      if (date) {
+        if (!customTime) {
+          timeline.addCustomTime()
+          timeline.setCustomTimeMarker('Zeitpunkt')
+          customTime = true
+        }
+        timeline.setCustomTime(state.date)
+      } else if (customTime) {
+        timeline.removeCustomTime()
+        customTime = null
+      }
 
       const current = timeline.getWindow()
       const c = completeDate(date)
-      if (moment(current.start).format('YYYY-MM-DD') > c ||
-          moment(current.end).format('YYYY-MM-DD') < c) {
+      if (c && (moment(current.start).format('YYYY-MM-DD') > c ||
+          moment(current.end).format('YYYY-MM-DD') < c)) {
         timeline.moveTo(moment(c))
       }
     }
