@@ -28,5 +28,5 @@ module.exports = function twigGet (template, data) {
     }
   }
 
-  return twigTemplates[template].render(data)
+  return twigTemplates[template].render(data).trim()
 }
