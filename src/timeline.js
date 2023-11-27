@@ -43,12 +43,23 @@ function init () {
     app.state.apply({ date })
   })
   timeline.on('click', (e) => {
+    const item = timeline.itemSet.getItemById(e.item)
+    if (item && item.data.isCluster) {
+      timeline.setWindow(item.data.min, item.data.max, { animation: true })
+      return
+    }
+
     date = moment(e.time).format()
     app.updateLink()
     app.state.apply({ date })
   })
   timeline.on('select', (e) => {
     const selectedItems = dataset.get(e.items)
+
+    if (!selectedItems.length) {
+      return
+    }
+
     let start = selectedItems.map(i => i.start).filter(v => v).sort()
     start = start.length ? start[0] : null
     let end = selectedItems.map(i => i.end).filter(v => v).sort().reverse()
