@@ -122,20 +122,20 @@ module.exports = class TimelineJSON extends Events {
       }
 
       result.log.forEach(logEntry => {
-        let { start, end } = this.logGetStartEnd(item, logEntry)
+        this.logGetStartEnd(item, logEntry)
 
-        if (start !== null && start !== '') {
-          if (this.min !== null && (start ?? '0') < this.min) {
-            this.min = start
+        if (logEntry._start !== null) {
+          if (this.min !== null && (logEntry._start ?? '0') < this.min) {
+            this.min = logEntry._start
           }
-          this.timestamps[start] = true
+          this.timestamps[logEntry._start] = true
         }
 
-        if (end !== null && end !== '') {
-          if (this.max !== null && (end ?? '99999') > this.max) {
-            this.max = end
+        if (logEntry._end !== null && logEntry._end !== '') {
+          if (this.max !== null && (logEntry._end ?? '99999') > this.max) {
+            this.max = logEntry._end
           }
-          this.timestamps[end] = true
+          this.timestamps[logEntry._end] = true
         }
       })
 
@@ -236,13 +236,12 @@ module.exports = class TimelineJSON extends Events {
       let shown
       if (date && log) {
         shown = log.map(logEntry => {
-          const e = this.logGetStartEnd(item, logEntry)
           let shown = false
-          if (e.start === null || e.start <= date) {
+          if (logEntry._start === null || logEntry._start <= date) {
             shown = true
           }
-          if (e.end !== null && e.end !== '') {
-            if (e.end <= date) {
+          if (logEntry._end !== null && logEntry._end !== '') {
+            if (logEntry._end <= date) {
               shown = false
             }
           }
@@ -476,7 +475,8 @@ module.exports = class TimelineJSON extends Events {
       end = null
     }
 
-    return { start, end }
+    logEntry._start = start
+    logEntry._end = end
   }
 
   getTimelineItems () {
