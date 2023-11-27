@@ -466,6 +466,8 @@ module.exports = class TimelineJSON extends Events {
     let end = this.config.feature.endLog ?
       twigGet(this.config.feature.endLog, { item, logEntry, state: this.app.state.current }) :
       logEntry[this.config.feature.endLogField ?? 'end']
+    start = completeDate(start, 'start')
+    end = completeDate(end, 'end')
 
     if (start === '') {
       start = null
