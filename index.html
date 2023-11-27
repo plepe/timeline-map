@@ -18,11 +18,12 @@
     <div class='timeline-header'>
       <div class='controls'>
         <input id="date" type="text" name="date" value="">
-        <div class=''>
+        <div class='buttons'>
           <button name='backward'><i class="fa-solid fa-backward-step"></i></button>
           <button name='play'><i class="fa-solid fa-play"></i></button>
           <button name='forward'><i class="fa-solid fa-forward-step"></i></button>
         </div>
+        <div class='options'>
         Speed: <select name='stepSize'>
           <option value='1d'>1 Tag</option>
           <option value='1w'>1 Woche</option>
@@ -31,6 +32,7 @@
           <option value='1y'>1 Jahr</option>
           <option value='5y'>5 Jahre</option>
         </select>
+        </div>
       </div>
       <div id='timeline'></div>
     </div>

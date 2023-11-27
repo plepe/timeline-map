@@ -14,8 +14,42 @@ body {
   display: flex;
   flex-direction: row;
 }
-.timeline-header > .controls {
+.timeline-header > .controls > * {
+  margin: 0.25em 0;
 }
+.timeline-header > .controls > input#date {
+  border: none;
+  font-weight: bold;
+  text-align: center;
+}
+.timeline-header > .controls > .buttons {
+  display: flex;
+  flex-direction: row;
+}
+.timeline-header > .controls > .buttons > button {
+  flex-grow: 1;
+  background: none;
+  border: none;
+}
+.timeline-header > .controls > .buttons > button:active {
+  background: grey;
+  border-radius: 0.5em;
+}
+.timeline-header > .controls > .options {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5em;
+}
+.timeline-header > .controls > .options select {
+  border: none;
+  background: none;
+}
+.timeline-header > .controls > .options select:active {
+  background: grey;
+  border-radius: 0.5em;
+}
+
 .timeline-header > #timeline {
   width: 100%;
 }
