@@ -517,6 +517,8 @@ module.exports = class TimelineJSON extends Events {
 
   parseGeom (value) {
     switch (this.config.feature.geomType) {
+      case 'geojson':
+        return value
       case 'wkt':
       case 'ewkt':
       case 'wkb':

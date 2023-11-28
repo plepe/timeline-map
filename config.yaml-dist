@@ -52,7 +52,7 @@ layers:
     #geomLogField: 'geom'
 
     # Type of geometry, currently supported: 'wkt', 'ewkt', 'wkb', 'ewkb',
-    # 'twkb'
+    # 'twkb', 'geojson'
     geomType: 'wkt'
 
     # which field in each log entry to use as startdate (default: 'start')
