@@ -129,7 +129,7 @@ module.exports = class TimelineJSON extends Events {
         if (i > 0 && !logEntry._start) {
           logEntry._start = result.log[i - 1]._end
         }
-        if (i < result.log.length && !logEntry._end) {
+        if (i < result.log.length - 1 && !logEntry._end) {
           logEntry._end = result.log[i + 1]._start
         }
       })
