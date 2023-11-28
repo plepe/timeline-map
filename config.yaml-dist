@@ -28,7 +28,7 @@ timeline:
   options:
     zoomMin: 864000000
 
-layer:
+layers:
 - type: TimelineJSON
   source:
     # url: '{{ state.id }}.json'
