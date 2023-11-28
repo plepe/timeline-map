@@ -264,7 +264,16 @@ module.exports = class TimelineJSON extends Events {
       }
 
       if (shown.includes(true)) {
-        let style = twigGet(this.config.feature.styleTemplate, { item, logEntry: shown[0], state: this.app.state.current })
+        const shownIndex = shown
+          .map((l, i) => l ? i : null)
+          .filter(i => i !== null)
+
+        let style = twigGet(this.config.feature.styleTemplate, {
+          item,
+          logEntry: log[shownIndex[0]],
+          state: this.app.state.current
+        })
+
         try {
           style = JSON.parse(style)
         } catch (e) {
