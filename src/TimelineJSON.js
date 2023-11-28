@@ -123,7 +123,18 @@ module.exports = class TimelineJSON extends Events {
 
       result.log.forEach(logEntry => {
         this.logGetStartEnd(item, logEntry)
+      })
 
+      result.log.forEach((logEntry, i) => {
+        if (i > 0 && !logEntry._start) {
+          logEntry._start = result.log[i - 1]._end
+        }
+        if (i < result.log.length && !logEntry._end) {
+          logEntry._end = result.log[i + 1]._start
+        }
+      })
+
+      result.log.forEach(logEntry => {
         if (logEntry._start !== null) {
           if (this.min !== null && (logEntry._start ?? '0') < this.min) {
             this.min = logEntry._start
