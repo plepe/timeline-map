@@ -1,7 +1,7 @@
 const moment = require('moment')
 
 module.exports = function completeDate (date, timestamp) {
-  if (date === null) {
+  if (date === null || date === undefined || date === '') {
     return null
   }
   if (typeof date !== 'string') {
