@@ -148,7 +148,7 @@ module.exports = class TimelineJSON extends Events {
           const coords = {
             type: 'Feature',
             properties: { item, logEntry },
-            geometry: wkx.Geometry.parse(logEntry[this.config.feature.geomLogField]).toGeoJSON()
+            geometry: this.parseGeom(logEntry[this.config.feature.geomLogField])
           }
 
           const feature = this.coordsToLeaflet(coords, item, logEntry)
@@ -159,7 +159,7 @@ module.exports = class TimelineJSON extends Events {
         const coords = {
           type: 'Feature',
           properties: { item },
-          geometry: wkx.Geometry.parse(item[this.config.feature.geomField]).toGeoJSON()
+          geometry: this.parseGeom(item[this.config.feature.geomField])
         }
 
         result.feature = coordsToLeaflet(coords, item)
@@ -512,5 +512,9 @@ module.exports = class TimelineJSON extends Events {
       .filter(v => v)
 
     return items
+  }
+
+  parseGeom (value) {
+    return wkx.Geometry.parse(value).toGeoJSON()
   }
 }
