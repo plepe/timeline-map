@@ -162,7 +162,8 @@ module.exports = class TimelineJSON extends Events {
           geometry: this.parseGeom(item[this.config.feature.geomField])
         }
 
-        result.feature = coordsToLeaflet(coords, item)
+        result.feature = this.coordsToLeaflet(coords, item)
+        this.layer.addLayer(result.feature)
       }
 
       return result
@@ -301,7 +302,7 @@ module.exports = class TimelineJSON extends Events {
               this.layer.removeLayer(f)
             }
           })
-        } else if (this.layer.hasLayer(features)) {
+        } else if (this.layer.hasLayer(feature)) {
           this.layer.removeLayer(feature)
         }
       }
