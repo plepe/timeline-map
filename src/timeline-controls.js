@@ -90,7 +90,7 @@ App.addExtension({
 
     app.on('state-apply', state => {
       if ('date' in state) {
-        inputs.date.value = state.date ? moment(state.date).format(app.config.dateFormat) : ''
+        inputs.date.value = state.date ? moment(state.date).format('YYYY-MM-DD') : ''
       }
 
       if ('stepSize' in state) {
