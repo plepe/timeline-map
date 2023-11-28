@@ -44,6 +44,17 @@ layers:
       {{ state.id }}
 
   feature:
+    # name of the field containing the geometry (if there's one per item)
+    geomField: 'geom'
+
+    # alternatively, name of the field in each log entry (if the geometry
+    # of the item changes)
+    #geomLogField: 'geom'
+
+    # Type of geometry, currently supported: 'wkt', 'ewkt', 'wkb', 'ewkb',
+    # 'twkb'
+    geomType: 'wkt'
+
     # which field in each log entry to use as startdate (default: 'start')
     #startLogField: start
 

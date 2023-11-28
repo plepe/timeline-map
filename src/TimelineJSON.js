@@ -515,6 +515,14 @@ module.exports = class TimelineJSON extends Events {
   }
 
   parseGeom (value) {
-    return wkx.Geometry.parse(value).toGeoJSON()
+    switch (this.config.feature.geomType) {
+      case 'wkt':
+      case 'ewkt':
+      case 'wkb':
+      case 'ewkb':
+      case 'twkb':
+      default:
+        return wkx.Geometry.parse(value).toGeoJSON()
+    }
   }
 }
