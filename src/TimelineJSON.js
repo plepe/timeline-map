@@ -97,7 +97,7 @@ module.exports = class TimelineJSON extends Events {
     this.timestamps = {}
     this.layer = L.featureGroup()
 
-    this.allItems = this.data.map(item => {
+    this.allItems = this.data.map((item, index) => {
       const result = { item }
 
       if (this.config.feature.init) {
@@ -169,7 +169,7 @@ module.exports = class TimelineJSON extends Events {
       } else if (this.config.feature.geomField) {
         const coords = {
           type: 'Feature',
-          properties: { item },
+          properties: { item, index },
           geometry: this.parseGeom(item[this.config.feature.geomField])
         }
 
@@ -188,15 +188,19 @@ module.exports = class TimelineJSON extends Events {
     if (this.config.feature.popupTemplate || this.config.feature.popupSource) {
       this.layer.bindPopup(feature => {
         const div = document.createElement('div')
+        const d = { ...feature.feature.properties, state: this.app.state.current }
+        if ('index' in feature.feature.properties) {
+          d.logEntry = this.allItems[feature.feature.properties.index].logEntry
+        }
 
         if (this.config.feature.popupTemplate) {
-          const content = twigGet(this.config.feature.popupTemplate, { ...feature.feature.properties, state: this.app.state.current })
+          const content = twigGet(this.config.feature.popupTemplate, d)
           div.innerHTML = content
           app.emit('popup-open', div)
         }
 
         if (this.config.feature.popupSource) {
-          const url = twigGet(this.config.feature.popupSource.url, { ...feature.feature.properties, state: this.app.state.current })
+          const url = twigGet(this.config.feature.popupSource.url, d)
           fetch(url)
             .then(req => req.text())
             .then(body => {
@@ -267,10 +271,11 @@ module.exports = class TimelineJSON extends Events {
         const shownIndex = shown
           .map((l, i) => l ? i : null)
           .filter(i => i !== null)
+        const logEntry = log[shownIndex[0]]
+        this.allItems[i].logEntry = logEntry
 
         let style = twigGet(this.config.feature.styleTemplate, {
-          item,
-          logEntry: log[shownIndex[0]],
+          item, logEntry,
           state: this.app.state.current
         })
 
@@ -315,6 +320,8 @@ module.exports = class TimelineJSON extends Events {
           feature.addTo(this.layer)
         }
       } else {
+        this.allItems[i].logEntry = null
+
         if (features) {
           features.forEach(f => {
             if (!f) { return }
