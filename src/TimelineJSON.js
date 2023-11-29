@@ -104,11 +104,13 @@ module.exports = class TimelineJSON extends Events {
     this.layer = L.featureGroup()
 
     this.allItems = this.data.map((item, index) => {
-      const result = { item }
-
       if (this.config.feature.init) {
         twigGet(this.config.feature.init, { item, state: this.app.state.current })
       }
+    })
+
+    this.allItems = this.data.map((item, index) => {
+      const result = { item }
 
       if (this.config.feature.type === 'start-end-field') {
         const start = twigGet(this.config.feature.startField, { item, state: this.app.state.current })
