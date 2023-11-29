@@ -29,6 +29,7 @@ var FullscreenControl = L.Control.extend({
           document.exitFullscreen()
         } else {
           dom.requestFullscreen()
+          document.body.classList.add('fullscreen')
         }
       } else {
         document.body.classList.toggle('fullscreen')
@@ -37,6 +38,13 @@ var FullscreenControl = L.Control.extend({
       app.map.invalidateSize()
       return false
     }
+
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement) {
+        document.body.classList.remove('fullscreen')
+        app.map.invalidateSize()
+      }
+    })
 
     return container
   }
