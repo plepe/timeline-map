@@ -1,8 +1,12 @@
 defaultState:
 # Default Map Location.
-  zoom: 15
-  lat: 46.2
-  lon: 16.4
+
+map:
+  defaultView:
+    minlat: 48.2
+    maxlat: 48.4
+    minlon: 16.2
+    maxlon: 16.6
 
 # remember these additional parameters in the url
 addParam:
