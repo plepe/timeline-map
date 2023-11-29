@@ -28,10 +28,10 @@ var FocusDataControl = L.Control.extend({
       app.getParameter('initial-map-view')
         .then(value => {
           if (value.bounds) {
-            app.map.fitBounds(value.bounds)
+            app.map.flyToBounds(value.bounds)
           }
           else if (value.center) {
-            app.map.setView(value.center, value.zoom ?? 12)
+            app.map.flyTo(value.center)
           }
         })
 
