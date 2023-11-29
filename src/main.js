@@ -9,6 +9,7 @@ import './addParam'
 import './overlays'
 import './flags'
 import './fullscreen'
+import './focusData'
 
 window.onload = function () {
   window.app = new App()
