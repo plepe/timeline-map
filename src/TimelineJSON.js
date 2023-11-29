@@ -6,6 +6,8 @@ import isTrue from './isTrue'
 import completeDate from './completeDate'
 import applyPopupModifier from './applyPopupModifier'
 
+let currentPopupDiv, currentPopupItem
+
 module.exports = class TimelineJSON extends Events {
   constructor (app, config) {
     super()
@@ -31,6 +33,11 @@ module.exports = class TimelineJSON extends Events {
 
       if ('date' in state) {
         this.setDate(state.date)
+      }
+
+      if (this.config.feature.popupModifyApply && currentPopupDiv) {
+        const d = { ...currentPopupItem.feature.properties, state: this.app.state.current }
+        applyPopupModifier(currentPopupDiv, this.config.feature.popupModifyApply, d)
       }
     })
 
@@ -189,7 +196,10 @@ module.exports = class TimelineJSON extends Events {
     if (this.config.feature.popupTemplate || this.config.feature.popupSource) {
       this.layer.bindPopup(feature => {
         const div = document.createElement('div')
+        currentPopupDiv = div
         const d = { ...feature.feature.properties, state: this.app.state.current }
+        currentPopupItem = feature
+
         if ('index' in feature.feature.properties) {
           d.logEntry = this.allItems[feature.feature.properties.index].logEntry
         }

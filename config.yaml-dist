@@ -105,6 +105,14 @@ layers:
         content: |-
           <a href="#id={{ item.id }}">{{ item.id }}</a>
 
+    # If a popup is open, every time the state changes, the following modifiers
+    # are applied:
+    popupModifyApply:
+    - query: .date
+      action: replace
+      content: |-
+        {{ state.date }}
+
     # how to show item in the timeline. Each of the options may be a twig
     # template, available values: item, state. start and end may be overridden,
     # if not startField and endField are used.
