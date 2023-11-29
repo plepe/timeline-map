@@ -8,6 +8,7 @@ import './timeline-controls'
 import './addParam'
 import './overlays'
 import './flags'
+import './fullscreen'
 
 window.onload = function () {
   window.app = new App()
