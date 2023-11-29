@@ -27,13 +27,11 @@ var FocusDataControl = L.Control.extend({
     container.onclick = function () {
       app.getParameter('initial-map-view')
         .then(value => {
-          switch (value.type) {
-            case 'bounds':
-              app.map.fitBounds(value.bounds)
-              break
-            case 'view':
-              app.map.setView(value.center, value.zoom)
-              break
+          if (value.bounds) {
+            app.map.fitBounds(value.bounds)
+          }
+          else if (value.center) {
+            app.map.setView(value.center, value.zoom ?? 12)
           }
         })
 
