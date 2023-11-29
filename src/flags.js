@@ -1,18 +1,13 @@
 import App from 'geowiki-viewer/src/App'
 const Twig = require('twig')
+import './refresh'
 
 let app
-let timeout
 const flags = {}
 
 function set (k, v) {
-  flags[k] = v
-
-  if (!timeout) {
-    timeout = global.setTimeout(() => {
-      timeout = null
-      app.state.apply({})
-    }, 0)
+  if (!(k in flags) || JSON.stringify(flags[k]) !== JSON.stringify(v)) {
+    flags[k] = v
   }
 }
 
