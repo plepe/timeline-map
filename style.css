@@ -12,6 +12,7 @@ body {
 .timeline-header {
   width: 100%;
   display: flex;
+  background: white;
   flex-direction: row;
 }
 .timeline-header > .controls > * {
