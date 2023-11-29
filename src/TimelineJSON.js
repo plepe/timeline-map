@@ -80,6 +80,8 @@ module.exports = class TimelineJSON extends Events {
         })
       }))
     })
+
+    this.app.on('refresh', () => this.init())
   }
 
   load (url, callback) {
