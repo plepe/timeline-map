@@ -13,7 +13,7 @@ Twig.extendFilter('json_decode', (value) => {
 
 const twigTemplates = {}
 
-module.exports = function twigGet (template, data) {
+module.exports = function twigGet (template, data, callback) {
   if (typeof template !== 'string') {
     console.error('Twig template is not a string:', template)
     return ''
@@ -28,5 +28,10 @@ module.exports = function twigGet (template, data) {
     }
   }
 
-  return twigTemplates[template].render(data).trim()
+  if (callback) {
+    twigTemplates[template].renderAsync(data)
+      .then(result => callback(null, result.trim()))
+  } else {
+    return twigTemplates[template].render(data).trim()
+  }
 }
