@@ -22,7 +22,18 @@ var FullscreenControl = L.Control.extend({
     container.title = modulekitLang.lang('toggle_fullscreen')
 
     container.onclick = function () {
-      document.body.classList.toggle('fullscreen')
+      const dom = document.body
+
+      if (dom.requestFullscreen) {
+        if (document.fullscreenElement) {
+          document.exitFullscreen()
+        } else {
+          dom.requestFullscreen()
+        }
+      } else {
+        document.body.classList.toggle('fullscreen')
+      }
+
       app.map.invalidateSize()
       return false
     }
