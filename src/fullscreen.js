@@ -18,7 +18,7 @@ var FullscreenControl = L.Control.extend({
   },
   onAdd: function (map) {
     var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control-fullscreen')
-    container.innerHTML = "<a href='#'><i class='fa fa-arrows-alt'></i></a>"
+    container.innerHTML = "<a href='#'><i class='fa fa-expand'></i></a>"
     container.title = modulekitLang.lang('toggle_fullscreen')
 
     container.onclick = function () {

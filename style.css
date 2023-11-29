@@ -74,3 +74,7 @@ body {
 .leaflet-popup-content {
   width: 400px;
 }
+
+.leaflet-bar {
+  font-size: 20px;
+}
