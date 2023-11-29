@@ -4,6 +4,7 @@ import twigGet from './twigGet'
 import loader from './loader'
 import isTrue from './isTrue'
 import completeDate from './completeDate'
+import applyPopupModifier from './applyPopupModifier'
 
 module.exports = class TimelineJSON extends Events {
   constructor (app, config) {
@@ -215,6 +216,7 @@ module.exports = class TimelineJSON extends Events {
               }
 
               div.innerHTML = body
+              applyPopupModifier(div, this.config.feature.popupSource.modifier, d)
               app.emit('popup-open', div)
             })
         }

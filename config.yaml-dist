@@ -93,6 +93,18 @@ layers:
       # if the address returns wrapping HTML, just use the queried part
       querySelector: '.content'
 
+      # You may apply modifiers. Each modifier has a querySelector or
+      # querySelectorAll. To the first result (or all results using
+      # querySelectorAll), the content will be applied (content is a Twig
+      # template; you may use item.*, state.* and (if a time has been selected)
+      # logEntry.*.
+      # Available actions: 'append', 'prepend', 'replace' (default).
+      modifier:
+      - query: .header
+        action: append
+        content: |-
+          <a href="#id={{ item.id }}">{{ item.id }}</a>
+
     # how to show item in the timeline. Each of the options may be a twig
     # template, available values: item, state. start and end may be overridden,
     # if not startField and endField are used.
