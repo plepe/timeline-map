@@ -57,14 +57,12 @@ module.exports = class TimelineJSON extends Events {
       promises.push(new Promise((resolve, reject) => {
         if (this.data) {
           return resolve({
-            type: 'bounds',
             bounds: this.initialMapView()
           })
         }
 
         this.once('data-loaded', () => {
           resolve({
-            type: 'bounds',
             bounds: this.initialMapView()
           })
         })
