@@ -472,9 +472,13 @@ module.exports = class TimelineJSON extends Events {
           return
         }
 
-        return {
+        const result = {
           start: twigGet(this.config.feature.startField, p),
           end: twigGet(this.config.feature.endField, p)
+        }
+
+        if (result.start) {
+          return result
         }
       })
       .filter(v => v)
@@ -537,7 +541,9 @@ module.exports = class TimelineJSON extends Events {
         data.start = completeDate(data.start, 'start')
         data.end = completeDate(data.end, 'end')
 
-        return data
+        if (data.start) {
+          return data
+        }
       })
       .filter(v => v)
 
