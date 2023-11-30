@@ -152,23 +152,16 @@ module.exports = class TimelineJSON extends Events {
   }
 
   initialMapView () {
-    let allItems = this.allItems
     let group = []
 
     if (this.config.feature.initialMapView) {
-      allItems = allItems.forEach(({ item, log, feature, features }) => {
-        if (!isTrue(twigGet(this.config.feature.initialMapView, { item, state: this.app.state.current }))) {
+      this.allItems.forEach(feature => {
+        if (!feature.initialMapView()) {
           return
         }
 
-        if (feature) {
-          group.push(feature)
-        } else if (features) {
-          group = group.concat(features)
-        }
+        group = group.concat(feature.leafletFeatures())
       })
-
-      group = group.filter(f => f)
 
       const layer = L.featureGroup(group)
       return layer.getBounds()

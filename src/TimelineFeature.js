@@ -2,6 +2,7 @@ import wkx from 'wkx'
 import twigGet from './twigGet'
 import completeDate from './completeDate'
 import applyPopupModifier from './applyPopupModifier'
+import isTrue from './isTrue'
 
 module.exports = class TimelineFeature {
   constructor (layer, item, index) {
@@ -363,6 +364,20 @@ module.exports = class TimelineFeature {
       case 'twkb':
       default:
         return wkx.Geometry.parse(value).toGeoJSON()
+    }
+  }
+
+  initialMapView () {
+    this.twigContext.state = this.app.state.current
+
+    return isTrue(twigGet(this.config.feature.initialMapView, this.twigContext))
+  }
+
+  leafletFeatures () {
+    if (this.feature) {
+      return [this.feature]
+    } else {
+      return this.features.filter(f => f)
     }
   }
 }
