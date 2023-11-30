@@ -1,3 +1,7 @@
+app:
+  name: timeline-map
+  url: https://github.com/plepe/timeline-map
+
 defaultState:
 # Default Map Location.
 
