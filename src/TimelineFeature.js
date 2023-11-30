@@ -28,7 +28,7 @@ module.exports = class TimelineFeature {
       const end = twigGet(this.config.feature.endField, this.twigContext)
       this.log = [{ start, end }]
     } else if (this.config.feature.type === 'log-array') {
-      this.log = feature.log(e => {
+      this.log = this.feature.log(e => {
         return { start: e[0], end: e[1] }
       })
     } else if (this.config.feature.type === 'function') {
@@ -56,6 +56,8 @@ module.exports = class TimelineFeature {
     })
 
     this.log.forEach(logEntry => {
+      this.twigContext.logEntry = logEntry
+
       if (logEntry._start !== null) {
         if (this.min !== null && (logEntry._start ?? '0') < this.min) {
           this.min = logEntry._start
@@ -83,7 +85,7 @@ module.exports = class TimelineFeature {
           geometry: this.parseGeom(logEntry[this.config.feature.geomLogField])
         }
 
-        const feature = this.coordsToLeaflet(coords, this.item, logEntry)
+        const feature = this.coordsToLeaflet(coords)
         this.layer.layer.addLayer(feature)
         return feature
       })
@@ -91,10 +93,10 @@ module.exports = class TimelineFeature {
       const coords = {
         type: 'Feature',
         properties: this,
-        geometry: this.parseGeom(item[this.config.feature.geomField])
+        geometry: this.parseGeom(this.item[this.config.feature.geomField])
       }
 
-      this.feature = this.coordsToLeaflet(coords, this.item)
+      this.feature = this.coordsToLeaflet(coords)
       this.layer.layer.addLayer(this.feature)
     }
   }
@@ -126,13 +128,9 @@ module.exports = class TimelineFeature {
   setDate (date) {
     this.twigContext.state = this.app.state.current
 
-    const log = this.log
-    const feature = this.feature
-    const features = this.features
-
     let shown
-    if (date && log) {
-      shown = log.map(logEntry => {
+    if (date && this.log) {
+      shown = this.log.map(logEntry => {
         let shown = false
         if (logEntry._start === null || logEntry._start <= date) {
           shown = true
@@ -145,7 +143,7 @@ module.exports = class TimelineFeature {
         return shown
       })
     } else {
-      shown = log ? log.map(v => true) : [true]
+      shown = this.log ? this.log.map(v => true) : [true]
     }
 
     if (shown.includes(true)) {
@@ -171,8 +169,10 @@ module.exports = class TimelineFeature {
         style.opacity = 1
       }
 
-      if (features) {
-        features.forEach((f, i) => {
+      if (this.features) {
+        this.features.forEach((f, i) => {
+          this.twigContext.logEntry = this.log[i]
+
           if (!f) { return }
 
           if (shown[i]) {
@@ -180,7 +180,7 @@ module.exports = class TimelineFeature {
               f.setStyle(style)
             }
             if (f.setIcon) {
-              f.setIcon(this.getIcon(item, log[i]))
+              f.setIcon(this.getIcon())
             }
 
             f.addTo(this.layer.layer)
@@ -188,28 +188,28 @@ module.exports = class TimelineFeature {
             this.layer.layer.removeLayer(f)
           }
         })
-      } else if (feature) {
-        if (feature.setStyle) {
-          feature.setStyle(style)
+      } else if (this.feature) {
+        if (this.feature.setStyle) {
+          this.feature.setStyle(style)
         }
-        if (feature.setIcon) {
-          feature.setIcon(this.getIcon(item, shown[0]))
+        if (this.feature.setIcon) {
+          this.feature.setIcon(this.getIcon(shown[0]))
         }
 
-        feature.addTo(this.layer.layer)
+        this.feature.addTo(this.layer.layer)
       }
     } else {
       this.logEntry = null
 
-      if (features) {
-        features.forEach(f => {
+      if (this.features) {
+        this.features.forEach(f => {
           if (!f) { return }
           if (this.layer.layer.hasLayer(f)) {
             this.layer.layer.removeLayer(f)
           }
         })
-      } else if (this.layer.layer.hasLayer(feature)) {
-        this.layer.layer.removeLayer(feature)
+      } else if (this.layer.layer.hasLayer(this.feature)) {
+        this.layer.layer.removeLayer(this.feature)
       }
     }
   }
@@ -221,7 +221,7 @@ module.exports = class TimelineFeature {
     if (this.config.feature.popupTemplate) {
       const content = twigGet(this.config.feature.popupTemplate, this.twigContext)
       div.innerHTML = content
-      app.emit('popup-open', div)
+      this.app.emit('popup-open', div)
     }
 
     if (this.config.feature.popupSource) {
@@ -241,7 +241,7 @@ module.exports = class TimelineFeature {
 
           div.innerHTML = body
           applyPopupModifier(div, this.config.feature.popupSource.modifier, this.twigContext)
-          app.emit('popup-open', div)
+          this.app.emit('popup-open', div)
         })
     }
 
@@ -253,9 +253,7 @@ module.exports = class TimelineFeature {
     applyPopupModifier(currentPopupDiv, this.config.feature.popupModifyApply, this.twigContext)
   }
 
-  getIcon (logEntry = null) {
-    const item = this.item
-
+  getIcon () {
     if (!this.config.feature.markerSymbol) {
       return null
     }
@@ -304,14 +302,14 @@ module.exports = class TimelineFeature {
     return L.divIcon(iconOptions)
   }
 
-  coordsToLeaflet (coords, item, logEntry = null) {
+  coordsToLeaflet (coords) {
     if (coords.geometry.type === 'GeometryCollection') {
       const layers = coords.geometry.geometries.map(g => {
         return this.coordsToLeaflet({
           type: 'Feature',
           properties: coords.properties,
           geometry: g
-        }, item, logEntry)
+        })
       })
 
       return L.featureGroup(layers)
@@ -325,7 +323,7 @@ module.exports = class TimelineFeature {
             type: 'Point',
             coordinates: g
           }
-        }, item, logEntry)
+        })
       })
 
       return L.featureGroup(layers)
@@ -344,7 +342,7 @@ module.exports = class TimelineFeature {
         return style
       },
       pointToLayer: (feature, latlng) => {
-        const icon = this.getIcon(item, logEntry)
+        const icon = this.getIcon()
         if (icon) {
           return L.marker(latlng, { icon })
         } else {
