@@ -13,17 +13,19 @@ module.exports = class TimelineFeature {
   }
 
   init () {
+    this.twigContext = { item: this.item, state: this.app.state.current }
+
     if (this.config.feature.init) {
-      twigGet(this.config.feature.init, { item: this.item, state: this.app.state.current })
+      twigGet(this.config.feature.init, this.twigContext)
     }
   }
 
   prepare () {
-    const item = this.item
+    this.twigContext.state = this.app.state.current
 
     if (this.config.feature.type === 'start-end-field') {
-      const start = twigGet(this.config.feature.startField, { item, state: this.app.state.current })
-      const end = twigGet(this.config.feature.endField, { item, state: this.app.state.current })
+      const start = twigGet(this.config.feature.startField, this.twigContext)
+      const end = twigGet(this.config.feature.endField, this.twigContext)
       this.log = [{ start, end }]
     } else if (this.config.feature.type === 'log-array') {
       this.log = feature.log(e => {
@@ -31,12 +33,14 @@ module.exports = class TimelineFeature {
       })
     } else if (this.config.feature.type === 'function') {
       try {
-        const l = twigGet(this.config.feature.logFunction, { item, state: this.app.state.current })
+        const l = twigGet(this.config.feature.logFunction, this.twigContext)
         this.log = JSON.parse(l)
       } catch (e) {
         console.error(e.message)
       }
     }
+
+    this.twigContext.log = this.log
 
     this.log.forEach(logEntry => {
       this.logGetStartEnd(logEntry)
@@ -79,7 +83,7 @@ module.exports = class TimelineFeature {
           geometry: this.parseGeom(logEntry[this.config.feature.geomLogField])
         }
 
-        const feature = this.coordsToLeaflet(coords, item, logEntry)
+        const feature = this.coordsToLeaflet(coords, this.item, logEntry)
         this.layer.layer.addLayer(feature)
         return feature
       })
@@ -90,17 +94,20 @@ module.exports = class TimelineFeature {
         geometry: this.parseGeom(item[this.config.feature.geomField])
       }
 
-      this.feature = this.coordsToLeaflet(coords, item)
+      this.feature = this.coordsToLeaflet(coords, this.item)
       this.layer.layer.addLayer(this.feature)
     }
   }
 
   logGetStartEnd (logEntry) {
+    this.twigContext.state = this.app.state.current
+    this.twigContext.logEntry = logEntry
+
     let start = this.config.feature.startLog ?
-      twigGet(this.config.feature.startLog, { item: this.item, logEntry, state: this.app.state.current }) :
+      twigGet(this.config.feature.startLog, this.twigContext) :
       logEntry[this.config.feature.startLogField ?? 'start']
     let end = this.config.feature.endLog ?
-      twigGet(this.config.feature.endLog, { item: this.item, logEntry, state: this.app.state.current }) :
+      twigGet(this.config.feature.endLog, this.twigContext) :
       logEntry[this.config.feature.endLogField ?? 'end']
     start = completeDate(start, 'start')
     end = completeDate(end, 'end')
@@ -117,7 +124,8 @@ module.exports = class TimelineFeature {
   }
 
   setDate (date) {
-    const item = this.item
+    this.twigContext.state = this.app.state.current
+
     const log = this.log
     const feature = this.feature
     const features = this.features
@@ -146,11 +154,9 @@ module.exports = class TimelineFeature {
         .filter(i => i !== null)
       const logEntry = this.log[shownIndex[0]]
       this.logEntry = logEntry
+      this.twigContext.logEntry = logEntry
 
-      let style = twigGet(this.config.feature.styleTemplate, {
-        item, logEntry,
-        state: this.app.state.current
-      })
+      let style = twigGet(this.config.feature.styleTemplate, this.twigContext)
 
       try {
         style = JSON.parse(style)
@@ -210,16 +216,16 @@ module.exports = class TimelineFeature {
 
   showPopup () {
     const div = document.createElement('div')
-    const d = { item: this.item, logEntry: this.logEntry, state: this.app.state.current }
+    this.twigContext.state = this.app.state.current
 
     if (this.config.feature.popupTemplate) {
-      const content = twigGet(this.config.feature.popupTemplate, d)
+      const content = twigGet(this.config.feature.popupTemplate, this.twigContext)
       div.innerHTML = content
       app.emit('popup-open', div)
     }
 
     if (this.config.feature.popupSource) {
-      const url = twigGet(this.config.feature.popupSource.url, d)
+      const url = twigGet(this.config.feature.popupSource.url, this.twigContext)
       fetch(url)
         .then(req => req.text())
         .then(body => {
@@ -234,7 +240,7 @@ module.exports = class TimelineFeature {
           }
 
           div.innerHTML = body
-          applyPopupModifier(div, this.config.feature.popupSource.modifier, d)
+          applyPopupModifier(div, this.config.feature.popupSource.modifier, this.twigContext)
           app.emit('popup-open', div)
         })
     }
@@ -243,8 +249,8 @@ module.exports = class TimelineFeature {
   }
 
   applyPopupModifier (currentPopupDiv) {
-    const d = { item: this.item, logEntry: this.logEntry, state: this.app.state.current }
-    applyPopupModifier(currentPopupDiv, this.config.feature.popupModifyApply, d)
+    this.twigContext.state = this.app.state.current
+    applyPopupModifier(currentPopupDiv, this.config.feature.popupModifyApply, this.twigContext)
   }
 
   getIcon (logEntry = null) {
@@ -255,7 +261,7 @@ module.exports = class TimelineFeature {
     }
 
     const div = document.createElement('div')
-    const html = twigGet(this.config.feature.markerSymbol, { item, logEntry, state: this.app.state.current })
+    const html = twigGet(this.config.feature.markerSymbol, this.twigContext)
     div.innerHTML = html
     const c = div.firstChild
 
@@ -292,7 +298,7 @@ module.exports = class TimelineFeature {
     if (this.config.feature.markerSign) {
       const x = iconOptions.iconAnchor[0] + iconOptions.signAnchor[0]
       const y = -iconOptions.iconSize[1] + iconOptions.iconAnchor[1] + iconOptions.signAnchor[1]
-      iconOptions.html += '<div class="sign" style="margin-left: ' + x + 'px; margin-top: ' + y + 'px;">' + twigGet(this.config.feature.markerSign, { item, logEntry, state: this.app.state.current }) + '</div>'
+      iconOptions.html += '<div class="sign" style="margin-left: ' + x + 'px; margin-top: ' + y + 'px;">' + twigGet(this.config.feature.markerSign, this.twigContext) + '</div>'
     }
 
     return L.divIcon(iconOptions)
@@ -329,7 +335,7 @@ module.exports = class TimelineFeature {
       style: (feature) => {
         let style
         try {
-          style = twigGet(this.config.feature.styleTemplate, { ...feature.properties, state: this.app.state.current })
+          style = twigGet(this.config.feature.styleTemplate, this.twigContext)
           style = JSON.parse(style)
         } catch (e) {
           console.error(e.message)

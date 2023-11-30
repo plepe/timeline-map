@@ -59,6 +59,13 @@ layers:
     # 'twkb', 'geojson'
     geomType: 'wkt'
 
+    # init template - this is twig template which will be evaluated for all
+    # items before other templates are evaluated. You may set variables for
+    # this item with {% set var = "any value" %}. You can set global variables
+    # with {{ setFlag("var", "any value") }}, which can be recalled from other
+    # items with {{ getFlag("var") }}.
+    #init: |
+
     # which field in each log entry to use as startdate (default: 'start')
     #startLogField: start
 
