@@ -1,6 +1,6 @@
 {
-  "name": "geojson-timeline",
-  "description": "Use a timeline to visualize GeoJSON files with timed information.",
+  "name": "timeline-map",
+  "description": "Use a timeline to visualize geographic data with timed information.",
   "version": "0.0.0",
   "scripts": {
     "build": "browserify -g browserify-css -p esmify src/main.js -o dist/app.js",
@@ -39,7 +39,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/plepe/geojson-timeline.git"
+    "url": "git+https://github.com/plepe/timeline-map.git"
   },
   "keywords": [
     "GeoJSON",
@@ -48,7 +48,7 @@
   "author": "Stephan Bösch-Plepelits <skunk@xover.mud.at>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/plepe/geojson-timeline/issues"
+    "url": "https://github.com/plepe/timeline-map/issues"
   },
-  "homepage": "https://github.com/plepe/geojson-timeline#readme"
+  "homepage": "https://github.com/plepe/timeline-map#readme"
 }
