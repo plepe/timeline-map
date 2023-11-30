@@ -62,8 +62,8 @@ function init () {
 
     let start = selectedItems.map(i => i.start).filter(v => v).sort()
     start = start.length ? start[0] : null
-    let end = selectedItems.map(i => i.end).filter(v => v).sort().reverse()
-    end = end.length ? end[0] : null
+    // let end = selectedItems.map(i => i.end).filter(v => v).sort().reverse()
+    // end = end.length ? end[0] : null
 
     app.state.apply({ date: start })
     app.updateLink()
@@ -117,8 +117,4 @@ function init () {
       dataset.add(items)
     })
   })
-}
-
-function setDate (date) {
-  app.state.apply({ date })
 }

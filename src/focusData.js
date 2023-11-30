@@ -1,3 +1,4 @@
+/* global L:false */
 import App from 'geowiki-viewer/src/App'
 import modulekitLang from 'modulekit-lang'
 
@@ -14,13 +15,13 @@ App.addExtension({
   }
 })
 
-var FocusDataControl = L.Control.extend({
+const FocusDataControl = L.Control.extend({
   options: {
     position: 'topleft'
     // control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
   },
   onAdd: function (map) {
-    var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control-fullscreen')
+    const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control-fullscreen')
     container.innerHTML = "<a href='#'><i class='fa fa-arrows-to-circle'></i></a>"
     container.title = modulekitLang.lang('focus-to-data')
 
@@ -29,8 +30,7 @@ var FocusDataControl = L.Control.extend({
         .then(value => {
           if (value.bounds) {
             app.map.flyToBounds(value.bounds)
-          }
-          else if (value.center) {
+          } else if (value.center) {
             app.map.flyTo(value.center)
           }
         })

@@ -1,3 +1,4 @@
+/* global L:false */
 import wkx from 'wkx'
 import twigGet from './twigGet'
 import completeDate from './completeDate'
@@ -77,7 +78,7 @@ module.exports = class TimelineFeature {
     if (this.config.feature.geomLogField) {
       this.features = this.log.map(logEntry => {
         if (!logEntry[this.config.feature.geomLogField]) {
-          return
+          return null
         }
 
         const coords = {
@@ -106,12 +107,12 @@ module.exports = class TimelineFeature {
     this.twigContext.state = this.app.state.current
     this.twigContext.logEntry = logEntry
 
-    let start = this.config.feature.startLog ?
-      twigGet(this.config.feature.startLog, this.twigContext) :
-      logEntry[this.config.feature.startLogField ?? 'start']
-    let end = this.config.feature.endLog ?
-      twigGet(this.config.feature.endLog, this.twigContext) :
-      logEntry[this.config.feature.endLogField ?? 'end']
+    let start = this.config.feature.startLog
+      ? twigGet(this.config.feature.startLog, this.twigContext)
+      : logEntry[this.config.feature.startLogField ?? 'start']
+    let end = this.config.feature.endLog
+      ? twigGet(this.config.feature.endLog, this.twigContext)
+      : logEntry[this.config.feature.endLogField ?? 'end']
     start = completeDate(start, 'start')
     end = completeDate(end, 'end')
 
@@ -314,8 +315,7 @@ module.exports = class TimelineFeature {
       })
 
       return L.featureGroup(layers)
-    }
-    else if (coords.geometry.type === 'MultiPoint') {
+    } else if (coords.geometry.type === 'MultiPoint') {
       const layers = coords.geometry.coordinates.map(g => {
         return this.coordsToLeaflet({
           type: 'Feature',

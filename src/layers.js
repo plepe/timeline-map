@@ -8,12 +8,11 @@ const types = {
 App.addExtension({
   id: 'layers',
   initFun: (app, callback) => {
-
     app.on('init', () => {
-      const layers = app.config.layers ?? [ app.config ]
-      layers.forEach(l => {
+      const layers = app.config.layers ?? [app.config]
+      layers.map(l => {
         const Type = types[l.type ?? 'TimelineGeoJSON']
-        new Type(app, l)
+        return new Type(app, l)
       })
     })
 

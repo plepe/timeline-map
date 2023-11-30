@@ -1,8 +1,7 @@
 import App from 'geowiki-viewer/src/App'
-const Twig = require('twig')
 import './refresh'
+const Twig = require('twig')
 
-let app
 const flags = {}
 
 function set (k, v) {
@@ -20,8 +19,7 @@ Twig.extendFunction('getFlag', get)
 
 App.addExtension({
   id: 'flags',
-  initFun: (_app, callback) => {
-    app = _app
+  initFun: (app, callback) => {
     callback()
   }
 })

@@ -1,8 +1,8 @@
+/* global L:false */
 import Events from 'events'
 import twigGet from './twigGet'
 import loader from './loader'
 import isTrue from './isTrue'
-import completeDate from './completeDate'
 import TimelineFeature from './TimelineFeature'
 
 let currentPopupDiv, currentPopupItem
@@ -123,7 +123,6 @@ module.exports = class TimelineJSON extends Events {
       })
     }
 
-
     this.emit('data-loaded')
     this.app.emit('data-loaded', this)
 
@@ -175,9 +174,7 @@ module.exports = class TimelineJSON extends Events {
       .map(feature => {
         const result = feature.getTimelineTimespan()
 
-        if (result && result.start) {
-          return result
-        }
+        return result && result.start ? result : null
       })
       .filter(v => v)
 

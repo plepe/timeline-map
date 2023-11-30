@@ -10,7 +10,7 @@ let interval
 App.addExtension({
   id: 'timeline-controls',
   initFun: (app, callback) => {
-    const getDate = (p) => new Promise(resolve => {
+    const getDate = (p) => new Promise((resolve, reject) => {
       const date = app.state.current.date
       if (date) {
         return resolve(date)
@@ -70,7 +70,7 @@ App.addExtension({
         setActive(false)
         getDate(v === 'forward' ? 'start' : 'end').then(date => {
           date = moment(date)
-          date = v == 'backward' ? date.subtract(...stepSize) : date.add(...stepSize)
+          date = v === 'backward' ? date.subtract(...stepSize) : date.add(...stepSize)
           date = date.format('YYYY-MM-DD')
           app.state.apply({ date })
           app.updateLink()

@@ -1,5 +1,5 @@
-const Twig = require('twig')
 import markers from 'openstreetbrowser-markers'
+const Twig = require('twig')
 const osmDateQuery = require('openstreetmap-date-query')
 
 Twig.extendFunction('markerLine', (data, options) => Twig.filters.raw(markers.line(data, options)))
@@ -26,7 +26,7 @@ module.exports = function twigGet (template, data, callback) {
   if (!(template in twigTemplates)) {
     try {
       twigTemplates[template] = Twig.twig({ data: template, rethrow: true })
-    } catch(e) {
+    } catch (e) {
       console.error('Error compiling Twig template:', template, e.message)
       return ''
     }

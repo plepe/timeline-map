@@ -21,4 +21,3 @@ module.exports = function completeDate (date, timestamp) {
       return date
   }
 }
-

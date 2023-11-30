@@ -1,5 +1,3 @@
-import Events from 'events'
-import twigGet from './twigGet'
 import TimelineJSON from './TimelineJSON'
 
 module.exports = class TimelineGeoJSON extends TimelineJSON {

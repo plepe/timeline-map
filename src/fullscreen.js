@@ -1,9 +1,12 @@
+/* global L:false */
 import App from 'geowiki-viewer/src/App'
 import modulekitLang from 'modulekit-lang'
 
+let app
 App.addExtension({
   id: 'fullscreen',
-  initFun: (app, callback) => {
+  initFun: (_app, callback) => {
+    app = _app
     app.on('init', () => {
       app.map.addControl(new FullscreenControl())
     })
@@ -11,13 +14,13 @@ App.addExtension({
   }
 })
 
-var FullscreenControl = L.Control.extend({
+const FullscreenControl = L.Control.extend({
   options: {
     position: 'topleft'
     // control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
   },
   onAdd: function (map) {
-    var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control-fullscreen')
+    const container = L.DomUtil.create('div', 'leaflet-bar leaflet-control-fullscreen')
     container.innerHTML = "<a href='#'><i class='fa fa-expand'></i></a>"
     container.title = modulekitLang.lang('toggle_fullscreen')
 

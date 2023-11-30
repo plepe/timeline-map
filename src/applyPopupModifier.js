@@ -14,8 +14,7 @@ module.exports = function applyPopupModifier (div, modifier, data) {
       if (found) {
         apply(found, mod, v)
       }
-    }
-    else if (mod.queryAll) {
+    } else if (mod.queryAll) {
       const found = div.querySelectorAll(mod.queryAll)
       Array.from(found).forEach(f => {
         apply(f, mod, v)
@@ -29,20 +28,13 @@ function apply (found, mod, v) {
     while (v.firstChild) {
       found.appendChild(v.firstChild)
     }
-  }
-  else if (mod.action === 'prepend') {
+  } else if (mod.action === 'prepend') {
     while (v.lastChild) {
       found.insertBefore(v.lastChild, found.firstChild)
     }
-  }
-  else if (!mod.action || mod.action === 'replace') {
+  } else if (!mod.action || mod.action === 'replace') {
     found.innerHTML = v.innerHTML
-  }
-  else {
+  } else {
     console.error('Invalid modifier action: ' + mod.action, mod)
   }
-}
-
-function createElement (text, mod, data) {
-  return v
 }
