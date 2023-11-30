@@ -380,4 +380,19 @@ module.exports = class TimelineFeature {
       return this.features.filter(f => f)
     }
   }
+
+  getTimelineTimespan () {
+    this.twigContext.state = this.app.state.current
+
+    if (!isTrue(twigGet(this.config.feature.considerTimelineTimespan, this.twigContext))) {
+      return null
+    }
+
+    const result = {
+      start: twigGet(this.config.feature.startField, this.twigContext),
+      end: twigGet(this.config.feature.endField, this.twigContext)
+    }
+
+    return result
+  }
 }

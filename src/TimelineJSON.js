@@ -172,19 +172,10 @@ module.exports = class TimelineJSON extends Events {
 
   getTimelineTimespan () {
     const ranges = this.allItems
-      .map(({ item }) => {
-        const p = { item, state: this.app.state.current }
+      .map(feature => {
+        const result = feature.getTimelineTimespan()
 
-        if (!isTrue(twigGet(this.config.feature.considerTimelineTimespan, p))) {
-          return
-        }
-
-        const result = {
-          start: twigGet(this.config.feature.startField, p),
-          end: twigGet(this.config.feature.endField, p)
-        }
-
-        if (result.start) {
+        if (result && result.start) {
           return result
         }
       })
