@@ -191,37 +191,12 @@ module.exports = class TimelineJSON extends Events {
   }
 
   getTimelineItems () {
-    const config = this.config.feature.timeline ?? { show: false }
+    if (!this.config.feature.timeline) {
+      return []
+    }
 
     const items = this.allItems
-      .map(feature => {
-        const d = { ...feature, state: this.app.state.current }
-        const data = Object.fromEntries(Object.entries(config).map(([k, v]) => {
-          if (typeof v === 'string') {
-            v = twigGet(v, d)
-          }
-          return [k, v]
-        }))
-
-        if ('show' in data && !isTrue(data.show)) {
-          return null
-        }
-
-        if (!('start' in data)) {
-          data.start = twigGet(this.config.feature.startField, d)
-        }
-
-        if (!('end' in data)) {
-          data.end = twigGet(this.config.feature.endField, d)
-        }
-
-        data.start = completeDate(data.start, 'start')
-        data.end = completeDate(data.end, 'end')
-
-        if (data.start) {
-          return data
-        }
-      })
+      .map(feature => feature.getTimelineItems())
       .filter(v => v)
 
     return items

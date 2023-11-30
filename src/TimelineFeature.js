@@ -395,4 +395,35 @@ module.exports = class TimelineFeature {
 
     return result
   }
+
+  getTimelineItems () {
+    const config = this.config.feature.timeline
+    this.twigContext.state = this.app.state.current
+
+    const data = Object.fromEntries(Object.entries(config).map(([k, v]) => {
+      if (typeof v === 'string') {
+        v = twigGet(v, this.twigContext)
+      }
+      return [k, v]
+    }))
+
+    if ('show' in data && !isTrue(data.show)) {
+      return null
+    }
+
+    if (!('start' in data)) {
+      data.start = twigGet(this.config.feature.startField, this.twigContext)
+    }
+
+    if (!('end' in data)) {
+      data.end = twigGet(this.config.feature.endField, this.twigContext)
+    }
+
+    data.start = completeDate(data.start, 'start')
+    data.end = completeDate(data.end, 'end')
+
+    if (data.start) {
+      return data
+    }
+  }
 }
