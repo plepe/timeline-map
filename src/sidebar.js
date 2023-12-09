@@ -1,9 +1,10 @@
 import App from 'geowiki-viewer/src/App'
 import twigGet from './twigGet'
 import isTrue from './isTrue'
+import ContentDisplay from './ContentDisplay'
 import './resize'
 
-let sidebar, content, resizer
+let sidebar, contentDisplay, resizer
 let drag = false
 let app
 
@@ -35,9 +36,13 @@ function init () {
   sidebar = document.createElement('aside')
   document.body.appendChild(sidebar)
 
-  content = document.createElement('div')
-  content.className = 'content'
-  sidebar.appendChild(content)
+  contentDisplay = new ContentDisplay(app.config.sidebar)
+  contentDisplay.div.className = 'content'
+  sidebar.appendChild(contentDisplay.div)
+
+  contentDisplay.show({
+    state: app.state.current
+  })
 
   resizer = document.createElement('div')
   resizer.className = 'resizer'
