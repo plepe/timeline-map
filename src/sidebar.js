@@ -8,12 +8,12 @@ let drag = false
 App.addExtension({
   id: 'sidebar',
   initFun: (app, callback) => {
-    app.on('state-apply', () => {
-      const config = app.config.sidebar
-      if (!config) {
-        return
-      }
+    const config = app.config.sidebar
+    if (!config) {
+      return callback()
+    }
 
+    app.on('state-apply', () => {
       if (typeof config.show === 'boolean' ? config.show : isTrue(twigGet(app.config.sidebar.show, { state: app.state.current }))) {
         document.body.classList.add('sidebar')
       } else {
