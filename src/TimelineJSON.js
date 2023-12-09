@@ -34,8 +34,8 @@ module.exports = class TimelineJSON extends Events {
         this.setDate(state.date)
       }
 
-      if (this.config.feature.popupModifyApply && currentPopupDiv) {
-        currentPopupItem.applyPopupModifier(currentPopupDiv)
+      if (currentPopupDisplay) {
+        currentPopupDisplay.update(currentPopupItem.twigData())
       }
     })
 

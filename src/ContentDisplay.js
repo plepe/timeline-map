@@ -38,4 +38,10 @@ module.exports = class ContentDisplay extends Events {
         })
     }
   }
+
+  update (data) {
+    if (this.config.update) {
+      applyPopupModifier(this.div, this.config.update, data)
+    }
+  }
 }

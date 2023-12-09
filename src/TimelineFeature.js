@@ -2,7 +2,6 @@
 import wkx from 'wkx'
 import twigGet from './twigGet'
 import completeDate from './completeDate'
-import applyPopupModifier from './applyPopupModifier'
 import isTrue from './isTrue'
 import ContentDisplay from './ContentDisplay'
 
@@ -225,7 +224,8 @@ module.exports = class TimelineFeature {
   showPopup () {
     const popup = new ContentDisplay({
       template: this.config.feature.popupTemplate,
-      source: this.config.feature.popupSource
+      source: this.config.feature.popupSource,
+      update: this.config.feature.popupModifyApply
     })
 
     this.twigContext.state = this.app.state.current
@@ -234,11 +234,6 @@ module.exports = class TimelineFeature {
     popup.on('ready', () => this.app.emit('popup-open', popup.div))
 
     return popup
-  }
-
-  applyPopupModifier (currentPopupDiv) {
-    this.twigContext.state = this.app.state.current
-    applyPopupModifier(currentPopupDiv, this.config.feature.popupModifyApply, this.twigContext)
   }
 
   getIcon () {
