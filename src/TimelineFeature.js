@@ -233,7 +233,7 @@ module.exports = class TimelineFeature {
 
     popup.on('ready', () => this.app.emit('popup-open', popup.div))
 
-    return popup.div
+    return popup
   }
 
   applyPopupModifier (currentPopupDiv) {
