@@ -1,6 +1,5 @@
 import Events from 'events'
 import twigGet from './twigGet'
-import isTrue from './isTrue'
 import applyPopupModifier from './applyPopupModifier'
 
 module.exports = class ContentDisplay extends Events {

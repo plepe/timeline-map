@@ -23,6 +23,11 @@ module.exports = class TimelineFeature {
     }
   }
 
+  twigData () {
+    this.twigContext.state = this.app.state.current
+    return this.twigContext
+  }
+
   prepare () {
     this.twigContext.state = this.app.state.current
 
