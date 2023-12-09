@@ -19,8 +19,12 @@ addParam:
 dateFormat: lll
 
 sidebar:
+  # For all twig Templates the following values are available: state.*
+
   # Whether the sidebar should be shown or not (boolean / twig template)
   show: false
+
+  template: 'SIDEBAR {{ state.id }}'
 
 overlays:
   - id: borders

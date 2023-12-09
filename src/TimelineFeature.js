@@ -4,6 +4,7 @@ import twigGet from './twigGet'
 import completeDate from './completeDate'
 import applyPopupModifier from './applyPopupModifier'
 import isTrue from './isTrue'
+import ContentDisplay from './ContentDisplay'
 
 module.exports = class TimelineFeature {
   constructor (layer, item, index) {
@@ -217,37 +218,17 @@ module.exports = class TimelineFeature {
   }
 
   showPopup () {
-    const div = document.createElement('div')
+    const popup = new ContentDisplay({
+      template: this.config.feature.popupTemplate,
+      source: this.config.feature.popupSource
+    })
+
     this.twigContext.state = this.app.state.current
+    popup.show(this.twigContext)
 
-    if (this.config.feature.popupTemplate) {
-      const content = twigGet(this.config.feature.popupTemplate, this.twigContext)
-      div.innerHTML = content
-      this.app.emit('popup-open', div)
-    }
+    popup.on('ready', () => this.app.emit('popup-open', popup.div))
 
-    if (this.config.feature.popupSource) {
-      const url = twigGet(this.config.feature.popupSource.url, this.twigContext)
-      fetch(url)
-        .then(req => req.text())
-        .then(body => {
-          if (this.config.feature.popupSource.querySelector) {
-            const x = document.createElement('div')
-            x.innerHTML = body
-
-            const content = x.querySelector(this.config.feature.popupSource.querySelector)
-            if (content) {
-              body = content.innerHTML
-            }
-          }
-
-          div.innerHTML = body
-          applyPopupModifier(div, this.config.feature.popupSource.modifier, this.twigContext)
-          this.app.emit('popup-open', div)
-        })
-    }
-
-    return div
+    return popup.div
   }
 
   applyPopupModifier (currentPopupDiv) {
