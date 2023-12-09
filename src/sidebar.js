@@ -1,6 +1,7 @@
 import App from 'geowiki-viewer/src/App'
 import twigGet from './twigGet'
 import isTrue from './isTrue'
+import './resize'
 
 let sidebar, content, resizer
 let drag = false
@@ -27,6 +28,8 @@ function init () {
     } else {
       document.body.classList.remove('sidebar')
     }
+
+    app.resize()
   })
 
   sidebar = document.createElement('aside')
@@ -49,9 +52,9 @@ function init () {
   document.body.onmousemove = (e) => {
     if (drag) {
       document.body.style.gridTemplateColumns = e.clientX + 'px auto'
+      app.resize()
       return false
     }
-
   }
 
   document.body.onmouseup = (e) => {
