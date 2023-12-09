@@ -119,4 +119,12 @@ aside {
   grid-column: 2 / 3;
   grid-row: 2 / 3;
 }
+aside > .resizer {
+  top: 50%;
+  right: 0;
+  position: absolute;
+  translate: 50%;
+  z-index: 10000;
+  background: white;
+}
 /** /Sidebar **/
