@@ -1,4 +1,6 @@
 import App from 'geowiki-viewer/src/App'
+import twigGet from './twigGet'
+import isTrue from './isTrue'
 
 let sidebar, content, resizer
 let drag = false
@@ -6,7 +8,19 @@ let drag = false
 App.addExtension({
   id: 'sidebar',
   initFun: (app, callback) => {
-    document.body.classList.add('sidebar')
+    app.on('state-apply', () => {
+      const config = app.config.sidebar
+      if (!config) {
+        return
+      }
+
+      if (typeof config.show === 'boolean' ? config.show : isTrue(twigGet(app.config.sidebar.show, { state: app.state.current }))) {
+        document.body.classList.add('sidebar')
+      } else {
+        document.body.classList.remove('sidebar')
+      }
+    })
+
     sidebar = document.createElement('aside')
     document.body.appendChild(sidebar)
 
