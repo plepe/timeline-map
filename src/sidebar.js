@@ -26,6 +26,10 @@ function init () {
   app.on('state-apply', () => {
     if (typeof config.show === 'boolean' ? config.show : isTrue(twigGet(app.config.sidebar.show, { state: app.state.current }))) {
       document.body.classList.add('sidebar')
+
+      contentDisplay.show({
+        state: app.state.current
+      })
     } else {
       document.body.classList.remove('sidebar')
     }
@@ -39,10 +43,6 @@ function init () {
   contentDisplay = new ContentDisplay(app.config.sidebar)
   contentDisplay.div.className = 'content'
   sidebar.appendChild(contentDisplay.div)
-
-  contentDisplay.show({
-    state: app.state.current
-  })
 
   resizer = document.createElement('div')
   resizer.className = 'resizer'
