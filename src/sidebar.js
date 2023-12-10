@@ -49,23 +49,23 @@ function init () {
   resizer.innerHTML = '&nbsp;'
   sidebar.appendChild(resizer)
 
-  resizer.onmousedown = (e) => {
+  resizer.addEventListener('mousedown', (e) => {
     drag = true
-    return false
-  }
+    e.preventDefault()
+  })
 
-  document.body.onmousemove = (e) => {
+  document.body.addEventListener('mousemove', (e) => {
     if (drag) {
       document.body.style.gridTemplateColumns = e.clientX + 'px auto'
       app.resize()
-      return false
+      e.preventDefault()
     }
-  }
+  })
 
-  document.body.onmouseup = (e) => {
+  document.body.addEventListener('mouseup', (e) => {
     if (drag) {
       drag = false
-      return false
+      e.preventDefault()
     }
-  }
+  })
 }
