@@ -46,7 +46,7 @@ function init () {
 
   resizer = document.createElement('div')
   resizer.className = 'resizer'
-  resizer.innerHTML = '‖'
+  resizer.innerHTML = '&nbsp;'
   sidebar.appendChild(resizer)
 
   resizer.onmousedown = (e) => {
