@@ -55,8 +55,12 @@ function init () {
 
   document.body.addEventListener('mousemove', (e) => {
     if (drag) {
-      document.body.style.gridTemplateColumns = e.clientX + 'px auto'
-      app.resize()
+      if (e.buttons === 0) {
+        drag = false
+      } else {
+        document.body.style.gridTemplateColumns = e.clientX + 'px auto'
+        app.resize()
+      }
       e.preventDefault()
     }
   })
