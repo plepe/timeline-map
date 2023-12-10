@@ -7,25 +7,25 @@ module.exports = class ContentDisplay extends Events {
     super()
     this.config = config
 
-    this.div = document.createElement('div')
+    this.content = document.createElement('div')
   }
 
   show (data) {
     if (this.config.template) {
       const content = twigGet(this.config.template, data)
-      this.div.innerHTML = content
+      this.content.innerHTML = content
       this.update(data)
       this.emit('ready')
     }
 
     if (this.config.source) {
       const url = twigGet(this.config.source.url, data)
-      if (!url || url === this.currentUrl) {
+      if (!url || url === this.url) {
         this.update(data)
         return
       }
 
-      this.currentUrl = url
+      this.url = url
       fetch(url)
         .then(req => req.text())
         .then(body => {
@@ -39,8 +39,8 @@ module.exports = class ContentDisplay extends Events {
             }
           }
 
-          this.div.innerHTML = body
-          applyPopupModifier(this.div, this.config.source.modifier, data)
+          this.content.innerHTML = body
+          applyPopupModifier(this.content, this.config.source.modifier, data)
           this.update(data)
           this.emit('ready')
         })
@@ -49,7 +49,7 @@ module.exports = class ContentDisplay extends Events {
 
   update (data) {
     if (this.config.update) {
-      applyPopupModifier(this.div, this.config.update, data)
+      applyPopupModifier(this.content, this.config.update, data)
     }
   }
 }

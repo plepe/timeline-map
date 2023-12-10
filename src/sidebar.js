@@ -41,8 +41,8 @@ function init () {
   document.body.appendChild(sidebar)
 
   contentDisplay = new ContentDisplay(app.config.sidebar)
-  contentDisplay.div.className = 'content'
-  sidebar.appendChild(contentDisplay.div)
+  contentDisplay.content.className = 'content'
+  sidebar.appendChild(contentDisplay.content)
 
   resizer = document.createElement('div')
   resizer.className = 'resizer'

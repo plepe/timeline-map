@@ -231,7 +231,7 @@ module.exports = class TimelineFeature {
     this.twigContext.state = this.app.state.current
     popup.show(this.twigContext)
 
-    popup.on('ready', () => this.app.emit('popup-open', popup.div))
+    popup.on('ready', () => this.app.emit('popup-open', popup.content))
 
     return popup
   }
