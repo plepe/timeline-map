@@ -46,7 +46,6 @@ function init () {
 
   resizer = document.createElement('div')
   resizer.className = 'resizer'
-  resizer.innerHTML = '&nbsp;'
   sidebar.appendChild(resizer)
 
   resizer.addEventListener('mousedown', (e) => {
