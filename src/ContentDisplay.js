@@ -14,12 +14,14 @@ module.exports = class ContentDisplay extends Events {
     if (this.config.template) {
       const content = twigGet(this.config.template, data)
       this.div.innerHTML = content
+      this.update(data)
       this.emit('ready')
     }
 
     if (this.config.source) {
       const url = twigGet(this.config.source.url, data)
       if (!url || url === this.currentUrl) {
+        this.update(data)
         return
       }
 
@@ -39,6 +41,7 @@ module.exports = class ContentDisplay extends Events {
 
           this.div.innerHTML = body
           applyPopupModifier(this.div, this.config.source.modifier, data)
+          this.update(data)
           this.emit('ready')
         })
     }
