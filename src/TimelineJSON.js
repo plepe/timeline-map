@@ -5,7 +5,7 @@ import loader from './loader'
 import isTrue from './isTrue'
 import TimelineFeature from './TimelineFeature'
 
-let currentPopupDiv, currentPopupItem
+let currentPopupDisplay, currentPopupItem
 
 module.exports = class TimelineJSON extends Events {
   constructor (app, config) {
@@ -34,8 +34,8 @@ module.exports = class TimelineJSON extends Events {
         this.setDate(state.date)
       }
 
-      if (this.config.feature.popupModifyApply && currentPopupDiv) {
-        currentPopupItem.applyPopupModifier(currentPopupDiv)
+      if (currentPopupDisplay) {
+        currentPopupDisplay.update(currentPopupItem.twigData())
       }
     })
 
@@ -117,9 +117,8 @@ module.exports = class TimelineJSON extends Events {
     if (this.config.feature.popupTemplate || this.config.feature.popupSource) {
       this.layer.bindPopup(feature => {
         currentPopupItem = feature.feature.properties
-        const div = feature.feature.properties.showPopup()
-        currentPopupDiv = div
-        return div
+        currentPopupDisplay = feature.feature.properties.showPopup()
+        return currentPopupDisplay.div
       })
     }
 

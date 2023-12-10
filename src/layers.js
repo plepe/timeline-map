@@ -10,7 +10,7 @@ App.addExtension({
   initFun: (app, callback) => {
     app.on('init', () => {
       const layers = app.config.layers ?? [app.config]
-      layers.map(l => {
+      app.timelineLayers = layers.map(l => {
         const Type = types[l.type ?? 'TimelineGeoJSON']
         return new Type(app, l)
       })

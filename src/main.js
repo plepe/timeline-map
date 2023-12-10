@@ -10,6 +10,7 @@ import './overlays'
 import './flags'
 import './fullscreen'
 import './focusData'
+import './sidebar'
 
 window.onload = function () {
   window.app = new App()
