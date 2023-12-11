@@ -118,7 +118,7 @@ module.exports = class TimelineJSON extends Events {
       this.layer.bindPopup(feature => {
         currentPopupItem = feature.feature.properties
         currentPopupDisplay = feature.feature.properties.showPopup()
-        return currentPopupDisplay.div
+        return currentPopupDisplay.content
       })
     }
 
