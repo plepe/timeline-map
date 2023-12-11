@@ -33,7 +33,7 @@ module.exports = class ContentDisplay extends Events {
             const x = document.createElement('div')
             x.innerHTML = body
 
-            const content = x.querySelector(this.config.source.querySelector)
+            const content = x.querySelector(twigGet(this.config.source.querySelector, data))
             if (content) {
               body = content.innerHTML
             }
