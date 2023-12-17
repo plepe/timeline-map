@@ -5,7 +5,12 @@ App.addExtension({
   initFun: (app, callback) => {
     app.on('state-get', state => {
       (app.config.addParam ?? []).forEach(k => {
-        state[k] = app.state.current[k]
+        if (typeof k === 'object') {
+          const key = Object.keys(k)[0]
+          state[key] = app.state.current[key]
+        } else {
+          state[k] = app.state.current[k]
+        }
       })
     })
 
