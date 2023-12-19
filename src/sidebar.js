@@ -5,6 +5,7 @@ import ContentDisplay from './ContentDisplay'
 import './resize'
 
 let sidebar, contentDisplay, resizer
+let isVertical = false
 let drag = false
 let app
 
@@ -36,6 +37,9 @@ function init () {
 
     app.resize()
   })
+
+  app.on('resize', resize)
+  window.addEventListener('resize', resize)
 
   sidebar = document.createElement('aside')
   document.body.appendChild(sidebar)
@@ -69,11 +73,23 @@ function start (e) {
 
 function move (e) {
   if (drag) {
-    const pos = e.clientX ?? (e.touches.length ? e.touches[0].clientX : undefined)
+    const prop = isVertical ? 'clientY' : 'clientX'
+
+    let pos = e[prop] ?? (e.touches.length ? e.touches[0][prop] : undefined)
+
+    if (isVertical) {
+      console.log(document.body.offsetHeight, pos)
+      pos = document.body.offsetHeight - pos
+    }
+
     if (e.buttons === 0) {
       drag = false
     } else {
-      document.body.style.gridTemplateColumns = pos + 'px auto'
+      if (isVertical) {
+        document.body.style.gridTemplateRows = 'min-content auto ' + pos + 'px'
+      } else {
+        document.body.style.gridTemplateColumns = pos + 'px auto'
+      }
       app.resize()
     }
     e.preventDefault()
@@ -84,5 +100,15 @@ function stop (e) {
   if (drag) {
     drag = false
     e.preventDefault()
+  }
+}
+
+function resize () {
+  const _isVertical = getComputedStyle(document.querySelector('.sidebar aside')).borderRightWidth === '0px'
+
+  if (isVertical !== _isVertical) {
+    isVertical = _isVertical
+    document.body.style.gridTemplateColumns = null
+    document.body.style.gridTemplateRows = null
   }
 }
