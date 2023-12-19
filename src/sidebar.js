@@ -52,27 +52,37 @@ function init () {
   resizer.className = 'resizer'
   sidebar.appendChild(resizer)
 
-  resizer.addEventListener('mousedown', (e) => {
-    drag = true
-    e.preventDefault()
-  })
+  resizer.addEventListener('mousedown', start)
+  resizer.addEventListener('touchstart', start)
 
-  document.body.addEventListener('mousemove', (e) => {
-    if (drag) {
-      if (e.buttons === 0) {
-        drag = false
-      } else {
-        document.body.style.gridTemplateColumns = e.clientX + 'px auto'
-        app.resize()
-      }
-      e.preventDefault()
-    }
-  })
+  document.body.addEventListener('touchmove', move)
+  document.body.addEventListener('mousemove', move)
 
-  document.body.addEventListener('mouseup', (e) => {
-    if (drag) {
+  document.body.addEventListener('mouseup', stop)
+  document.body.addEventListener('touchend', stop)
+}
+
+function start (e) {
+  drag = true
+  e.preventDefault()
+}
+
+function move (e) {
+  if (drag) {
+    const pos = e.clientX ?? (e.touches.length ? e.touches[0].clientX : undefined)
+    if (e.buttons === 0) {
       drag = false
-      e.preventDefault()
+    } else {
+      document.body.style.gridTemplateColumns = pos + 'px auto'
+      app.resize()
     }
-  })
+    e.preventDefault()
+  }
+}
+
+function stop (e) {
+  if (drag) {
+    drag = false
+    e.preventDefault()
+  }
 }
