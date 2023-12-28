@@ -30,9 +30,7 @@ module.exports = class TimelineJSON extends Events {
         })
       }
 
-      if ('date' in state) {
-        this.setDate(state.date)
-      }
+      this.setDate(state.date)
 
       if (currentPopupDisplay) {
         currentPopupDisplay.update(currentPopupItem.twigData())
@@ -125,10 +123,7 @@ module.exports = class TimelineJSON extends Events {
     this.emit('data-loaded')
     this.app.emit('data-loaded', this)
 
-    const date = this.app.state.current.date
-    if (date) {
-      this.setDate(date)
-    }
+    this.setDate(this.app.state.current.date)
   }
 
   show (map) {

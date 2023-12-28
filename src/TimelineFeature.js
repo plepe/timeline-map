@@ -92,9 +92,7 @@ module.exports = class TimelineFeature {
           geometry: this.parseGeom(logEntry[this.config.feature.geomLogField])
         }
 
-        const feature = this.coordsToLeaflet(coords)
-        this.layer.layer.addLayer(feature)
-        return feature
+        return this.coordsToLeaflet(coords)
       })
     } else if (this.config.feature.geomField) {
       const coords = {
@@ -104,7 +102,6 @@ module.exports = class TimelineFeature {
       }
 
       this.feature = this.coordsToLeaflet(coords)
-      this.layer.layer.addLayer(this.feature)
     }
   }
 
