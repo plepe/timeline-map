@@ -39,8 +39,7 @@ function init () {
 
   timeline.on('timechanged', (e) => {
     date = moment(e.time).format()
-    app.updateLink()
-    app.state.apply({ date })
+    app.state.apply({ date }, { update: 'push' })
   })
   timeline.on('click', (e) => {
     const item = timeline.itemSet.getItemById(e.item)
@@ -50,8 +49,7 @@ function init () {
     }
 
     date = moment(e.time).format()
-    app.updateLink()
-    app.state.apply({ date })
+    app.state.apply({ date }, { update: 'push' })
   })
   timeline.on('select', (e) => {
     const selectedItems = dataset.get(e.items)
@@ -65,8 +63,7 @@ function init () {
     // let end = selectedItems.map(i => i.end).filter(v => v).sort().reverse()
     // end = end.length ? end[0] : null
 
-    app.state.apply({ date: start })
-    app.updateLink()
+    app.state.apply({ date: start }, { update: 'push' })
   })
   app.on('state-get', state => {
     state.date = date
