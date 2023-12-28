@@ -10,8 +10,14 @@ let app
 let dataset
 let date = null
 
+const urlPrecisionFormats = {
+  date: 'YYYY-MM-DD',
+  datetime: 'YYYY-MM-DDTHH:mm:ss'
+}
+
 App.addExtension({
   id: 'timeline',
+  requireExtensions: [ 'config' ],
   initFun: (_app, callback) => {
     app = _app
     app.on('init', init)
@@ -23,6 +29,7 @@ App.addExtension({
 let customTime
 
 function init () {
+  const urlPrecision = app.config.timeline ? app.config.timeline.urlPrecision ?? 'datetime' : 'datetime'
   const options = {
     autoResize: true,
     selectable: true,
@@ -38,7 +45,7 @@ function init () {
   }
 
   timeline.on('timechanged', (e) => {
-    date = moment(e.time).format()
+    date = moment(e.time).format(urlPrecisionFormats[urlPrecision])
     app.state.apply({ date }, { update: 'push' })
   })
   timeline.on('click', (e) => {
@@ -48,7 +55,7 @@ function init () {
       return
     }
 
-    date = moment(e.time).format()
+    date = moment(e.time).format(urlPrecisionFormats[urlPrecision])
     app.state.apply({ date }, { update: 'push' })
   })
   timeline.on('select', (e) => {
@@ -63,7 +70,8 @@ function init () {
     // let end = selectedItems.map(i => i.end).filter(v => v).sort().reverse()
     // end = end.length ? end[0] : null
 
-    app.state.apply({ date: start }, { update: 'push' })
+    date = start === null ? null : moment(start).format(urlPrecisionFormats[urlPrecision])
+    app.state.apply({ date }, { update: 'push' })
   })
   app.on('state-get', state => {
     state.date = date

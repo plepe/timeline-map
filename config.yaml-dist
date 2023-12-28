@@ -39,6 +39,10 @@ overlays:
 timeline:
   defaultMin: 1900
   defaultMax: 2030
+
+  # which urlPrecision to use, either 'date' or 'datetime' (default)
+  urlPrecision: 'datetime'
+
   # apply additional configuration options for the timeline, see
   # https://visjs.github.io/vis-timeline/docs/timeline/#Configuration_Options
   options:
