@@ -3,4 +3,15 @@ const fs = require('fs')
 
 let content = fs.readFileSync('index.html-dist').toString()
 
+try {
+  local = fs.readFileSync('local.html')
+} catch (e) {
+  // ignore file not found error
+  if (e.errno !== -2) {
+    throw(e)
+  }
+}
+
+content = content.replace('<!--local.html-->', local)
+
 fs.writeFileSync('index.html', content)
