@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+const fs = require('fs')
+
+let content = fs.readFileSync('index.html-dist').toString()
+
+fs.writeFileSync('index.html', content)

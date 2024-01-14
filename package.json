@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "scripts": {
     "build": "browserify -g browserify-css -p esmify src/main.js -o dist/app.js",
+    "build-html": "node build_html",
     "lint": "standard --fix src/*.js",
-    "prepare": "npm run build",
+    "prepare": "npm run build ; npm run build-html",
     "update": "node update.js",
     "watch": "watchify -g browserify-css -p esmify -d src/main.js -o dist/app.js -v"
   },
