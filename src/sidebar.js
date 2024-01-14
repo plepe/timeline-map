@@ -26,13 +26,13 @@ function init () {
 
   app.on('state-apply', () => {
     if (typeof config.show === 'boolean' ? config.show : isTrue(twigGet(app.config.sidebar.show, { state: app.state.current }))) {
-      document.body.classList.add('sidebar')
+      document.body.classList.add('sidebar-active')
 
       contentDisplay.show({
         state: app.state.current
       })
     } else {
-      document.body.classList.remove('sidebar')
+      document.body.classList.remove('sidebar-active')
     }
 
     app.resize()
@@ -104,7 +104,7 @@ function stop (e) {
 }
 
 function resize () {
-  const _isVertical = getComputedStyle(document.querySelector('.sidebar aside')).borderRightWidth === '0px'
+  const _isVertical = getComputedStyle(document.querySelector('.sidebar-active aside')).borderRightWidth === '0px'
 
   if (isVertical !== _isVertical) {
     isVertical = _isVertical
