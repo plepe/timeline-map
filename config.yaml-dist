@@ -192,3 +192,7 @@ layers:
     # undefined).
     markerSign: |-
       <i class="fa-solid fa-location-dot"></i>
+
+    # Specify further options for the marker, e.g. pane. This field expects a JSON.
+    markerOptions: |-
+      {"pane":"labels"}

@@ -173,6 +173,14 @@ module.exports = class TimelineFeature {
         style.opacity = 1
       }
 
+      let markerOptions
+      try {
+        markerOptions = twigGet(this.config.feature.markerOptions ?? '{}', this.twigContext)
+        markerOptions = JSON.parse(markerOptions)
+      } catch (e) {
+        console.error(e.message)
+      }
+
       if (this.features) {
         this.features.forEach((f, i) => {
           this.twigContext.logEntry = this.log[i]
