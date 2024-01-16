@@ -12,6 +12,13 @@ map:
     minlon: 16.2
     maxlon: 16.6
 
+# Create additional panes if you need any:
+#panes:
+#  labels:
+#    zIndex: 650
+#    pointerEvents: none
+
+
 # remember these additional parameters in the url
 addParam:
 - id

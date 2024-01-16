@@ -11,6 +11,7 @@ import './flags'
 import './fullscreen'
 import './focusData'
 import './sidebar'
+import './panes'
 
 window.onload = function () {
   window.app = new App()
