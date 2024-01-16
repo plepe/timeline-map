@@ -173,14 +173,6 @@ module.exports = class TimelineFeature {
         style.opacity = 1
       }
 
-      let markerOptions
-      try {
-        markerOptions = twigGet(this.config.feature.markerOptions ?? '{}', this.twigContext)
-        markerOptions = JSON.parse(markerOptions)
-      } catch (e) {
-        console.error(e.message)
-      }
-
       if (this.features) {
         this.features.forEach((f, i) => {
           this.twigContext.logEntry = this.log[i]
@@ -329,11 +321,19 @@ module.exports = class TimelineFeature {
         return style
       },
       pointToLayer: (feature, latlng) => {
+        let markerOptions
+        try {
+          markerOptions = twigGet(this.config.feature.markerOptions ?? '{}', this.twigContext)
+          markerOptions = JSON.parse(markerOptions)
+        } catch (e) {
+          console.error(e.message)
+        }
+
         const icon = this.getIcon()
         if (icon) {
-          return L.marker(latlng, { icon })
+          return L.marker(latlng, { ...markerOptions, icon })
         } else {
-          return L.marker(latlng)
+          return L.marker(latlng, markerOptions)
         }
       }
     })
