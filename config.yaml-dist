@@ -172,3 +172,16 @@ layers:
       {{ item.properties.ADMIN }}
     styleTemplate: |-
       {{ { color: 'red' }|json_encode }}
+
+    # A marker consists of two things: the symbol, e.g. a pin
+    # in fact any HTML or SVG is possible here. The top DOM Node should have
+    # 'width', 'height', 'anchorX' and 'anchorY' attributes.
+    # The following library creates markers: https://github.com/plepe/openstreetbrowser-markers
+    markerSymbol: |-
+      {{ markerPointer({"fillColor": "red"}) }}
+
+    # The sign of the marker is a HTML string at the position of the
+    # 'signAnchorX', 'signAnchorY' position of the marker (or the center if
+    # undefined).
+    markerSign: |-
+      <i class="fa-solid fa-location-dot"></i>
