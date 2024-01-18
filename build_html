@@ -2,6 +2,7 @@
 const fs = require('fs')
 
 let content = fs.readFileSync('index.html-dist').toString()
+let local
 
 try {
   local = fs.readFileSync('local.html')
