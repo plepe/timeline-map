@@ -1,22 +1,21 @@
-import App from 'geowiki-viewer/src/App'
 import twigGet from './twigGet'
 import isTrue from './isTrue'
 import ContentDisplay from './ContentDisplay'
-import './resize'
 
 let sidebar, contentDisplay, resizer
 let isVertical = false
 let drag = false
 let app
 
-App.addExtension({
+module.exports = {
   id: 'sidebar',
-  initFun: (_app, callback) => {
+  requireModules: ['resize'],
+  appInit: (_app, callback) => {
     app = _app
     app.on('init', init)
     callback()
   }
-})
+}
 
 function init () {
   const config = app.config.sidebar

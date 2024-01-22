@@ -1,10 +1,8 @@
-import App from 'geowiki-viewer/src/App'
-
 let refreshRequest
 
-App.addExtension({
+module.exports = {
   id: 'refresh',
-  initFun: (app, callback) => {
+  appInit: (app, callback) => {
     app.refresh = () => {
       if (refreshRequest) { return }
 
@@ -16,4 +14,4 @@ App.addExtension({
 
     callback()
   }
-})
+}

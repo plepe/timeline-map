@@ -1,5 +1,3 @@
-import App from 'geowiki-viewer/src/App'
-
 const moment = require('moment')
 const getTimespan = require('./getTimespan')
 
@@ -7,9 +5,9 @@ const inputs = {}
 let stepSize = ['1', 'M']
 let interval
 
-App.addExtension({
+module.exports = {
   id: 'timeline-controls',
-  initFun: (app, callback) => {
+  appInit: (app, callback) => {
     const getDate = (p) => new Promise((resolve, reject) => {
       const date = app.state.current.date
       if (date) {
@@ -101,7 +99,7 @@ App.addExtension({
 
     callback()
   }
-})
+}
 
 function parseStepSize (str) {
   return Array.from(str.match(/^([0-9]+)([A-Za-z])+$/)).slice(1)

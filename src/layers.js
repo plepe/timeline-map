@@ -1,13 +1,11 @@
-import App from 'geowiki-viewer/src/App'
-
 const types = {
   TimelineGeoJSON: require('./TimelineGeoJSON'),
   TimelineJSON: require('./TimelineJSON')
 }
 
-App.addExtension({
+module.exports = {
   id: 'layers',
-  initFun: (app, callback) => {
+  appInit: (app, callback) => {
     app.on('init', () => {
       const layers = app.config.layers ?? [app.config]
       app.timelineLayers = layers.map(l => {
@@ -18,4 +16,4 @@ App.addExtension({
 
     callback()
   }
-})
+}

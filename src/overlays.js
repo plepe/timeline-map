@@ -1,14 +1,13 @@
-import App from 'geowiki-viewer/src/App'
 const OverpassFrontend = require('overpass-frontend')
 const LeafletGeowiki = require('leaflet-geowiki')
 const twigGet = require('./twigGet')
 
 const overpassFrontendData = {}
 
-App.addExtension({
+module.exports = {
   id: 'overlays',
-  requireExtensions: ['map'],
-  initFun: (app, callback) => {
+  requireModules: ['map'],
+  appInit: (app, callback) => {
     if (app.config.overlays) {
       app.config.overlays.forEach(l => {
         if (l.data && !(l.data in overpassFrontendData)) {
@@ -33,4 +32,4 @@ App.addExtension({
 
     callback()
   }
-})
+}

@@ -1,8 +1,6 @@
-import App from 'geowiki-viewer/src/App'
-
-App.addExtension({
+module.exports = {
   id: 'addParam',
-  initFun: (app, callback) => {
+  appInit: (app, callback) => {
     app.on('state-get', state => {
       (app.config.addParam ?? []).forEach(k => {
         if (typeof k === 'object') {
@@ -24,4 +22,4 @@ App.addExtension({
 
     callback()
   }
-})
+}

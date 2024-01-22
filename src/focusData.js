@@ -1,19 +1,18 @@
 /* global L:false */
-import App from 'geowiki-viewer/src/App'
 import modulekitLang from 'modulekit-lang'
 
 let app
 
-App.addExtension({
+module.exports = {
   id: 'focusData',
-  initFun: (_app, callback) => {
+  appInit: (_app, callback) => {
     app = _app
     app.on('init', () => {
       app.map.addControl(new FocusDataControl())
     })
     callback()
   }
-})
+}
 
 const FocusDataControl = L.Control.extend({
   options: {

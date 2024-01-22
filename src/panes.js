@@ -1,11 +1,10 @@
 import yaml from 'js-yaml'
-import App from 'geowiki-viewer/src/App'
 import twigGet from './twigGet'
 
-App.addExtension({
-  id: 'panes',
-  requireExtensions: ['config', 'map'],
-  initFun: (app, callback) => {
+module.exports = {
+  id: 'panes-global',
+  requireModules: ['config', 'map'],
+  appInit: (app, callback) => {
     app.map.once('layeradd', () => {
       if (app.config.panes) {
         if (typeof app.config.panes === 'string') {
@@ -27,4 +26,4 @@ App.addExtension({
 
     callback()
   }
-})
+}

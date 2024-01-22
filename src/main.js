@@ -1,17 +1,23 @@
 import App from 'geowiki-viewer/src/App'
-import 'geowiki-viewer/src/lang'
-import 'geowiki-viewer/src/map'
-import 'geowiki-viewer/src/config'
-import './timeline'
-import './layers'
-import './timeline-controls'
-import './addParam'
-import './overlays'
-import './flags'
-import './fullscreen'
-import './focusData'
-import './sidebar'
-import './panes'
+
+const modules = [
+  require('geowiki-viewer/src/lang'),
+  require('geowiki-viewer/src/map'),
+  require('geowiki-viewer/src/config'),
+  require('./timeline'),
+  require('./layers'),
+  require('./timeline-controls'),
+  require('./addParam'),
+  require('./overlays'),
+  require('./flags'),
+  require('./fullscreen'),
+  require('./focusData'),
+  require('./sidebar'),
+  require('./resize'),
+  require('./panes'),
+]
+
+App.modules = [...App.modules, ...modules, ...require('../modules')]
 
 window.onload = function () {
   window.app = new App()

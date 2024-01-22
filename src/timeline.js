@@ -1,4 +1,3 @@
-import App from 'geowiki-viewer/src/App'
 import async from 'async'
 
 const visTimeline = require('vis-timeline')
@@ -15,16 +14,16 @@ const urlPrecisionFormats = {
   datetime: 'YYYY-MM-DDTHH:mm:ss'
 }
 
-App.addExtension({
+module.exports = {
   id: 'timeline',
-  requireExtensions: [ 'config' ],
-  initFun: (_app, callback) => {
+  requireModules: [ 'config' ],
+  appInit: (_app, callback) => {
     app = _app
     app.on('init', init)
 
     callback()
   }
-})
+}
 
 let customTime
 

@@ -1,10 +1,8 @@
-import App from 'geowiki-viewer/src/App'
-
 let resizeRequest
 
-App.addExtension({
+module.exports = {
   id: 'resize',
-  initFun: (app, callback) => {
+  appInit: (app, callback) => {
     app.resize = () => {
       if (resizeRequest) { return }
 
@@ -17,4 +15,4 @@ App.addExtension({
 
     callback()
   }
-})
+}
