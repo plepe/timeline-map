@@ -1,5 +1,6 @@
 const OverpassFrontend = require('overpass-frontend')
-const LeafletGeowiki = require('leaflet-geowiki')
+const LeafletGeowiki = require('leaflet-geowiki/minimal')
+import App from 'geowiki-viewer/src/App'
 const twigGet = require('./twigGet')
 
 const overpassFrontendData = {}
@@ -13,6 +14,8 @@ module.exports = {
         if (l.data && !(l.data in overpassFrontendData)) {
           overpassFrontendData[l.data] = new OverpassFrontend(l.data)
         }
+
+        LeafletGeowiki.modules = [...LeafletGeowiki.modules, ...App.modules]
 
         const layer = new LeafletGeowiki({
           overpassFrontend: overpassFrontendData[l.data],
