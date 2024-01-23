@@ -1,11 +1,6 @@
-import markers from 'openstreetbrowser-markers'
 const Twig = require('twig')
 const osmDateQuery = require('openstreetmap-date-query')
 
-Twig.extendFunction('markerLine', (data, options) => Twig.filters.raw(markers.line(data, options)))
-Twig.extendFunction('markerCircle', (data, options) => Twig.filters.raw(markers.circle(data, options)))
-Twig.extendFunction('markerPointer', (data, options) => Twig.filters.raw(markers.pointer(data, options)))
-Twig.extendFunction('markerPolygon', (data, options) => Twig.filters.raw(markers.polygon(data, options)))
 Twig.extendFilter('osmDateQuery', (value, options) => osmDateQuery(value, options[0]))
 Twig.extendFilter('debug', (value) => {
   console.log(value)
