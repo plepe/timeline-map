@@ -162,6 +162,12 @@ layers:
     timeline:
       show: true
       type: 'box'
+
+      # if the item is selected, change state to the following value. Expects a JSON.
+      # The (start) date of the item will be added to the state as well.
+      selectStateChange: |-
+        {{ { id: item.id }|json_encode }}
+
       content: |-
         {{ item.title }}
 

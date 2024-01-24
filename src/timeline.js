@@ -69,8 +69,14 @@ function init () {
     // let end = selectedItems.map(i => i.end).filter(v => v).sort().reverse()
     // end = end.length ? end[0] : null
 
-    date = start === null ? null : moment(start).format(urlPrecisionFormats[urlPrecision])
-    app.state.apply({ date }, { update: 'push' })
+    let stateChange = {}
+
+    if (selectedItems[0].selectStateChange) {
+      stateChange = JSON.parse(selectedItems[0].selectStateChange)
+    }
+
+    stateChange.date = start === null ? null : moment(start).format(urlPrecisionFormats[urlPrecision])
+    app.state.apply(stateChange, { update: 'push' })
   })
   app.on('state-get', state => {
     state.date = date
