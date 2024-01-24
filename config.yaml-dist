@@ -109,6 +109,10 @@ layers:
     endField: |-
       {{ item.end }}
 
+    # Exclude this item from display.
+    exclude: |-
+      {{ item.exclude }}
+
     # Whether this feature should be considered by the initialMapView (default:
     # true)
     initialMapView: |

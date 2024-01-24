@@ -129,6 +129,14 @@ module.exports = class TimelineFeature {
     logEntry._end = end
   }
 
+  excluded () {
+    if (this.config.feature.exclude) {
+      return isTrue(twigGet(this.config.feature.exclude, this.twigContext))
+    }
+
+    return false
+  }
+
   setDate (date) {
     this.twigContext.state = this.app.state.current
 
@@ -150,7 +158,7 @@ module.exports = class TimelineFeature {
       shown = this.log ? this.log.map(v => true) : [true]
     }
 
-    if (shown.includes(true)) {
+    if (shown.includes(true) && !this.excluded()) {
       const shownIndex = shown
         .map((l, i) => l ? i : null)
         .filter(i => i !== null)
