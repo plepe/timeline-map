@@ -102,6 +102,12 @@ module.exports = class TimelineJSON extends Events {
     this.layer = L.featureGroup()
 
     this.allItems = this.data.map((item, index) => new TimelineFeature(this, item, index))
+
+    this.twigContext = { state: this.app.state.current }
+    if (this.config.init) {
+      twigGet(this.config.init, this.twigContext)
+    }
+
     this.allItems.forEach(f => f.init())
     console.log('init')
     this.allItems.forEach(f => f.prepare())

@@ -70,6 +70,11 @@ layers:
     filterId: |
       {{ state.id }}
 
+  # the init template will be evaluated after each state change (refresh), before all
+  # feature's 'init' will be evaluated. You may reset global variables with
+  # {{ setFlag("var", "any value") }}.
+  init: |
+
   feature:
     # name of the field containing the geometry (if there's one per item)
     geomField: 'geom'
