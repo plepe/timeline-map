@@ -15,7 +15,7 @@
     "@turf/simplify": "^6.5.0",
     "async": "^3.2.4",
     "esmify": "^2.1.1",
-    "geowiki-viewer": "github:geowiki-net/geowiki-viewer#modules",
+    "geowiki-viewer": "github:geowiki-net/geowiki-viewer",
     "js-yaml": "^4.1.0",
     "leaflet": "^1.9.4",
     "leaflet-geowiki": "github:geowiki-net/leaflet-geowiki#modules",
