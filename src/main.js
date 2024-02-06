@@ -10,7 +10,6 @@ const modules = [
   require('./addParam'),
   require('./overlays'),
   require('./flags'),
-  require('./fullscreen'),
   require('./focusData'),
   require('./sidebar'),
   require('./resize'),
