@@ -79,6 +79,10 @@ layers:
     # name of the field containing the geometry (if there's one per item)
     geomField: 'geom'
 
+    # How to display node features: 'Marker', 'Circle' or 'CircleMarker'
+    # use the 'radius' value for radius of circle
+    nodeFeature: Marker
+
     # alternatively, name of the field in each log entry (if the geometry
     # of the item changes)
     #geomLogField: 'geom'

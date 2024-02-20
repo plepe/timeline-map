@@ -337,11 +337,18 @@ module.exports = class TimelineFeature {
           console.error(e.message)
         }
 
-        const icon = this.getIcon()
-        if (icon) {
-          return L.marker(latlng, { ...markerOptions, icon })
-        } else {
-          return L.marker(latlng, markerOptions)
+        switch (markerOptions.nodeFeature ?? 'Marker') {
+          case 'Circle':
+            return L.circle(latlng, markerOptions.radius, markerOptions)
+          case 'CircleMarker':
+            return L.circle(latlng, markerOptions.radius, markerOptions)
+          default:
+            const icon = this.getIcon()
+            if (icon) {
+              return L.marker(latlng, { ...markerOptions, icon })
+            } else {
+              return L.marker(latlng, markerOptions)
+            }
         }
       }
     })
