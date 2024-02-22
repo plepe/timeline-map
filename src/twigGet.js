@@ -15,7 +15,7 @@ const twigTemplates = {}
 module.exports = function twigGet (template, data, callback) {
   if (typeof template !== 'string') {
     console.error('Twig template is not a string:', template)
-    return ''
+    return template
   }
 
   if (!(template in twigTemplates)) {
