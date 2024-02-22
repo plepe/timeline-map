@@ -4,6 +4,7 @@ app:
 
 defaultState:
 # Default Map Location.
+  date: now # Date can either be a timestamp or 'now'
 
 map:
   defaultView:

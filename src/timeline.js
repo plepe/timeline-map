@@ -21,6 +21,14 @@ module.exports = {
     app = _app
     app.on('init', init)
 
+    app.state.parameters.date = {
+      parse (v) {
+        if (v === 'now') {
+          return new Date().toISOString()
+        }
+      }
+    }
+
     callback()
   }
 }
