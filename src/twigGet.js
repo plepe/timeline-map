@@ -7,7 +7,7 @@ Twig.extendFilter('debug', (value) => {
   return value
 })
 Twig.extendFilter('json_decode', (value) => {
-  return JSON.parse(value)
+  return typeof value === 'string' ? JSON.parse(value) : null
 })
 
 const twigTemplates = {}
