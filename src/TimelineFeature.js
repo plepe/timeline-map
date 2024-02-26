@@ -40,7 +40,7 @@ module.exports = class TimelineFeature {
       })
     } else if (this.config.feature.type === 'function') {
       try {
-        const l = twigGet(this.config.feature.logFunction, this.twigContext)
+        const l = twigGet(this.config.feature.logFunction, this.twigContext, { autoescape: false })
         this.log = JSON.parse(l)
       } catch (e) {
         console.error(e.message)
