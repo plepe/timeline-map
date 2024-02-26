@@ -9,6 +9,7 @@ const completeDate = require('./completeDate')
 let app
 let dataset
 let date = null
+let currentBounds
 
 const urlPrecisionFormats = {
   date: 'YYYY-MM-DD',
@@ -47,7 +48,12 @@ function stateApply (state) {
   const defaultMax = twigGet(app.config.timeline.defaultMax, twigContext)
 
   if (app.config.timeline && (defaultMin || defaultMax)) {
+    if (currentBounds && currentBounds[0] === defaultMin && currentBounds[1] === defaultMax) {
+      return
+    }
+
     timeline.setWindow(completeDate(defaultMin, 'start'), completeDate(defaultMax, 'end'), { animation: false })
+    currentBounds = [ defaultMin, defaultMax ]
   }
 }
 
