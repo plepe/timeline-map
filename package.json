@@ -51,5 +51,8 @@
   "bugs": {
     "url": "https://github.com/plepe/timeline-map/issues"
   },
-  "homepage": "https://github.com/plepe/timeline-map#readme"
+  "homepage": "https://github.com/plepe/timeline-map#readme",
+  "overrides": {
+    "babel-template": "npm:@babel/template@^7"
+  }
 }
