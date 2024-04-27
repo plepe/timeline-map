@@ -28,9 +28,9 @@ const FocusDataControl = L.Control.extend({
       app.getParameter('initial-map-view')
         .then(value => {
           if (value.bounds) {
-            app.map.flyToBounds(value.bounds)
+            app.map.flyToBounds(value.bounds, value.options ?? {})
           } else if (value.center) {
-            app.map.flyTo(value.center)
+            app.map.flyTo(value.center, value.zoom ?? (value.options ?? {}).maxZoom ?? 12, value.options ?? {})
           }
         })
 
