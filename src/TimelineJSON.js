@@ -12,12 +12,13 @@ module.exports = class TimelineJSON extends Events {
     super()
     this.app = app
     this.config = config
+    this.twigContext = { state: this.app.state.current }
 
     this.app.on('state-apply', () => {
-      const state = this.app.state.current
+      this.twigContext.state = this.app.state.current
 
-      const url = twigGet(this.config.source.url, { state })
-      const filterId = this.config.source.filterId ? twigGet(this.config.source.filterId, { state }) : null
+      const url = twigGet(this.config.source.url, this.twigContext)
+      const filterId = this.config.source.filterId ? twigGet(this.config.source.filterId, this.twigContext) : null
 
       if (this.url !== url || this.currentFilterId !== filterId) {
         this.currentFilterId = filterId
@@ -103,7 +104,7 @@ module.exports = class TimelineJSON extends Events {
 
     this.allItems = this.data.map((item, index) => new TimelineFeature(this, item, index))
 
-    this.twigContext = { state: this.app.state.current }
+    this.twigContext.state = this.app.state.current
     if (this.config.init) {
       twigGet(this.config.init, this.twigContext)
     }
