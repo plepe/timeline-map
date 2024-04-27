@@ -31,7 +31,7 @@ module.exports = class TimelineJSON extends Events {
         })
       }
 
-      this.setDate(state.date)
+      this.setDate(this.app.state.current.date)
 
       if (currentPopupDisplay) {
         currentPopupDisplay.update(currentPopupItem.twigData())
