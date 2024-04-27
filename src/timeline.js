@@ -1,5 +1,6 @@
 import async from 'async'
 
+import twigGet from './twigGet'
 const visTimeline = require('vis-timeline')
 const visDataset = require('vis-data')
 const moment = require('moment')
@@ -8,6 +9,7 @@ const completeDate = require('./completeDate')
 let app
 let dataset
 let date = null
+let currentBounds
 
 const urlPrecisionFormats = {
   date: 'YYYY-MM-DD',
@@ -20,12 +22,40 @@ module.exports = {
   appInit: (_app, callback) => {
     app = _app
     app.on('init', init)
+    app.on('state-apply', stateApply)
+
+    app.state.parameters.date = {
+      parse (v) {
+        if (v === 'now') {
+          return new Date().toISOString()
+        }
+      }
+    }
 
     callback()
   }
 }
 
 let customTime
+let timeline
+
+function stateApply (state) {
+  const twigContext = {
+    state: app.state.current
+  }
+
+  const defaultMin = twigGet(app.config.timeline.defaultMin, twigContext)
+  const defaultMax = twigGet(app.config.timeline.defaultMax, twigContext)
+
+  if (app.config.timeline && (defaultMin || defaultMax)) {
+    if (currentBounds && currentBounds[0] === defaultMin && currentBounds[1] === defaultMax) {
+      return
+    }
+
+    timeline.setWindow(completeDate(defaultMin, 'start'), completeDate(defaultMax, 'end'), { animation: false })
+    currentBounds = [ defaultMin, defaultMax ]
+  }
+}
 
 function init () {
   const urlPrecision = app.config.timeline ? app.config.timeline.urlPrecision ?? 'datetime' : 'datetime'
@@ -37,11 +67,7 @@ function init () {
 
   const container = document.getElementById('timeline')
   dataset = new visDataset.DataSet([])
-  const timeline = new visTimeline.Timeline(container, dataset, options)
-
-  if (app.config.timeline && (app.config.timeline.defaultMin || app.config.timeline.defaultMax)) {
-    timeline.setWindow(completeDate(app.config.timeline.defaultMin, 'start'), completeDate(app.config.timeline.defaultMax, 'end'), { animation: false })
-  }
+  timeline = new visTimeline.Timeline(container, dataset, options)
 
   timeline.on('timechanged', (e) => {
     date = moment(e.time).format(urlPrecisionFormats[urlPrecision])
@@ -85,6 +111,10 @@ function init () {
   app.on('state-apply', state => {
     if ('date' in state) {
       date = state.date
+
+      if (date === 'now') {
+        date = new Date()
+      }
 
       if (date) {
         if (!customTime) {

@@ -18,7 +18,7 @@
     "geowiki-viewer": "github:geowiki-net/geowiki-viewer",
     "js-yaml": "^4.1.0",
     "leaflet": "^1.9.4",
-    "leaflet-geowiki": "github:geowiki-net/leaflet-geowiki#modules",
+    "leaflet-geowiki": "github:geowiki-net/leaflet-geowiki",
     "md5": "^2.3.0",
     "modulekit-lang": "github:plepe/modulekit-lang#browserify",
     "moment": "^2.29.4",
@@ -51,5 +51,8 @@
   "bugs": {
     "url": "https://github.com/plepe/timeline-map/issues"
   },
-  "homepage": "https://github.com/plepe/timeline-map#readme"
+  "homepage": "https://github.com/plepe/timeline-map#readme",
+  "overrides": {
+    "babel-template": "npm:@babel/template@^7"
+  }
 }

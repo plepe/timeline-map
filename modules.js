@@ -8,6 +8,9 @@ module.exports = [
   // List map features in a div
   require('leaflet-geowiki/src/list'),
 
+  // TMS basemaps
+  require('geowiki-viewer/src/mapLayers'),
+
   // Render markers on the map
   require('leaflet-geowiki/src/markers'),
 
@@ -30,6 +33,5 @@ module.exports = [
   require('leaflet-geowiki/src/evaluate'),
 
   // Add a 'Fullscreen' button to Geowiki Viewer
-  // install via 'npm install github:geowiki-net/geowiki-module-fullscreen'
-  // require('geowiki-module-fullscreen'),
+  require('geowiki-module-fullscreen'),
 ]

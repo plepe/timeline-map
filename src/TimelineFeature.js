@@ -40,7 +40,7 @@ module.exports = class TimelineFeature {
       })
     } else if (this.config.feature.type === 'function') {
       try {
-        const l = twigGet(this.config.feature.logFunction, this.twigContext)
+        const l = twigGet(this.config.feature.logFunction, this.twigContext, { autoescape: false })
         this.log = JSON.parse(l)
       } catch (e) {
         console.error(e.message)
@@ -337,11 +337,18 @@ module.exports = class TimelineFeature {
           console.error(e.message)
         }
 
-        const icon = this.getIcon()
-        if (icon) {
-          return L.marker(latlng, { ...markerOptions, icon })
-        } else {
-          return L.marker(latlng, markerOptions)
+        switch (markerOptions.nodeFeature ?? 'Marker') {
+          case 'Circle':
+            return L.circle(latlng, markerOptions.radius, markerOptions)
+          case 'CircleMarker':
+            return L.circle(latlng, markerOptions.radius, markerOptions)
+          default:
+            const icon = this.getIcon()
+            if (icon) {
+              return L.marker(latlng, { ...markerOptions, icon })
+            } else {
+              return L.marker(latlng, markerOptions)
+            }
         }
       }
     })
