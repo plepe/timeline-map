@@ -75,6 +75,13 @@ layers:
   # {{ setFlag("var", "any value") }}.
   init: |
 
+  # when an initial map view is requested (either on startup or on focus),
+  # these options will be passed to flyTo resp. flyToBounds.
+  # If this is a string, it will be evaluated as twig template. A JSON object
+  # is expected.
+  initialMapViewOptions: |
+    {"maxZoom":15}
+
   feature:
     # name of the field containing the geometry (if there's one per item)
     geomField: 'geom'

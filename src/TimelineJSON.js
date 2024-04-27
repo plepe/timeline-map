@@ -54,13 +54,15 @@ module.exports = class TimelineJSON extends Events {
       promises.push(new Promise((resolve, reject) => {
         if (this.data) {
           return resolve({
-            bounds: this.initialMapView()
+            bounds: this.initialMapView(),
+            options: this.initialMapViewOptions()
           })
         }
 
         this.once('data-loaded', () => {
           resolve({
-            bounds: this.initialMapView()
+            bounds: this.initialMapView(),
+            options: this.initialMapViewOptions()
           })
         })
       }))
@@ -168,6 +170,22 @@ module.exports = class TimelineJSON extends Events {
     } else {
       return this.layer.getBounds()
     }
+  }
+
+  initialMapViewOptions () {
+    if (!this.config.initialMapViewOptions) {
+      return {}
+    }
+
+    this.twigContext.state = this.app.state.current
+
+    const result = twigGet(this.config.initialMapViewOptions, this.twigContext)
+
+    if (typeof result === 'string') {
+      return JSON.parse(result)
+    }
+
+    return result
   }
 
   getTimelineTimespan () {
