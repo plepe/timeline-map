@@ -57,6 +57,8 @@ function stateApply (state) {
   }
 }
 
+let preventClick = null
+
 function init () {
   const urlPrecision = app.config.timeline ? app.config.timeline.urlPrecision ?? 'datetime' : 'datetime'
   const options = {
@@ -74,6 +76,8 @@ function init () {
     app.state.apply({ date }, { update: 'push' })
   })
   timeline.on('click', (e) => {
+    if (preventClick) { return }
+
     const item = timeline.itemSet.getItemById(e.item)
     if (item && item.data.isCluster) {
       timeline.setWindow(item.data.min, item.data.max, { animation: true })
@@ -100,6 +104,9 @@ function init () {
     if (selectedItems[0].selectStateChange) {
       stateChange = JSON.parse(selectedItems[0].selectStateChange)
     }
+
+    preventClick = true
+    global.setTimeout(() => preventClick = false, 100)
 
     stateChange.date = start === null ? null : moment(start).format(urlPrecisionFormats[urlPrecision])
     app.state.apply(stateChange, { update: 'push' })
