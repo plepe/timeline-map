@@ -148,7 +148,7 @@ module.exports = class TimelineFeature {
           shown = true
         }
         if (logEntry._end !== null && logEntry._end !== '') {
-          if (logEntry._end <= date) {
+          if (logEntry._end < date) {
             shown = false
           }
         }
