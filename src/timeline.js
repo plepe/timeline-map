@@ -32,7 +32,7 @@ module.exports = {
 
       parse (v) {
         if (v === 'now') {
-          return new Date().toISOString()
+          return moment().format('YYYY-MM-DDTHH:mm:ss')
         }
 
         return v
