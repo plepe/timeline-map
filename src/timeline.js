@@ -126,10 +126,6 @@ function init () {
     if ('date' in state) {
       date = state.date
 
-      if (date === 'now') {
-        date = new Date()
-      }
-
       if (date) {
         if (!customTime) {
           timeline.addCustomTime()
