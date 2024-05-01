@@ -23,7 +23,6 @@ module.exports = {
   appInit: (_app, callback) => {
     app = _app
     app.on('init', init)
-    app.on('state-apply', stateApply)
 
     app.state.parameters.date = {
       stringify (v) {
@@ -46,7 +45,7 @@ module.exports = {
 let customTime
 let timeline
 
-function stateApply (state) {
+function updateTimelineBounds () {
   const twigContext = {
     state: app.state.current
   }
@@ -166,5 +165,7 @@ function init () {
       dataset.clear()
       dataset.add(items)
     })
+
+    updateTimelineBounds()
   })
 }
