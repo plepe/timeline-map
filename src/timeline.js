@@ -34,6 +34,8 @@ module.exports = {
         if (v === 'now') {
           return new Date().toISOString()
         }
+
+        return v
       }
     }
 
