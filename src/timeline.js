@@ -10,6 +10,7 @@ let app
 let dataset
 let date = null
 let currentBounds
+let urlPrecision
 
 const urlPrecisionFormats = {
   date: 'YYYY-MM-DD',
@@ -25,6 +26,10 @@ module.exports = {
     app.on('state-apply', stateApply)
 
     app.state.parameters.date = {
+      stringify (v) {
+        return moment(v).format(urlPrecisionFormats[urlPrecision])
+      },
+
       parse (v) {
         if (v === 'now') {
           return new Date().toISOString()
@@ -60,7 +65,7 @@ function stateApply (state) {
 let preventClick = null
 
 function init () {
-  const urlPrecision = app.config.timeline ? app.config.timeline.urlPrecision ?? 'datetime' : 'datetime'
+  urlPrecision = app.config.timeline ? app.config.timeline.urlPrecision ?? 'datetime' : 'datetime'
   const options = {
     autoResize: true,
     selectable: true,
@@ -72,7 +77,7 @@ function init () {
   timeline = new visTimeline.Timeline(container, dataset, options)
 
   timeline.on('timechanged', (e) => {
-    date = moment(e.time).format(urlPrecisionFormats[urlPrecision])
+    date = moment(e.time).format('YYYY-MM-DDTHH:mm:ss')
     app.state.apply({ date }, { update: 'push' })
   })
   timeline.on('click', (e) => {
@@ -84,7 +89,7 @@ function init () {
       return
     }
 
-    date = moment(e.time).format(urlPrecisionFormats[urlPrecision])
+    date = moment(e.time).format('YYYY-MM-DDTHH:mm:ss')
     app.state.apply({ date }, { update: 'push' })
   })
   timeline.on('select', (e) => {
@@ -108,7 +113,7 @@ function init () {
     preventClick = true
     global.setTimeout(() => preventClick = false, 100)
 
-    stateChange.date = start === null ? null : moment(start).format(urlPrecisionFormats[urlPrecision])
+    stateChange.date = start === null ? null : moment(start).format('YYYY-MM-DDTHH:mm:ss')
     app.state.apply(stateChange, { update: 'push' })
   })
   app.on('state-get', state => {
