@@ -19,7 +19,10 @@ module.exports = class ContentDisplay extends Events {
     }
 
     if (this.config.source) {
-      const url = twigGet(this.config.source.url, data)
+      const url = twigGet(this.config.source.url, data, {
+        autoescape: false
+      })
+
       if (!url || url === this.url) {
         this.update(data)
         return
