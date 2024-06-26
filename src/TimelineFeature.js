@@ -89,6 +89,7 @@ module.exports = class TimelineFeature {
         const coords = {
           type: 'Feature',
           properties: this,
+          logEntry,
           geometry: this.parseGeom(logEntry[this.config.feature.geomLogField])
         }
 
@@ -226,7 +227,7 @@ module.exports = class TimelineFeature {
     }
   }
 
-  showPopup () {
+  showPopup (logEntry) {
     const popup = new ContentDisplay({
       template: this.config.feature.popupTemplate,
       source: this.config.feature.popupSource,
@@ -234,6 +235,8 @@ module.exports = class TimelineFeature {
     })
 
     this.twigContext.state = this.app.state.current
+    this.twigContext.logEntry = logEntry
+
     popup.show(this.twigContext)
 
     popup.on('ready', () => this.app.emit('popup-open', popup.content))
