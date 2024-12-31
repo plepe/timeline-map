@@ -103,7 +103,10 @@ function stop (e) {
 }
 
 function resize () {
-  const _isVertical = getComputedStyle(document.querySelector('.sidebar-active aside')).borderRightWidth === '0px'
+  const sidebar = document.querySelector('.sidebar-active aside')
+  if (!sidebar) { return }
+
+  const _isVertical = getComputedStyle(sidebar).borderRightWidth === '0px'
 
   if (isVertical !== _isVertical) {
     isVertical = _isVertical
