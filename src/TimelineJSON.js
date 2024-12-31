@@ -25,7 +25,12 @@ module.exports = class TimelineJSON extends Events {
         this.data = null
 
         this.hide()
-        this.load(url, () => {
+        this.load(url, (err) => {
+          if (err) {
+            console.error(err)
+            return global.alert("Error loading TimelineJSON data: " + err.message)
+          }
+
           this.init()
           this.show()
         })

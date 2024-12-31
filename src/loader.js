@@ -21,4 +21,9 @@ module.exports = function loader (url, options, callback) {
       cache[url] = data
       cbs.forEach(cb => cb(null, data))
     })
+    .catch(err => {
+      const cbs = loading[url]
+      delete loading[url]
+      cbs.forEach(cb => cb(err))
+    })
 }
