@@ -17,13 +17,20 @@ module.exports = function loader (url, options, callback) {
     .then(data => {
       const cbs = loading[url]
       delete loading[url]
-
       cache[url] = data
-      cbs.forEach(cb => cb(null, data))
+
+      if (cbs) {
+        cbs.forEach(cb => global.setTimeout(() => cb(null, data), 0))
+      }
     })
     .catch(err => {
       const cbs = loading[url]
       delete loading[url]
-      cbs.forEach(cb => cb(err))
+
+      if (cbs) {
+        cbs.forEach(cb => global.setTimeout(() => cb(err), 0))
+      } else {
+        console.error('callbacks already cleared?')
+      }
     })
 }
