@@ -222,4 +222,14 @@ module.exports = class TimelineJSON extends Events {
 
     return items
   }
+
+  _featureAdd (feature) {
+    this.layer.addLayer(feature)
+  }
+
+  _featureRemove (feature) {
+    if (this.layer.hasLayer(feature)) {
+      this.layer.removeLayer(feature)
+    }
+  }
 }
