@@ -85,6 +85,7 @@ module.exports = class TimelineJSON extends Events {
       }))
     })
 
+    this.app.emit('timeline-json-init', this)
     this.app.on('refresh', () => this.init())
   }
 
