@@ -34,4 +34,7 @@ module.exports = [
 
   // Add a 'Fullscreen' button to Geowiki Viewer
   require('geowiki-module-fullscreen'),
+
+  // Add marker clustering to Geowiki Viewer
+  require('./src/cluster'),
 ]

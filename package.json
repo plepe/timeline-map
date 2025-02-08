@@ -19,6 +19,7 @@
     "js-yaml": "^4.1.0",
     "leaflet": "^1.9.4",
     "leaflet-geowiki": "github:geowiki-net/leaflet-geowiki",
+    "leaflet.markercluster": "^1.5.3",
     "md5": "^2.3.0",
     "modulekit-lang": "github:plepe/modulekit-lang#browserify",
     "moment": "^2.29.4",
