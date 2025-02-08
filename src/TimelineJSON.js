@@ -140,6 +140,10 @@ module.exports = class TimelineJSON extends Events {
     this.setDate(this.app.state.current.date)
   }
 
+  evaluate (code) {
+    return twigGet(code, this.twigContext)
+  }
+
   show (map) {
     this.layer.addTo(this.app.map)
   }
