@@ -10,6 +10,12 @@ module.exports = {
         Object.entries(app.config.clusterGroups).forEach(([id, config]) => {
           clusterGroups[id] = L.markerClusterGroup(config || {})
           app.map.addLayer(clusterGroups[id])
+
+          clusterGroups[id].bindPopup(feature => {
+            if (feature.feature.properties.layer) {
+              return feature.feature.properties.layer.getPopupContent(feature)
+            }
+          })
         })
       }
     })

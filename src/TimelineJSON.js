@@ -128,17 +128,19 @@ module.exports = class TimelineJSON extends Events {
     }
 
     if (this.config.feature.popupTemplate || this.config.feature.popupSource) {
-      this.layer.bindPopup(feature => {
-        currentPopupItem = feature.feature.properties
-        currentPopupDisplay = feature.feature.properties.showPopup(feature.feature.logEntry)
-        return currentPopupDisplay.content
-      })
+      this.layer.bindPopup(feature => this.getPopupContent(feature))
     }
 
     this.emit('data-loaded')
     this.app.emit('data-loaded', this)
 
     this.setDate(this.app.state.current.date)
+  }
+
+  getPopupContent (feature) {
+    currentPopupItem = feature.feature.properties
+    currentPopupDisplay = feature.feature.properties.showPopup(feature.feature.logEntry)
+    return currentPopupDisplay.content
   }
 
   evaluate (code) {
