@@ -20,6 +20,9 @@ module.exports = class TimelineFeature {
     if (this.config.feature.init) {
       twigGet(this.config.feature.init, this.twigContext)
     }
+    if (this.config.feature.refresh) {
+      twigGet(this.config.feature.refresh, this.twigContext)
+    }
   }
 
   twigData () {
@@ -144,6 +147,9 @@ module.exports = class TimelineFeature {
 
   setDate (date) {
     this.twigContext.state = this.app.state.current
+    if (this.config.feature.refresh) {
+      twigGet(this.config.feature.refresh, this.twigContext)
+    }
 
     let shown
     if (date && this.log) {
