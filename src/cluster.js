@@ -33,17 +33,17 @@ module.exports = {
 
         if (cluster && clusterGroups[cluster]) {
           clusterGroups[cluster].addLayer(feature)
-          item.cluster = cluster
+          feature._timeline_cluster = cluster
           return
         }
 
-        item.cluster = null
+        feature._timeline_cluster = null
         origFeatureAdd(feature)
       }
 
       layer._featureRemove = function (feature, item) {
-        if (item.cluster) {
-          clusterGroups[item.cluster].removeLayer(feature)
+        if (feature._timeline_cluster) {
+          clusterGroups[feature._timeline_cluster].removeLayer(feature)
           return
         }
 
