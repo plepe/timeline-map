@@ -192,6 +192,7 @@ module.exports = class TimelineFeature {
 
           if (!f) { return }
 
+          this.layer._featureRemove(f, this)
           if (shown[i]) {
             if (f.setStyle) {
               f.setStyle(style)
@@ -201,11 +202,11 @@ module.exports = class TimelineFeature {
             }
 
             this.layer._featureAdd(f, this)
-          } else {
-            this.layer._featureRemove(f, this)
           }
         })
       } else if (this.feature) {
+        this.layer._featureRemove(this.feature, this)
+
         if (this.feature.setStyle) {
           this.feature.setStyle(style)
         }
