@@ -197,9 +197,7 @@ module.exports = class TimelineFeature {
             if (f.setStyle) {
               f.setStyle(style)
             }
-            if (f.setIcon) {
-              f.setIcon(this.getIcon())
-            }
+            this.updateIcon(f)
 
             this.layer._featureAdd(f, this)
           }
@@ -210,9 +208,7 @@ module.exports = class TimelineFeature {
         if (this.feature.setStyle) {
           this.feature.setStyle(style)
         }
-        if (this.feature.setIcon) {
-          this.feature.setIcon(this.getIcon(shown[0]))
-        }
+        this.updateIcon(this.feature)
 
         this.layer._featureAdd(this.feature, this)
       }
@@ -431,6 +427,16 @@ module.exports = class TimelineFeature {
 
     if (data.start) {
       return data
+    }
+  }
+
+  updateIcon (feature) {
+    if (feature.setIcon) {
+      feature.setIcon(this.getIcon())
+    }
+
+    if (feature._layers) {
+      Object.values(feature._layers).forEach(f => this.updateIcon(f))
     }
   }
 }
