@@ -16,6 +16,9 @@ module.exports = class TimelineJSON extends Events {
 
     this.app.on('state-apply', () => {
       this.twigContext.state = this.app.state.current
+      if (this.config.refresh) {
+        twigGet(this.config.refresh, this.twigContext)
+      }
 
       const url = twigGet(this.config.source.url, this.twigContext)
       const filterId = this.config.source.filterId ? twigGet(this.config.source.filterId, this.twigContext) : null
@@ -115,6 +118,9 @@ module.exports = class TimelineJSON extends Events {
     this.twigContext.state = this.app.state.current
     if (this.config.init) {
       twigGet(this.config.init, this.twigContext)
+    }
+    if (this.config.refresh) {
+      twigGet(this.config.refresh, this.twigContext)
     }
 
     this.allItems.forEach(f => f.init())
