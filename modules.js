@@ -37,4 +37,7 @@ module.exports = [
 
   // Add marker clustering to Geowiki Viewer
   require('./src/cluster'),
+
+  // Add 'filter_objects' to TwigJS
+  require('./src/filterObjects'),
 ]
