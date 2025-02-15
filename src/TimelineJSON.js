@@ -39,6 +39,7 @@ module.exports = class TimelineJSON extends Events {
         })
       }
 
+      this.refreshAll()
       this.setDate(this.app.state.current.date)
 
       if (currentPopupDisplay) {
@@ -161,6 +162,14 @@ module.exports = class TimelineJSON extends Events {
     if (this.layer) {
       this.app.map.removeLayer(this.layer)
     }
+  }
+
+  refreshAll () {
+    if (!this.allItems) {
+      return
+    }
+
+    this.allItems.forEach(f => f.refresh())
   }
 
   setDate (date) {

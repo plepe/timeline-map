@@ -36,6 +36,9 @@ module.exports = class TimelineFeature {
 
   prepare () {
     this.twigContext.state = this.app.state.current
+    if (this.config.feature.pre) {
+      twigGet(this.config.feature.pre, this.twigContext)
+    }
 
     if (this.config.feature.type === 'start-end-field') {
       const start = twigGet(this.config.feature.startField, this.twigContext)
@@ -145,10 +148,16 @@ module.exports = class TimelineFeature {
     return false
   }
 
-  setDate (date) {
+  refresh () {
     this.twigContext.state = this.app.state.current
     if (this.config.feature.refresh) {
       twigGet(this.config.feature.refresh, this.twigContext)
+    }
+  }
+
+  setDate (date) {
+    if (this.config.feature.pre) {
+      twigGet(this.config.feature.pre, this.twigContext)
     }
 
     let shown
