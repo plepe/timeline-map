@@ -8,16 +8,15 @@ let interval
 module.exports = {
   id: 'timeline-controls',
   appInit: (app, callback) => {
-    const getDate = (p) => new Promise((resolve, reject) => {
+    const getDateRange = () => new Promise((resolve, reject) => {
       const date = app.state.current.date
       if (date) {
-        return resolve(date)
+        return resolve({ "start": date, "end": date })
       }
 
       return getTimespan(app)
         .then(v => {
-          console.log(v)
-          resolve(v[p])
+          resolve(v)
         })
         .catch(err => {
           console.error(err)
@@ -26,12 +25,13 @@ module.exports = {
         })
     })
 
-    const setActive = (active) => {
+    const setActive = (active, endDate = null) => {
       let date = app.state.current.date
+
       if (!date) {
-        return getDate('start').then(date => {
-          app.state.apply({ date })
-          setActive(active)
+        return getDateRange().then(range => {
+          app.state.apply({ date: range.start })
+          setActive(active, range.end)
         })
       }
 
@@ -41,6 +41,12 @@ module.exports = {
           date = moment(app.state.current.date)
           date = date.add(...stepSize)
           date = date.format('YYYY-MM-DD')
+
+          if (endDate && date >= endDate) {
+            date = endDate
+            setActive(false, null)
+          }
+
           app.state.apply({ date })
           app.updateLink()
         }, 1000)
@@ -66,8 +72,9 @@ module.exports = {
       inputs[v] = document.querySelector('button[name=' + v + ']')
       inputs[v].addEventListener('click', () => {
         setActive(false)
-        getDate(v === 'forward' ? 'start' : 'end').then(date => {
-          date = moment(date)
+        getDateRange().then(range => {
+          const pos = v === 'forward' ? 'start' : 'end'
+          let date = moment(date[pos])
           date = v === 'backward' ? date.subtract(...stepSize) : date.add(...stepSize)
           date = date.format('YYYY-MM-DD')
           app.state.apply({ date })
