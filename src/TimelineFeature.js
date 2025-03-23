@@ -346,13 +346,7 @@ module.exports = class TimelineFeature {
         return style
       },
       pointToLayer: (feature, latlng) => {
-        let markerOptions
-        try {
-          markerOptions = twigGet(this.config.feature.markerOptions ?? '{}', this.twigContext)
-          markerOptions = JSON.parse(markerOptions)
-        } catch (e) {
-          console.error(e.message)
-        }
+        const markerOptions = this._calcMarkerOptions()
 
         switch (markerOptions.nodeFeature ?? 'Marker') {
           case 'Circle':
@@ -445,8 +439,23 @@ module.exports = class TimelineFeature {
     }
   }
 
+  _calcMarkerOptions () {
+    let markerOptions
+    try {
+      markerOptions = twigGet(this.config.feature.markerOptions ?? '{}', this.twigContext)
+      markerOptions = JSON.parse(markerOptions)
+    } catch (e) {
+      console.error(e.message)
+    }
+
+    return markerOptions
+  }
+
   updateIcon (feature) {
     if (feature.setIcon) {
+      const markerOptions = this._calcMarkerOptions()
+      feature.options = {...feature.options, ...markerOptions}
+
       feature.setIcon(this.getIcon())
     }
 
