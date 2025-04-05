@@ -40,4 +40,7 @@ module.exports = [
 
   // Add 'filter_objects' to TwigJS
   require('./src/filterObjects'),
+
+  // Load related entities
+  require('./src/relations'),
 ]
