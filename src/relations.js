@@ -56,7 +56,7 @@ class Relation {
   }
 
   list () {
-    return this.data
+    return Object.values(this.data)
   }
 
   get (id) {
@@ -70,4 +70,30 @@ Twig.extendFunction('relationGet', (relationType, id) => {
   }
 
   return relations[relationType].get(id)
+})
+
+Twig.extendFunction('relationQuery', (relationType, query) => {
+  if (!(relationType in relations)) {
+    return
+  }
+
+  return relations[relationType].list().filter(item =>
+    query.filter(([key, value, op]) => {
+      switch (op) {
+        case '<':
+          return item[k] < value
+        case '<=':
+          return item[k] <= value
+        case '>':
+          return item[k] > value
+        case '>=':
+          return item[k] >= value
+        case '!=':
+          return item[k] != value
+        case '==':
+        default:
+          return item[key] == value
+      }
+    }).length
+  )
 })

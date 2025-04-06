@@ -14,13 +14,7 @@ Example usages:
 [{"id":4},{"id":5},{"id": 6}]|filter("id", "in", [5, 6]) -> [{"id":5},{"id":6}]
 ```
 
-### relationGet (defined in src/relations.js)
-A TwigJS function, that returns the a related item.
-
-Parameters:
-* type: type as defined in the config
-* id: id of the item
-
+## Relations
 Configure in `config.yaml`:
 ```yaml
 relations:
@@ -28,3 +22,17 @@ relations:
     source: /related_items.json
     idField: tid # if omitted, 'id' is assumed
 ```
+
+### relationGet (defined in src/relations.js)
+A TwigJS function, that returns the a related item.
+
+Parameters:
+* type: type as defined in the config
+* id: id of the item
+
+### relation
+A TwigJS function, that returns all related items based on a query.
+
+Parameters:
+* type: type as defined in the config
+* query: an array of tuples, where each tuple is [key, value, op?]. if op is omitted, '==' is assumed. Available ops: '<', '>', '<=', '>=', '!='. ['id', 5, '<'] -> item['id'] < 5.
